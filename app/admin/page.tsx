@@ -35,7 +35,7 @@ export default function AdminPage() {
         Back to Website
       </Link>
 
-      <div className="glass-panel animate-scale-in rounded-2xl p-8 w-full max-w-md">
+      <div className="glass-panel animate-scale-in rounded-2xl p-8 w-full max-w-md" style={{ borderColor: 'rgba(51, 65, 85, 0.6)' }}>
         <div className="flex flex-col items-center mb-8">
           <Image
             src="/assets/logo.png"
@@ -62,7 +62,7 @@ export default function AdminPage() {
               type="text"
               value={username}
               onChange={(e) => setUsername(e.target.value)}
-              className="w-full bg-background/50 border border-border rounded-lg px-4 py-3 text-foreground placeholder-muted-foreground outline-none focus:ring-2 focus:ring-ring focus:border-primary transition-all"
+              className="w-full bg-background/50 border border-slate-600 rounded-lg px-4 py-3 text-foreground placeholder-muted-foreground outline-none focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20 focus:outline-none transition-all duration-200"
               placeholder="Enter username"
               autoComplete="username"
             />
@@ -75,7 +75,7 @@ export default function AdminPage() {
                 type={showPassword ? 'text' : 'password'}
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="w-full bg-background/50 border border-border rounded-lg px-4 py-3 text-foreground placeholder-muted-foreground outline-none focus:ring-2 focus:ring-ring focus:border-primary transition-all pr-10"
+                className="w-full bg-background/50 border border-slate-600 rounded-lg px-4 py-3 text-foreground placeholder-muted-foreground outline-none focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20 focus:outline-none transition-all duration-200 pr-10"
                 placeholder="Enter password"
                 autoComplete="current-password"
               />

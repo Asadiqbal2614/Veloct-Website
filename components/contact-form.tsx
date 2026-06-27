@@ -16,25 +16,40 @@ const CONTACT_DETAILS = [
 ];
 
 const ACTIONS = ["Book Consultation", "Request a Proposal"];
+const COMPANY_SIZES = ["1-10", "11-50", "51-200", "200+"];
+const BUDGETS = ["Less than $5k", "$5k-$20k", "$20k+"];
+const TIMELINES = ["Immediately", "Within 1 Month", "Just Exploring"];
 
 export default function ContactForm() {
   const [email, setEmail] = useState("");
   const [action, setAction] = useState(ACTIONS[0]);
   const [context, setContext] = useState("");
+  const [company, setCompany] = useState("");
+  const [companySize, setCompanySize] = useState("");
+  const [budget, setBudget] = useState("");
+  const [timeline, setTimeline] = useState("");
   const [submitted, setSubmitted] = useState(false);
   const [toast, setToast] = useState(false);
   const [loading, setLoading] = useState(false);
+
+  const isProposal = action === "Request a Proposal";
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     setLoading(true);
 
-    const entry = {
+    const entry: Record<string, string> = {
       email,
       action,
       context,
+      company,
+      timeline,
       timestamp: new Date().toISOString(),
     };
+    if (isProposal) {
+      entry.companySize = companySize;
+      entry.budget = budget;
+    }
 
     const existing = JSON.parse(localStorage.getItem("veloct_contact_submissions") || "[]");
     existing.push(entry);
@@ -56,12 +71,16 @@ export default function ContactForm() {
     setEmail("");
     setAction(ACTIONS[0]);
     setContext("");
+    setCompany("");
+    setCompanySize("");
+    setBudget("");
+    setTimeline("");
     setTimeout(() => setToast(false), 4000);
     setTimeout(() => setSubmitted(false), 3000);
   };
 
   return (
-    <section id="contact" className="relative py-20 lg:py-28">
+    <section id="contact" className="relative py-16 lg:py-20">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid lg:grid-cols-2 gap-10 lg:gap-16">
           {/* Left - Info */}
@@ -160,6 +179,100 @@ export default function ContactForm() {
                       <option key={a} value={a} className="bg-[#00164A] text-white">
                         {a}
                       </option>
+                    ))}
+                  </select>
+                </div>
+
+                {/* Company Name - always visible */}
+                <div>
+                  <label htmlFor="company" className="micro-label text-white/60 block mb-1.5">
+                    Company Name <span className="text-[#FE7004]">*</span>
+                  </label>
+                  <input
+                    id="company"
+                    type="text"
+                    required
+                    value={company}
+                    onChange={(e) => setCompany(e.target.value)}
+                    placeholder="Your company name"
+                    className="w-full px-4 py-3 rounded-xl bg-white/5 border border-[#FE7004]/15 text-white text-sm placeholder:text-white/30 focus:outline-none focus:border-[#FE7004]/50 focus:ring-1 focus:ring-[#FE7004]/30 transition-all duration-300"
+                  />
+                </div>
+
+                {/* Company Size & Budget - only for proposals */}
+                {isProposal && (
+                  <>
+                    <div>
+                      <label htmlFor="companySize" className="micro-label text-white/60 block mb-1.5">
+                        Company Size <span className="text-[#FE7004]">*</span>
+                      </label>
+                      <select
+                        id="companySize"
+                        required
+                        value={companySize}
+                        onChange={(e) => setCompanySize(e.target.value)}
+                        className="w-full px-4 py-3 rounded-xl bg-white/5 border border-[#FE7004]/15 text-white text-sm focus:outline-none focus:border-[#FE7004]/50 focus:ring-1 focus:ring-[#FE7004]/30 transition-all duration-300 appearance-none"
+                        style={{
+                          backgroundImage: `url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%23FE7004' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e")`,
+                          backgroundPosition: "right 12px center",
+                          backgroundRepeat: "no-repeat",
+                          backgroundSize: "20px",
+                        }}
+                      >
+                        <option value="" disabled className="bg-[#00164A] text-white">Select size</option>
+                        {COMPANY_SIZES.map((s) => (
+                          <option key={s} value={s} className="bg-[#00164A] text-white">{s} employees</option>
+                        ))}
+                      </select>
+                    </div>
+
+                    <div>
+                      <label htmlFor="budget" className="micro-label text-white/60 block mb-1.5">
+                        Estimated Budget <span className="text-[#FE7004]">*</span>
+                      </label>
+                      <select
+                        id="budget"
+                        required
+                        value={budget}
+                        onChange={(e) => setBudget(e.target.value)}
+                        className="w-full px-4 py-3 rounded-xl bg-white/5 border border-[#FE7004]/15 text-white text-sm focus:outline-none focus:border-[#FE7004]/50 focus:ring-1 focus:ring-[#FE7004]/30 transition-all duration-300 appearance-none"
+                        style={{
+                          backgroundImage: `url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%23FE7004' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e")`,
+                          backgroundPosition: "right 12px center",
+                          backgroundRepeat: "no-repeat",
+                          backgroundSize: "20px",
+                        }}
+                      >
+                        <option value="" disabled className="bg-[#00164A] text-white">Select budget</option>
+                        {BUDGETS.map((b) => (
+                          <option key={b} value={b} className="bg-[#00164A] text-white">{b}</option>
+                        ))}
+                      </select>
+                    </div>
+                  </>
+                )}
+
+                {/* Timeline - always visible */}
+                <div>
+                  <label htmlFor="timeline" className="micro-label text-white/60 block mb-1.5">
+                    Project Timeline <span className="text-[#FE7004]">*</span>
+                  </label>
+                  <select
+                    id="timeline"
+                    required
+                    value={timeline}
+                    onChange={(e) => setTimeline(e.target.value)}
+                    className="w-full px-4 py-3 rounded-xl bg-white/5 border border-[#FE7004]/15 text-white text-sm focus:outline-none focus:border-[#FE7004]/50 focus:ring-1 focus:ring-[#FE7004]/30 transition-all duration-300 appearance-none"
+                    style={{
+                      backgroundImage: `url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%23FE7004' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e")`,
+                      backgroundPosition: "right 12px center",
+                      backgroundRepeat: "no-repeat",
+                      backgroundSize: "20px",
+                    }}
+                  >
+                    <option value="" disabled className="bg-[#00164A] text-white">Select timeline</option>
+                    {TIMELINES.map((t) => (
+                      <option key={t} value={t} className="bg-[#00164A] text-white">{t}</option>
                     ))}
                   </select>
                 </div>

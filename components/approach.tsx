@@ -35,7 +35,7 @@ const STEPS = [
 
 export default function Approach() {
   return (
-    <section id="approach" className="relative py-20 lg:py-28">
+    <section id="approach" className="relative py-16 lg:py-20">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
         <div className="text-center max-w-3xl mx-auto mb-14 lg:mb-20 space-y-4">

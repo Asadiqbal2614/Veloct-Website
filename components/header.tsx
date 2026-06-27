@@ -6,8 +6,9 @@ import { cn } from "@/lib/utils";
 
 const NAV_LINKS = [
   { label: "Home", href: "#hero" },
-  { label: "Services", href: "#services" },
   { label: "About Us", href: "#about" },
+  { label: "Services", href: "#services" },
+  { label: "Career", href: "/career" },
   { label: "Contact", href: "#contact" },
 ];
 
@@ -46,6 +47,7 @@ export default function Header() {
   }, []);
 
   const handleNavClick = useCallback((e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
+    if (href.startsWith("/")) return;
     e.preventDefault();
     const id = href.replace("#", "");
     const el = document.getElementById(id);

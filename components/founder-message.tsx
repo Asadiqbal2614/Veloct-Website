@@ -2,7 +2,7 @@
 
 export default function FounderMessage() {
   return (
-    <section id="about" className="relative py-20 lg:py-28">
+    <section id="about" className="relative py-16 lg:py-20">
     <div className="animate-fade-in-up">
       <div className="glass-panel rounded-2xl p-8 sm:p-10 lg:p-12 max-w-4xl mx-auto">
         <div className="space-y-4 mb-8">

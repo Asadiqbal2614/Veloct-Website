@@ -2,20 +2,24 @@ import { NextResponse } from "next/server";
 import { promises as fs } from "fs";
 import path from "path";
 
-const DATA_FILE = path.join(process.cwd(), "data", "submissions.json");
+const DATA_FILE = path.join(process.cwd(), "data", "careers.json");
 
-interface Submission {
+interface CareerSubmission {
+  fullName: string;
   email: string;
-  action: string;
-  context: string;
-  company?: string;
-  companySize?: string;
-  budget?: string;
-  timeline?: string;
+  contact: string;
+  day: string;
+  month: string;
+  year: string;
+  education: string;
+  specialization?: string;
+  experience: string;
+  city: string;
+  country: string;
   timestamp: string;
 }
 
-async function readSubmissions(): Promise<Submission[]> {
+async function readSubmissions(): Promise<CareerSubmission[]> {
   try {
     const raw = await fs.readFile(DATA_FILE, "utf-8");
     return JSON.parse(raw);
@@ -24,7 +28,7 @@ async function readSubmissions(): Promise<Submission[]> {
   }
 }
 
-async function writeSubmissions(data: Submission[]): Promise<void> {
+async function writeSubmissions(data: CareerSubmission[]): Promise<void> {
   await fs.writeFile(DATA_FILE, JSON.stringify(data, null, 2), "utf-8");
 }
 
@@ -36,23 +40,27 @@ export async function GET() {
 export async function POST(request: Request) {
   try {
     const body = await request.json();
-    const { email, action, context, company, companySize, budget, timeline } = body;
+    const { fullName, email, contact, day, month, year, education, specialization, experience, city, country } = body;
 
-    if (!email || !action || !context) {
+    if (!fullName || !email || !contact || !education || !experience || !city || !country) {
       return NextResponse.json(
         { error: "Missing required fields" },
         { status: 400 }
       );
     }
 
-    const submission: Submission = {
+    const submission: CareerSubmission = {
+      fullName,
       email,
-      action,
-      context,
-      company,
-      companySize,
-      budget,
-      timeline,
+      contact,
+      day,
+      month,
+      year,
+      education,
+      specialization,
+      experience,
+      city,
+      country,
       timestamp: new Date().toISOString(),
     };
 
@@ -64,7 +72,7 @@ export async function POST(request: Request) {
       { success: true, submission },
       { status: 201 }
     );
-  } catch (error) {
+  } catch {
     return NextResponse.json(
       { error: "Internal server error" },
       { status: 500 }
