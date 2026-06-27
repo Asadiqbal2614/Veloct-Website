@@ -4,5 +4,17 @@
     "action": "Request a Proposal",
     "context": "testing",
     "timestamp": "2026-06-23T19:46:22.096Z"
+  },
+  {
+    "email": "iasad2614@gmail.com",
+    "action": "Request a Proposal",
+    "context": "hi",
+    "timestamp": "2026-06-27T07:59:54.559Z"
+  },
+  {
+    "email": "ai3302730@gmail.com",
+    "action": "Book Consultation",
+    "context": "hello\n",
+    "timestamp": "2026-06-27T08:06:50.540Z"
   }
 ]

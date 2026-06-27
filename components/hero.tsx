@@ -1,42 +1,44 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
-import { ArrowRight, Check, FileText } from "lucide-react";
-import { cn } from "@/lib/utils";
+import { BrainCircuit, Cloud, Shield, ArrowRight, FileText } from "lucide-react";
 
-const SLIDES = [
+const PILLARS = [
   {
-    label: "Digital Transformation",
-    title: "End-to-End Digital Transformation",
-    description: "From legacy migration to full digital ecosystems — we architect, build and deploy at scale across the Gulf region.",
-    items: ["Strategic IT roadmaps", "Legacy system migration", "Cloud-native architecture"],
+    icon: BrainCircuit,
+    title: "AI & Automation",
+    description: "Custom models, intelligent automation, and predictive analytics",
+    features: [
+      "Machine Learning & NLP",
+      "Process Automation & RPA",
+      "Predictive Analytics",
+    ],
+    accent: "#FE7004",
   },
   {
-    label: "Cybersecurity",
-    title: "Enterprise-Grade Cybersecurity",
-    description: "Protect your business with defense-in-depth security tailored to regional compliance and global best practices.",
-    items: ["Vulnerability assessments", "SOC 2 & NIST alignment", "24/7 threat monitoring"],
+    icon: Cloud,
+    title: "Cloud Infrastructure",
+    description: "Scalable, secure, and cost-optimized cloud architectures",
+    features: [
+      "AWS, Azure & GCP",
+      "Cloud Migration & Modernization",
+      "Hybrid Multi-Cloud",
+    ],
+    accent: "#60A5FA",
   },
   {
-    label: "Intelligent Apps",
-    title: "AI-Powered Intelligent Applications",
-    description: "Leverage machine learning, NLP, and computer vision to build apps that learn, adapt, and drive decisions.",
-    items: ["Custom AI model development", "Conversational AI & chatbots", "Predictive analytics dashboards"],
+    icon: Shield,
+    title: "Cybersecurity",
+    description: "Defense-in-depth security for regional & global compliance",
+    features: [
+      "Threat Monitoring & Response",
+      "SOC 2, NIST & ISO 27001",
+      "Vulnerability Assessments",
+    ],
+    accent: "#34D399",
   },
 ];
 
 export default function Hero() {
-  const [currentSlide, setCurrentSlide] = useState(0);
-
-  const nextSlide = useCallback(() => {
-    setCurrentSlide((prev) => (prev + 1) % SLIDES.length);
-  }, []);
-
-  useEffect(() => {
-    const timer = setInterval(nextSlide, 6000);
-    return () => clearInterval(timer);
-  }, [nextSlide]);
-
   return (
     <section id="hero" className="relative min-h-screen flex items-center pt-24 pb-16 overflow-hidden">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
@@ -58,7 +60,7 @@ export default function Hero() {
             </h1>
 
             <p
-              className="animate-fade-in-up text-base sm:text-lg text-white/60 max-w-xl leading-relaxed"
+              className="animate-fade-in-up text-base sm:text-lg text-white/80 max-w-xl leading-relaxed"
               style={{ animationDelay: "0.2s" }}
             >
               VELOCT delivers enterprise IT solutions across Saudi Arabia and the Gulf — from AI-driven
@@ -94,50 +96,67 @@ export default function Hero() {
             </div>
           </div>
 
-          {/* Right Content - Slider */}
+          {/* Right Content - Three Pillars */}
           <div className="animate-fade-in-up" style={{ animationDelay: "0.4s" }}>
-            <div className="glass-panel rounded-2xl p-6 sm:p-8 relative overflow-hidden min-h-[360px]">
-              {/* Slide Content */}
-              <div className="space-y-5">
-                <span className="micro-label text-[#FE7004]">
-                  {SLIDES[currentSlide].label}
-                </span>
-
-                <h3 className="text-xl sm:text-2xl font-bold text-white">
-                  {SLIDES[currentSlide].title}
-                </h3>
-
-                <p className="text-sm sm:text-base text-white/60 leading-relaxed">
-                  {SLIDES[currentSlide].description}
-                </p>
-
-                <ul className="space-y-2.5">
-                  {SLIDES[currentSlide].items.map((item, idx) => (
-                    <li key={idx} className="flex items-start gap-3 text-sm text-white/70">
-                      <span className="flex-shrink-0 w-5 h-5 rounded-full bg-[#FE7004]/15 flex items-center justify-center mt-0.5">
-                        <Check className="w-3 h-3 text-[#FE7004]" />
-                      </span>
-                      {item}
-                    </li>
+            <div className="glass-panel rounded-2xl p-6 sm:p-8 relative overflow-hidden">
+              <div className="flex items-center gap-2 mb-6 pb-4 border-b border-[#FE7004]/10">
+                <span className="text-xs font-semibold text-white/50 tracking-widest uppercase">Technology Pillars</span>
+                <div className="flex items-center gap-1.5 ml-auto">
+                  {PILLARS.map((p) => (
+                    <span
+                      key={p.title}
+                      className="w-2 h-2 rounded-full"
+                      style={{ backgroundColor: p.accent }}
+                    />
                   ))}
-                </ul>
+                </div>
               </div>
 
-              {/* Dot Navigation */}
-              <div className="flex items-center gap-2 mt-6 pt-4 border-t border-[#FE7004]/10">
-                {SLIDES.map((_, idx) => (
-                  <button
-                    key={idx}
-                    onClick={() => setCurrentSlide(idx)}
-                    className={cn(
-                      "h-1.5 rounded-full transition-all duration-500",
-                      idx === currentSlide
-                        ? "w-8 bg-[#FE7004]"
-                        : "w-2 bg-white/20 hover:bg-white/40"
-                    )}
-                    aria-label={`Go to slide ${idx + 1}`}
-                  />
-                ))}
+              <div className="space-y-3">
+                {PILLARS.map((pillar) => {
+                  const Icon = pillar.icon;
+                  return (
+                    <div
+                      key={pillar.title}
+                      className="paper-card p-4 sm:p-5 group cursor-default"
+                      style={{ borderLeftColor: pillar.accent, borderLeftWidth: "3px" }}
+                    >
+                      <div className="flex items-start gap-3 mb-2.5">
+                        <div
+                          className="w-9 h-9 rounded-lg flex items-center justify-center flex-shrink-0"
+                          style={{ backgroundColor: `${pillar.accent}15` }}
+                        >
+                          <Icon className="w-4.5 h-4.5" style={{ color: pillar.accent }} />
+                        </div>
+                        <div className="min-w-0">
+                          <h4 className="text-sm font-bold text-white">
+                            {pillar.title}
+                          </h4>
+                          <p className="text-xs text-white/70 mt-0.5 line-clamp-1">
+                            {pillar.description}
+                          </p>
+                        </div>
+                      </div>
+                      <ul className="flex flex-wrap gap-x-4 gap-y-1">
+                        {pillar.features.map((f) => (
+                          <li key={f} className="flex items-center gap-1.5 text-xs text-white/60">
+                            <span
+                              className="w-1 h-1 rounded-full flex-shrink-0"
+                              style={{ backgroundColor: pillar.accent }}
+                            />
+                            {f}
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  );
+                })}
+              </div>
+
+              {/* Bottom summary bar */}
+              <div className="mt-4 pt-4 border-t border-[#FE7004]/10 flex items-center gap-2 text-xs text-white/40">
+                <span className="w-1.5 h-1.5 rounded-full bg-[#FE7004]" />
+                Integrated approach — AI, Cloud &amp; Security working as one
               </div>
             </div>
           </div>

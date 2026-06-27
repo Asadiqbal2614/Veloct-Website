@@ -36,7 +36,7 @@ export default function Solutions() {
           <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-white">
             Solutions We Deliver
           </h2>
-          <p className="text-base sm:text-lg text-white/60 leading-relaxed">
+          <p className="text-base sm:text-lg text-white/80 leading-relaxed">
             From chatbots to full-platform SaaS — we deliver production-ready solutions that drive real business impact.
           </p>
         </div>
@@ -48,7 +48,7 @@ export default function Solutions() {
             return (
               <div
                 key={solution.title}
-                className="paper-card p-5 sm:p-6 flex items-center gap-4 group cursor-pointer animate-fade-in-up"
+                className="paper-card p-5 sm:p-6 flex items-center gap-4 group cursor-pointer animate-fade-in-up hover:bg-[#FE7004]/[0.04] hover:shadow-lg hover:shadow-[#FE7004]/10 hover:border-[#FE7004]/40"
                 style={{ animationDelay: `${idx * 0.06}s` }}
               >
                 <div className="w-11 h-11 rounded-xl bg-[#FE7004]/10 flex items-center justify-center flex-shrink-0 transition-all duration-400 group-hover:bg-[#FE7004]/20 group-hover:scale-110">

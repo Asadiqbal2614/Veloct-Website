@@ -53,7 +53,7 @@ export default function WhyUs() {
           <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-white">
             Why Choose VELOCT
           </h2>
-          <p className="text-base sm:text-lg text-white/60 leading-relaxed">
+          <p className="text-base sm:text-lg text-white/80 leading-relaxed">
             We combine deep technical expertise with regional knowledge to deliver IT solutions that make a difference.
           </p>
         </div>
@@ -74,7 +74,7 @@ export default function WhyUs() {
                 <h3 className="text-lg font-bold text-white mb-2">
                   {reason.title}
                 </h3>
-                <p className="text-sm text-white/60 leading-relaxed">
+                <p className="text-sm text-white/80 leading-relaxed">
                   {reason.description}
                 </p>
               </div>

@@ -23,17 +23,17 @@ export default function DashboardPage() {
   const loadConsultations = useCallback(async () => {
     setRefreshing(true)
     try {
-      const res = await fetch('/api/submissions')
-      if (res.ok) {
-        const data = await res.json()
-        setConsultations(data)
-        return
+      try {
+        const res = await fetch('/api/submissions')
+        if (res.ok) {
+          const data = await res.json()
+          setConsultations(data)
+          return
+        }
+      } catch {
+        // API fetch failed, fall back to localStorage
       }
-    } catch {
-      // API fetch failed, fall back to localStorage
-    }
 
-    try {
       const raw = localStorage.getItem('veloct_contact_submissions')
       if (raw) {
         setConsultations(JSON.parse(raw))
@@ -42,8 +42,9 @@ export default function DashboardPage() {
       }
     } catch {
       setConsultations([])
+    } finally {
+      setRefreshing(false)
     }
-    setRefreshing(false)
   }, [])
 
   useEffect(() => {
