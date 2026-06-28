@@ -1,5 +1,5 @@
 import type { Metadata } from 'next'
-import { IBM_Plex_Sans, Fraunces, IBM_Plex_Mono } from 'next/font/google'
+import { IBM_Plex_Sans, IBM_Plex_Mono } from 'next/font/google'
 import { ThemeProvider } from 'next-themes'
 import './globals.css'
 
@@ -7,12 +7,6 @@ const ibmPlexSans = IBM_Plex_Sans({
   subsets: ['latin'],
   weight: ['400', '500', '600', '700'],
   variable: '--font-ibm-plex-sans',
-})
-
-const fraunces = Fraunces({
-  subsets: ['latin'],
-  weight: ['400', '500', '600', '700', '800'],
-  variable: '--font-fraunces',
 })
 
 const ibmPlexMono = IBM_Plex_Mono({
@@ -25,6 +19,11 @@ export const metadata: Metadata = {
   title: 'VELOCT | Accelerating Innovation Through AI, Cloud & Digital Transformation',
   description:
     'VELOCT accelerates innovation through AI, cloud, and digital transformation solutions for modern enterprises.',
+  icons: {
+    icon: '/assets/logo.png',
+    shortcut: '/assets/logo.png',
+    apple: '/assets/logo.png',
+  },
 }
 
 export default function RootLayout({
@@ -35,7 +34,7 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body
-        className={`${ibmPlexSans.variable} ${fraunces.variable} ${ibmPlexMono.variable} font-body antialiased`}
+        className={`${ibmPlexSans.variable} ${ibmPlexMono.variable} font-body antialiased`}
       >
         <ThemeProvider attribute="class" defaultTheme="dark">
           <div

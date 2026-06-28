@@ -74,7 +74,7 @@ export default function WhyUs() {
                 <h3 className="text-lg font-bold text-white mb-2">
                   {reason.title}
                 </h3>
-                <p className="text-sm text-white/80 leading-relaxed">
+                <p className="text-base text-white/80 leading-relaxed">
                   {reason.description}
                 </p>
               </div>

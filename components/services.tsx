@@ -73,13 +73,13 @@ export default function Services() {
                   {service.title}
                 </h3>
 
-                <p className="text-sm text-white/80 leading-relaxed mb-6">
+                <p className="text-base text-white/80 leading-relaxed mb-6">
                   {service.description}
                 </p>
 
                 <ul className="space-y-2.5 mt-auto">
                   {service.items.map((item) => (
-                    <li key={item} className="flex items-start gap-2 text-sm text-white/85">
+                    <li key={item} className="flex items-start gap-2 text-base text-white/85">
                       <ChevronRight className="w-4 h-4 text-[#FE7004] flex-shrink-0 mt-0.5" />
                       {item}
                     </li>

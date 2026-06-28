@@ -44,7 +44,7 @@ export default function AdminPage() {
             height={48}
             className="h-12 w-auto mb-4"
           />
-          <h1 className="font-display text-2xl font-semibold text-foreground">
+          <h1 className="text-2xl font-semibold text-foreground">
             Admin Login
           </h1>
         </div>

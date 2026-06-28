@@ -132,14 +132,14 @@ export default function Hero() {
                           <h4 className="text-sm font-bold text-white">
                             {pillar.title}
                           </h4>
-                          <p className="text-xs text-white/70 mt-0.5 line-clamp-1">
+                          <p className="text-sm text-white/70 mt-0.5 line-clamp-1">
                             {pillar.description}
                           </p>
                         </div>
                       </div>
                       <ul className="flex flex-wrap gap-x-4 gap-y-1">
                         {pillar.features.map((f) => (
-                          <li key={f} className="flex items-center gap-1.5 text-xs text-white/60">
+                          <li key={f} className="flex items-center gap-1.5 text-sm text-white/60">
                             <span
                               className="w-1 h-1 rounded-full flex-shrink-0"
                               style={{ backgroundColor: pillar.accent }}
@@ -154,7 +154,7 @@ export default function Hero() {
               </div>
 
               {/* Bottom summary bar */}
-              <div className="mt-4 pt-4 border-t border-[#FE7004]/10 flex items-center gap-2 text-xs text-white/40">
+              <div className="mt-4 pt-4 border-t border-[#FE7004]/10 flex items-center gap-2 text-sm text-white/40">
                 <span className="w-1.5 h-1.5 rounded-full bg-[#FE7004]" />
                 Integrated approach — AI, Cloud &amp; Security working as one
               </div>

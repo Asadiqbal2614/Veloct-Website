@@ -14,12 +14,7 @@ export default function Footer() {
           <p className="text-xs text-white/30 mt-2">
             &copy; {new Date().getFullYear()} VELOCT. All rights reserved.
           </p>
-          <a
-            href="/admin"
-            className="text-[10px] text-white/10 hover:text-white/30 transition-colors mt-4"
-          >
-            Admin
-          </a>
+
         </div>
       </div>
     </footer>

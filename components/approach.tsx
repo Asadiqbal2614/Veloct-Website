@@ -70,7 +70,7 @@ export default function Approach() {
                       {step.title}
                     </h3>
                   </div>
-                  <p className="text-sm text-white/80 leading-relaxed">
+                  <p className="text-base text-white/80 leading-relaxed">
                     {step.description}
                   </p>
                 </>
