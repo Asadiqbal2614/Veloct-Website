@@ -343,90 +343,60 @@ export default function DashboardPage() {
                 <p className="text-sm mt-1">Requests from the contact form will appear here.</p>
               </div>
             ) : (
-              <>
-                {/* Mobile Cards */}
-                <div className="block md:hidden space-y-3 p-4">
-                  {[...consultations].reverse().map((c, i) => (
-                    <div
-                      key={`${c.email}-${i}`}
-                      className="paper-card p-4 animate-slide-up"
-                      style={{ animationDelay: `${500 + i * 50}ms` }}
-                    >
-                      <div className="flex flex-col gap-2 text-sm">
-                        <div className="flex items-start justify-between gap-2">
-                          <a href={`mailto:${c.email}`} className="text-primary hover:underline font-medium break-all">{c.email}</a>
-                          <span className="micro-label text-primary shrink-0">
+              <div className="w-full overflow-x-auto">
+                <table className="w-full text-sm whitespace-nowrap">
+                  <thead>
+                    <tr className="border-b border-border">
+                      <th className="text-left px-6 py-4 micro-label">#</th>
+                      <th className="text-left px-6 py-4 micro-label">Email</th>
+                      <th className="text-left px-6 py-4 micro-label">Type</th>
+                      <th className="text-left px-6 py-4 micro-label">Company</th>
+                      <th className="text-left px-6 py-4 micro-label">Size</th>
+                      <th className="text-left px-6 py-4 micro-label">Budget</th>
+                      <th className="text-left px-6 py-4 micro-label">Timeline</th>
+                      <th className="text-left px-6 py-4 micro-label">Context</th>
+                      <th className="text-left px-6 py-4 micro-label">Date</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {[...consultations].reverse().map((c, i) => (
+                      <tr
+                        key={`${c.email}-${i}`}
+                        className="border-b border-border/50 hover:bg-white/[0.02] transition-colors animate-slide-up"
+                        style={{ animationDelay: `${500 + i * 50}ms` }}
+                      >
+                        <td className="px-6 py-4 font-medium text-primary">{i + 1}</td>
+                        <td className="px-6 py-4">
+                          <a href={`mailto:${c.email}`} className="text-primary hover:underline">{c.email}</a>
+                        </td>
+                        <td className="px-6 py-4">
+                          <span className="micro-label text-primary">
                             {c.action === 'Book Consultation' ? 'Consultation' : 'Proposal'}
                           </span>
-                        </div>
-                        <div className="grid grid-cols-2 gap-x-4 gap-y-1 text-white/80">
-                          <div><span className="text-white/40">Company:</span> {c.company || '-'}</div>
-                          <div><span className="text-white/40">Size:</span> {c.companySize || '-'}</div>
-                          <div><span className="text-white/40">Budget:</span> {c.budget || '-'}</div>
-                          <div><span className="text-white/40">Timeline:</span> {c.timeline || '-'}</div>
-                        </div>
-                        {c.context && <div className="text-white/80"><span className="text-white/40">Context:</span> {c.context}</div>}
-                        <div className="text-xs text-white/40">{new Date(c.timestamp).toLocaleDateString()}</div>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-                {/* Desktop Table */}
-                <div className="hidden md:block w-full overflow-x-auto">
-                  <table className="w-full text-sm">
-                    <thead>
-                      <tr className="border-b border-border">
-                        <th className="text-left px-6 py-4 micro-label">#</th>
-                        <th className="text-left px-6 py-4 micro-label">Email</th>
-                        <th className="text-left px-6 py-4 micro-label">Type</th>
-                        <th className="text-left px-6 py-4 micro-label hidden md:table-cell">Company</th>
-                        <th className="text-left px-6 py-4 micro-label hidden lg:table-cell">Size</th>
-                        <th className="text-left px-6 py-4 micro-label hidden lg:table-cell">Budget</th>
-                        <th className="text-left px-6 py-4 micro-label hidden lg:table-cell">Timeline</th>
-                        <th className="text-left px-6 py-4 micro-label hidden xl:table-cell">Context</th>
-                        <th className="text-left px-6 py-4 micro-label hidden lg:table-cell">Date</th>
+                        </td>
+                        <td className="px-6 py-4 text-muted-foreground whitespace-nowrap">
+                          {c.company || '-'}
+                        </td>
+                        <td className="px-6 py-4 text-muted-foreground whitespace-nowrap">
+                          {c.companySize || '-'}
+                        </td>
+                        <td className="px-6 py-4 text-muted-foreground whitespace-nowrap">
+                          {c.budget || '-'}
+                        </td>
+                        <td className="px-6 py-4 text-muted-foreground whitespace-nowrap">
+                          {c.timeline || '-'}
+                        </td>
+                        <td className="px-6 py-4 text-muted-foreground max-w-[180px] truncate">
+                          {c.context}
+                        </td>
+                        <td className="px-6 py-4 text-muted-foreground whitespace-nowrap">
+                          {new Date(c.timestamp).toLocaleDateString()}
+                        </td>
                       </tr>
-                    </thead>
-                    <tbody>
-                      {[...consultations].reverse().map((c, i) => (
-                        <tr
-                          key={`${c.email}-${i}`}
-                          className="border-b border-border/50 hover:bg-white/[0.02] transition-colors animate-slide-up"
-                          style={{ animationDelay: `${500 + i * 50}ms` }}
-                        >
-                          <td className="px-6 py-4 font-medium text-primary">{i + 1}</td>
-                          <td className="px-6 py-4">
-                            <a href={`mailto:${c.email}`} className="text-primary hover:underline">{c.email}</a>
-                          </td>
-                          <td className="px-6 py-4">
-                            <span className="micro-label text-primary">
-                              {c.action === 'Book Consultation' ? 'Consultation' : 'Proposal'}
-                            </span>
-                          </td>
-                          <td className="px-6 py-4 text-muted-foreground hidden md:table-cell whitespace-nowrap">
-                            {c.company || '-'}
-                          </td>
-                          <td className="px-6 py-4 text-muted-foreground hidden lg:table-cell">
-                            {c.companySize || '-'}
-                          </td>
-                          <td className="px-6 py-4 text-muted-foreground hidden lg:table-cell">
-                            {c.budget || '-'}
-                          </td>
-                          <td className="px-6 py-4 text-muted-foreground hidden lg:table-cell">
-                            {c.timeline || '-'}
-                          </td>
-                          <td className="px-6 py-4 text-muted-foreground hidden xl:table-cell max-w-[180px] truncate">
-                            {c.context}
-                          </td>
-                          <td className="px-6 py-4 text-muted-foreground hidden lg:table-cell whitespace-nowrap">
-                            {new Date(c.timestamp).toLocaleDateString()}
-                          </td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </div>
-              </>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
             )}
           </div>
         )}
@@ -444,71 +414,44 @@ export default function DashboardPage() {
                 <p className="text-sm mt-1">Applications from the career page will appear here.</p>
               </div>
             ) : (
-              <>
-                {/* Mobile Cards */}
-                <div className="block md:hidden space-y-3 p-4">
-                  {[...careers].reverse().map((c, i) => (
-                    <div
-                      key={`${c.email}-${i}`}
-                      className="paper-card p-4 animate-slide-up"
-                      style={{ animationDelay: `${500 + i * 50}ms` }}
-                    >
-                      <div className="flex flex-col gap-2 text-sm">
-                        <div className="flex items-start justify-between gap-2">
-                          <span className="text-white font-medium">{c.fullName}</span>
-                          <span className="text-xs text-white/40 shrink-0">{new Date(c.timestamp).toLocaleDateString()}</span>
-                        </div>
-                        <a href={`mailto:${c.email}`} className="text-primary hover:underline break-all">{c.email}</a>
-                        <div className="grid grid-cols-2 gap-x-4 gap-y-1 text-white/80">
-                          <div><span className="text-white/40">Education:</span> {c.education}</div>
-                          <div><span className="text-white/40">Specialization:</span> {c.specialization || '-'}</div>
-                          <div><span className="text-white/40">Experience:</span> {c.experience}</div>
-                          <div><span className="text-white/40">City:</span> {c.city}, {c.country}</div>
-                        </div>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-                {/* Desktop Table */}
-                <div className="hidden md:block w-full overflow-x-auto">
-                  <table className="w-full text-sm">
-                    <thead>
-                      <tr className="border-b border-border">
-                        <th className="text-left px-6 py-4 micro-label">#</th>
-                        <th className="text-left px-6 py-4 micro-label">Name</th>
-                        <th className="text-left px-6 py-4 micro-label">Email</th>
-                        <th className="text-left px-6 py-4 micro-label hidden md:table-cell">Education</th>
-                        <th className="text-left px-6 py-4 micro-label hidden lg:table-cell">Specialization</th>
-                        <th className="text-left px-6 py-4 micro-label hidden lg:table-cell">Experience</th>
-                        <th className="text-left px-6 py-4 micro-label hidden xl:table-cell">City</th>
-                        <th className="text-left px-6 py-4 micro-label hidden lg:table-cell">Date</th>
+              <div className="w-full overflow-x-auto">
+                <table className="w-full text-sm whitespace-nowrap">
+                  <thead>
+                    <tr className="border-b border-border">
+                      <th className="text-left px-6 py-4 micro-label">#</th>
+                      <th className="text-left px-6 py-4 micro-label">Name</th>
+                      <th className="text-left px-6 py-4 micro-label">Email</th>
+                      <th className="text-left px-6 py-4 micro-label">Education</th>
+                      <th className="text-left px-6 py-4 micro-label">Specialization</th>
+                      <th className="text-left px-6 py-4 micro-label">Experience</th>
+                      <th className="text-left px-6 py-4 micro-label">City</th>
+                      <th className="text-left px-6 py-4 micro-label">Date</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {[...careers].reverse().map((c, i) => (
+                      <tr
+                        key={`${c.email}-${i}`}
+                        className="border-b border-border/50 hover:bg-white/[0.02] transition-colors animate-slide-up"
+                        style={{ animationDelay: `${500 + i * 50}ms` }}
+                      >
+                        <td className="px-6 py-4 font-medium text-primary">{i + 1}</td>
+                        <td className="px-6 py-4 text-white font-medium">{c.fullName}</td>
+                        <td className="px-6 py-4">
+                          <a href={`mailto:${c.email}`} className="text-primary hover:underline">{c.email}</a>
+                        </td>
+                        <td className="px-6 py-4 text-muted-foreground">{c.education}</td>
+                        <td className="px-6 py-4 text-muted-foreground">{c.specialization || '-'}</td>
+                        <td className="px-6 py-4 text-muted-foreground">{c.experience}</td>
+                        <td className="px-6 py-4 text-muted-foreground">{c.city}, {c.country}</td>
+                        <td className="px-6 py-4 text-muted-foreground whitespace-nowrap">
+                          {new Date(c.timestamp).toLocaleDateString()}
+                        </td>
                       </tr>
-                    </thead>
-                    <tbody>
-                      {[...careers].reverse().map((c, i) => (
-                        <tr
-                          key={`${c.email}-${i}`}
-                          className="border-b border-border/50 hover:bg-white/[0.02] transition-colors animate-slide-up"
-                          style={{ animationDelay: `${500 + i * 50}ms` }}
-                        >
-                          <td className="px-6 py-4 font-medium text-primary">{i + 1}</td>
-                          <td className="px-6 py-4 text-white font-medium">{c.fullName}</td>
-                          <td className="px-6 py-4">
-                            <a href={`mailto:${c.email}`} className="text-primary hover:underline">{c.email}</a>
-                          </td>
-                          <td className="px-6 py-4 text-muted-foreground hidden md:table-cell">{c.education}</td>
-                          <td className="px-6 py-4 text-muted-foreground hidden lg:table-cell">{c.specialization || '-'}</td>
-                          <td className="px-6 py-4 text-muted-foreground hidden lg:table-cell">{c.experience}</td>
-                          <td className="px-6 py-4 text-muted-foreground hidden xl:table-cell">{c.city}, {c.country}</td>
-                          <td className="px-6 py-4 text-muted-foreground hidden lg:table-cell whitespace-nowrap">
-                            {new Date(c.timestamp).toLocaleDateString()}
-                          </td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </div>
-              </>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
             )}
           </div>
         )}
