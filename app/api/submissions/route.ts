@@ -1,41 +1,27 @@
 import { NextResponse } from "next/server";
-import { promises as fs } from "fs";
-import path from "path";
-
-const DATA_FILE = path.join(process.cwd(), "data", "submissions.json");
-
-interface Submission {
-  email: string;
-  action: string;
-  context: string;
-  company?: string;
-  companySize?: string;
-  budget?: string;
-  timeline?: string;
-  timestamp: string;
-}
-
-async function readSubmissions(): Promise<Submission[]> {
-  try {
-    const raw = await fs.readFile(DATA_FILE, "utf-8");
-    return JSON.parse(raw);
-  } catch {
-    return [];
-  }
-}
-
-async function writeSubmissions(data: Submission[]): Promise<void> {
-  await fs.writeFile(DATA_FILE, JSON.stringify(data, null, 2), "utf-8");
-}
+import { supabase } from "@/lib/supabase";
 
 export async function GET() {
-  const submissions = await readSubmissions();
-  return NextResponse.json(submissions);
+  const { data, error } = await supabase
+    .from("submissions")
+    .select("*")
+    .order("timestamp", { ascending: true });
+
+  if (error) {
+    console.error("[Submissions] GET error:", error)
+    return NextResponse.json(
+      { error: error.message || "Internal server error" },
+      { status: 500 }
+    );
+  }
+
+  return NextResponse.json(data);
 }
 
 export async function POST(request: Request) {
   try {
     const body = await request.json();
+    console.log("[Submissions] POST body:", body)
     const { email, action, context, company, companySize, budget, timeline } = body;
 
     if (!email || !action || !context) {
@@ -45,29 +31,64 @@ export async function POST(request: Request) {
       );
     }
 
-    const submission: Submission = {
-      email,
-      action,
-      context,
-      company,
-      companySize,
-      budget,
-      timeline,
-      timestamp: new Date().toISOString(),
-    };
+    const { data, error } = await supabase
+      .from("submissions")
+      .insert({
+        email,
+        action,
+        context,
+        company,
+        companySize,
+        budget,
+        timeline,
+        timestamp: new Date().toISOString(),
+      })
+      .select()
+      .single();
 
-    const submissions = await readSubmissions();
-    submissions.push(submission);
-    await writeSubmissions(submissions);
+    if (error) {
+      console.log("DETAILED DB ERROR:", JSON.stringify(error, null, 2));
+      return NextResponse.json(
+        { success: false, error },
+        { status: 500 }
+      );
+    }
 
     return NextResponse.json(
-      { success: true, submission },
+      { success: true, submission: data },
       { status: 201 }
     );
   } catch (error) {
+    console.log("DETAILED DB ERROR:", JSON.stringify(error, null, 2));
     return NextResponse.json(
-      { error: "Internal server error" },
+      { success: false, error },
       { status: 500 }
     );
+  }
+}
+
+export async function DELETE(request: Request) {
+  try {
+    const { searchParams } = new URL(request.url)
+    const id = searchParams.get('id')
+
+    if (id) {
+      const { error } = await supabase.from("submissions").delete().eq("id", id)
+      if (error) {
+        console.log("DETAILED DB ERROR:", JSON.stringify(error, null, 2));
+        return NextResponse.json({ success: false, error }, { status: 500 })
+      }
+      return NextResponse.json({ success: true })
+    }
+
+    const { error } = await supabase.from("submissions").delete().neq("email", "");
+    if (error) {
+      console.log("DETAILED DB ERROR:", JSON.stringify(error, null, 2));
+      return NextResponse.json({ success: false, error }, { status: 500 })
+    }
+    return NextResponse.json({ success: true });
+  } catch (error) {
+    console.log("DETAILED DB ERROR:", JSON.stringify(error, null, 2));
+    return NextResponse.json({ success: false, error }, { status: 500 })
   }
 }

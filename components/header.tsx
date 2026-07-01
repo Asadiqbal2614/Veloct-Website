@@ -1,27 +1,45 @@
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
-import { Menu, X, ArrowRight, ChevronRight } from "lucide-react";
+import { Menu, X, ArrowRight, ChevronRight, ChevronUp } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const NAV_LINKS = [
   { label: "Home", href: "#hero" },
-  { label: "About Us", href: "#about" },
+  { label: "About Us", href: "/about" },
   { label: "Services", href: "#services" },
   { label: "Blogs", href: "/blogs" },
   { label: "Career", href: "/career" },
   { label: "Contact", href: "#contact" },
 ];
 
-const SECTION_IDS = ["hero", "services", "about", "industries", "why-us", "solutions", "approach", "contact"];
+const SECTION_IDS = ["hero", "services", "industries", "why-us", "solutions", "approach", "contact"];
 
 export default function Header() {
   const [scrolled, setScrolled] = useState(false);
+  const [hidden, setHidden] = useState(false);
+  const [showScrollTop, setShowScrollTop] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const [activeSection, setActiveSection] = useState("hero");
 
   useEffect(() => {
-    const handleScroll = () => setScrolled(window.scrollY > 40);
+    let lastScrollY = 0;
+
+    const handleScroll = () => {
+      const currentY = window.scrollY;
+
+      setScrolled(currentY > 40);
+      setShowScrollTop(currentY > 300);
+
+      if (currentY > 80 && currentY > lastScrollY) {
+        setHidden(true);
+      } else {
+        setHidden(false);
+      }
+
+      lastScrollY = currentY;
+    };
+
     handleScroll();
     window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
@@ -57,9 +75,10 @@ export default function Header() {
   }, []);
 
   return (
-    <header
+    <><header
       className={cn(
-        "fixed top-0 left-0 right-0 z-50 transition-all duration-500",
+        "fixed top-0 left-0 right-0 z-50 transition-transform duration-300 ease-in-out",
+        hidden ? "-translate-y-full" : "translate-y-0",
         scrolled
           ? "bg-[#00164A]/90 backdrop-blur-xl shadow-lg shadow-black/20"
           : "bg-transparent"
@@ -166,5 +185,21 @@ export default function Header() {
         </nav>
       </div>
     </header>
+
+      {/* Scroll to Top */}
+      <button
+        onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+        className={cn(
+          "fixed bottom-6 right-6 z-50 w-11 h-11 rounded-full flex items-center justify-center shadow-lg transition-all duration-300",
+          showScrollTop
+            ? "opacity-100 pointer-events-auto translate-y-0"
+            : "opacity-0 pointer-events-none translate-y-2",
+          "bg-[#FE7004] hover:bg-[#e06504] text-white"
+        )}
+        aria-label="Scroll to top"
+      >
+        <ChevronUp className="w-5 h-5" />
+      </button>
+    </>
   );
 }

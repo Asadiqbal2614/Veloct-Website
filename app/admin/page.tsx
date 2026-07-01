@@ -17,7 +17,7 @@ export default function AdminPage() {
     e.preventDefault()
     setError('')
 
-    if (username === 'admin' && password === 'admin123') {
+    if (username === process.env.NEXT_PUBLIC_ADMIN_USER && password === process.env.NEXT_PUBLIC_ADMIN_PASSWORD) {
       sessionStorage.setItem('admin_authenticated', 'true')
       router.push('/dashboard')
     } else {

@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { useParams } from "next/navigation";
-import { ArrowLeft, Calendar, Loader2 } from "lucide-react";
+import { ArrowLeft, Calendar, Clock, Loader2, Tag } from "lucide-react";
 import type { BlogPost } from "@/app/api/blogs/route";
 
 export default function BlogArticlePage() {
@@ -73,6 +73,13 @@ export default function BlogArticlePage() {
               month: "long",
               day: "numeric",
             })}
+            {blog.readingTime && (
+              <>
+                <span className="text-white/20">&bull;</span>
+                <Clock className="w-4 h-4" />
+                <span>{blog.readingTime} min read</span>
+              </>
+            )}
           </div>
 
           <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-white leading-tight">
@@ -82,6 +89,20 @@ export default function BlogArticlePage() {
           <p className="text-lg text-white/60 leading-relaxed">
             {blog.excerpt}
           </p>
+
+          {blog.tags && (
+            <div className="flex flex-wrap gap-2">
+              {blog.tags.split(",").map((tag, i) => (
+                <span
+                  key={i}
+                  className="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-medium bg-white/5 border border-white/10 text-white/60"
+                >
+                  <Tag className="w-3 h-3" />
+                  {tag.trim()}
+                </span>
+              ))}
+            </div>
+          )}
         </div>
 
         {blog.imageUrl && (

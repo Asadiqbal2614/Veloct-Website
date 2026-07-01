@@ -1,13 +1,14 @@
 'use client'
 
-import { useState, useEffect, useCallback, FormEvent } from 'react'
+import { useState, useEffect, useCallback, FormEvent, useMemo } from 'react'
 import { useRouter } from 'next/navigation'
 import Image from 'next/image'
 import Link from 'next/link'
 import { cn } from '@/lib/utils'
-import { LogOut, RefreshCw, Trash2, Mail, Calendar, Users, Briefcase, GraduationCap, FileText, Pencil } from 'lucide-react'
+import { LogOut, RefreshCw, Trash2, Mail, Calendar, Users, Briefcase, GraduationCap, FileText, Pencil, Award, CalendarDays, Tag, Lock, Unlock, Clock, CheckCircle, XCircle } from 'lucide-react'
 
 interface Consultation {
+  id: string
   email: string
   action: string
   context: string
@@ -19,6 +20,7 @@ interface Consultation {
 }
 
 interface CareerSubmission {
+  id: string
   fullName: string
   email: string
   contact: string
@@ -31,6 +33,7 @@ interface CareerSubmission {
   city: string
   country: string
   timestamp: string
+  resume_url?: string
 }
 
 interface BlogPost {
@@ -40,6 +43,8 @@ interface BlogPost {
   content: string
   date: string
   imageUrl?: string
+  tags?: string
+  readingTime?: number
 }
 
 type Tab = 'queries' | 'careers' | 'blogs'
@@ -59,6 +64,9 @@ export default function DashboardPage() {
   const [blogExcerpt, setBlogExcerpt] = useState('')
   const [blogContent, setBlogContent] = useState('')
   const [blogImageUrl, setBlogImageUrl] = useState('')
+  const [blogTags, setBlogTags] = useState('')
+  const [slugLocked, setSlugLocked] = useState(true)
+  const [focusKeyword, setFocusKeyword] = useState('')
   const [editingSlug, setEditingSlug] = useState<string | null>(null)
   const [blogPublishing, setBlogPublishing] = useState(false)
   const [blogSuccess, setBlogSuccess] = useState('')
@@ -102,6 +110,22 @@ export default function DashboardPage() {
     }
   }
 
+  const handleDelete = async (id: string, type: 'queries' | 'careers') => {
+    const endpoint = type === 'queries' ? '/api/submissions' : '/api/careers'
+    try {
+      const res = await fetch(`${endpoint}?id=${id}`, { method: 'DELETE' })
+      if (res.ok) {
+        if (type === 'queries') {
+          setConsultations((prev) => prev.filter((item) => item.id !== id))
+        } else {
+          setCareers((prev) => prev.filter((item) => item.id !== id))
+        }
+      }
+    } catch {
+      // best-effort
+    }
+  }
+
   const handleLogout = () => {
     sessionStorage.removeItem('admin_authenticated')
     router.push('/admin')
@@ -128,6 +152,8 @@ export default function DashboardPage() {
           excerpt: blogExcerpt,
           content: blogContent,
           imageUrl: blogImageUrl,
+          tags: blogTags,
+          readingTime,
           date: new Date().toISOString(),
         }),
       })
@@ -139,11 +165,18 @@ export default function DashboardPage() {
         setBlogExcerpt('')
         setBlogContent('')
         setBlogImageUrl('')
+        setBlogTags('')
+        setFocusKeyword('')
+        setSlugLocked(true)
         setEditingSlug(null)
         loadData()
       } else {
         const err = await res.json()
-        setBlogError(err.error || 'Failed to publish blog')
+        setBlogError(
+          typeof err.error === 'object'
+            ? err.error.message || err.error.hint || JSON.stringify(err.error)
+            : err.error || 'Failed to publish blog'
+        )
       }
     } catch {
       setBlogError('Network error. Please try again.')
@@ -158,6 +191,9 @@ export default function DashboardPage() {
     setBlogExcerpt('')
     setBlogContent('')
     setBlogImageUrl('')
+    setBlogTags('')
+    setFocusKeyword('')
+    setSlugLocked(true)
     setEditingSlug(null)
     setBlogSuccess('')
     setBlogError('')
@@ -169,6 +205,8 @@ export default function DashboardPage() {
     setBlogExcerpt(blog.excerpt)
     setBlogContent(blog.content)
     setBlogImageUrl(blog.imageUrl || '')
+    setBlogTags(blog.tags || '')
+    setSlugLocked(true)
     setEditingSlug(blog.slug)
     setBlogSuccess('')
     setBlogError('')
@@ -184,6 +222,41 @@ export default function DashboardPage() {
       // best-effort
     }
   }
+
+  // Auto-generate slug from title
+  useEffect(() => {
+    if (slugLocked && !editingSlug) {
+      setBlogSlug(
+        blogTitle
+          .toLowerCase()
+          .replace(/[^a-z0-9\s-]/g, '')
+          .replace(/\s+/g, '-')
+          .replace(/-+/g, '-')
+          .replace(/^-|-$/g, '')
+      )
+    }
+  }, [blogTitle, slugLocked, editingSlug])
+
+  const readingTime = useMemo(() => {
+    const words = blogContent.trim() ? blogContent.trim().split(/\s+/).length : 0
+    return Math.max(1, Math.ceil(words / 200))
+  }, [blogContent])
+
+  const seoScore = useMemo(() => {
+    let score = 0
+    const targetKeyword = focusKeyword.toLowerCase().trim().replace(/\s+/g, '-')
+    const checks = {
+      titleLength: blogTitle.length >= 40 && blogTitle.length <= 60,
+      keywordInTitle: focusKeyword && blogTitle.toLowerCase().includes(focusKeyword.toLowerCase()),
+      keywordInSlug: focusKeyword && blogSlug.toLowerCase().includes(targetKeyword),
+      excerptLength: blogExcerpt.length >= 120 && blogExcerpt.length <= 160,
+    }
+    if (checks.titleLength) score += 25
+    if (checks.keywordInTitle) score += 25
+    if (checks.keywordInSlug) score += 25
+    if (checks.excerptLength) score += 25
+    return { score, checks }
+  }, [blogTitle, blogSlug, blogExcerpt, focusKeyword])
 
   if (!authenticated) return null
 
@@ -203,18 +276,34 @@ export default function DashboardPage() {
     { label: 'Proposals', value: proposalsCount, icon: Users, delay: '300ms' },
   ]
 
+  const topSpecialization = (() => {
+    const valid = careers.filter((c) => c.specialization && c.specialization.trim())
+    if (valid.length === 0) return 'N/A'
+    const freq: Record<string, number> = {}
+    valid.forEach((c) => {
+      freq[c.specialization!] = (freq[c.specialization!] || 0) + 1
+    })
+    return Object.entries(freq).sort((a, b) => b[1] - a[1])[0][0]
+  })()
+
+  const newThisWeek = careers.filter((c) => {
+    const d = new Date(c.timestamp)
+    const weekAgo = new Date()
+    weekAgo.setDate(weekAgo.getDate() - 7)
+    return d >= weekAgo
+  }).length
+
   const careersStats = [
     { label: 'Total Applications', value: totalCareers, icon: Briefcase, delay: '0ms' },
     { label: 'Latest Applicant', value: careers.length > 0 ? careers[careers.length - 1].fullName : 'N/A', icon: Users, delay: '100ms' },
-    { label: 'Unique Cities', value: [...new Set(careers.map((c) => c.city))].length, icon: Mail, delay: '200ms' },
-    { label: 'Avg Experience', value: careers.length > 0 ? `${Math.round(careers.reduce((s, c) => s + (parseInt(c.experience) || 0), 0) / careers.length)} yrs` : 'N/A', icon: GraduationCap, delay: '300ms' },
+    { label: 'Top Specialization', value: topSpecialization, icon: Award, delay: '200ms' },
+    { label: 'New This Week', value: newThisWeek, icon: CalendarDays, delay: '300ms' },
   ]
 
   const blogsStats = [
     { label: 'Total Published', value: totalBlogs, icon: FileText, delay: '0ms' },
     { label: 'Latest Title', value: blogs.length > 0 ? blogs[blogs.length - 1].title : 'N/A', icon: FileText, delay: '100ms' },
     { label: 'Total Words', value: blogs.length > 0 ? blogs.reduce((s, b) => s + b.content.split(/\s+/).length, 0).toLocaleString() : '0', icon: FileText, delay: '200ms' },
-    { label: 'Ready to Write', value: '✍️', icon: FileText, delay: '300ms' },
   ]
 
   const stats = activeTab === 'queries' ? queriesStats : activeTab === 'careers' ? careersStats : blogsStats
@@ -307,7 +396,10 @@ export default function DashboardPage() {
           </button>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+        <div className={cn(
+          "grid grid-cols-1 sm:grid-cols-2 gap-6 mb-8",
+          activeTab === 'blogs' ? 'md:grid-cols-3' : 'lg:grid-cols-4'
+        )}>
           {stats.map((stat) => (
             <div
               key={stat.label}
@@ -318,14 +410,16 @@ export default function DashboardPage() {
                 <stat.icon size={20} className="text-primary/70" />
               </div>
               <p className={cn(
-                " font-semibold mb-1",
-                (stat.label === 'Latest Email' || stat.label === 'Latest Applicant' || stat.label === 'Latest Title')
-                  ? "text-base truncate"
-                  : "text-3xl"
+                "mb-1",
+                stat.label === 'Latest Title'
+                  ? "text-xl font-semibold text-white"
+                  : stat.label === 'Latest Email'
+                    ? "text-lg sm:text-xl font-bold text-white break-words"
+                    : "text-3xl font-bold text-white"
               )}>
                 {stat.value}
               </p>
-              <p className="text-sm text-muted-foreground">{stat.label}</p>
+              <p className="text-sm text-gray-400 font-medium">{stat.label}</p>
             </div>
           ))}
         </div>
@@ -356,6 +450,7 @@ export default function DashboardPage() {
                       <th className="text-left px-6 py-4 micro-label">Timeline</th>
                       <th className="text-left px-6 py-4 micro-label">Context</th>
                       <th className="text-left px-6 py-4 micro-label">Date</th>
+                      <th className="text-left px-6 py-4 micro-label">Actions</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -392,6 +487,14 @@ export default function DashboardPage() {
                         <td className="px-6 py-4 text-muted-foreground whitespace-nowrap">
                           {new Date(c.timestamp).toLocaleDateString()}
                         </td>
+                        <td className="px-6 py-4">
+                          <button
+                            onClick={() => handleDelete(c.id, 'queries')}
+                            className="text-muted-foreground hover:text-red-500 transition-colors cursor-pointer"
+                          >
+                            <Trash2 size={14} />
+                          </button>
+                        </td>
                       </tr>
                     ))}
                   </tbody>
@@ -425,7 +528,9 @@ export default function DashboardPage() {
                       <th className="text-left px-6 py-4 micro-label">Specialization</th>
                       <th className="text-left px-6 py-4 micro-label">Experience</th>
                       <th className="text-left px-6 py-4 micro-label">City</th>
+                      <th className="text-left px-6 py-4 micro-label">Resume</th>
                       <th className="text-left px-6 py-4 micro-label">Date</th>
+                      <th className="text-left px-6 py-4 micro-label">Actions</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -444,8 +549,30 @@ export default function DashboardPage() {
                         <td className="px-6 py-4 text-muted-foreground">{c.specialization || '-'}</td>
                         <td className="px-6 py-4 text-muted-foreground">{c.experience}</td>
                         <td className="px-6 py-4 text-muted-foreground">{c.city}, {c.country}</td>
+                        <td className="px-6 py-4">
+                          {c.resume_url ? (
+                            <a
+                              href={c.resume_url}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="text-xs text-blue-400 hover:text-blue-300 hover:underline transition-colors"
+                            >
+                              View CV
+                            </a>
+                          ) : (
+                            <span className="text-xs text-white/30">No CV</span>
+                          )}
+                        </td>
                         <td className="px-6 py-4 text-muted-foreground whitespace-nowrap">
                           {new Date(c.timestamp).toLocaleDateString()}
+                        </td>
+                        <td className="px-6 py-4">
+                          <button
+                            onClick={() => handleDelete(c.id, 'careers')}
+                            className="text-muted-foreground hover:text-red-500 transition-colors cursor-pointer"
+                          >
+                            <Trash2 size={14} />
+                          </button>
                         </td>
                       </tr>
                     ))}
@@ -483,7 +610,7 @@ export default function DashboardPage() {
                 )}
                 {blogError && (
                   <div className="bg-red-500/10 border border-red-500/30 rounded-lg px-4 py-3 text-sm text-red-400">
-                    {blogError}
+                    {typeof blogError === 'string' ? blogError : 'An unexpected error occurred'}
                   </div>
                 )}
 
@@ -505,14 +632,25 @@ export default function DashboardPage() {
                   <label className="micro-label text-white/60 block mb-1.5">
                     URL Slug <span className="text-[#FE7004]">*</span>
                   </label>
-                  <input
-                    type="text"
-                    required
-                    value={blogSlug}
-                    onChange={(e) => setBlogSlug(e.target.value)}
-                    placeholder="e.g. future-of-ai-in-gulf"
-                    className="w-full px-4 py-3 rounded-xl bg-white/5 border border-[#FE7004]/15 text-white text-sm placeholder:text-white/30 focus:outline-none focus:border-[#FE7004]/50 focus:ring-1 focus:ring-[#FE7004]/30 transition-all font-mono"
-                  />
+                  <div className="flex gap-2">
+                    <input
+                      type="text"
+                      required
+                      readOnly={slugLocked}
+                      value={blogSlug}
+                      onChange={(e) => setBlogSlug(e.target.value)}
+                      placeholder="e.g. future-of-ai-in-gulf"
+                      className="w-full px-4 py-3 rounded-xl bg-white/5 border border-[#FE7004]/15 text-white text-sm placeholder:text-white/30 focus:outline-none focus:border-[#FE7004]/50 focus:ring-1 focus:ring-[#FE7004]/30 transition-all font-mono"
+                    />
+                    <button
+                      type="button"
+                      onClick={() => setSlugLocked(!slugLocked)}
+                      className="px-3 py-3 rounded-xl border border-[#FE7004]/15 text-white/60 hover:text-[#FE7004] hover:border-[#FE7004]/50 transition-all cursor-pointer"
+                      title={slugLocked ? 'Edit slug' : 'Lock slug'}
+                    >
+                      {slugLocked ? <Lock size={16} /> : <Unlock size={16} />}
+                    </button>
+                  </div>
                 </div>
 
                 <div>
@@ -526,6 +664,22 @@ export default function DashboardPage() {
                     placeholder="e.g. /images/blog-one.jpg or an external unsplash link"
                     className="w-full px-4 py-3 rounded-xl bg-white/5 border border-[#FE7004]/15 text-white text-sm placeholder:text-white/30 focus:outline-none focus:border-[#FE7004]/50 focus:ring-1 focus:ring-[#FE7004]/30 transition-all"
                   />
+                </div>
+
+                <div>
+                  <label className="micro-label text-white/60 block mb-1.5">
+                    Tags / Keywords
+                  </label>
+                  <div className="relative">
+                    <Tag size={14} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-white/30 pointer-events-none" />
+                    <input
+                      type="text"
+                      value={blogTags}
+                      onChange={(e) => setBlogTags(e.target.value)}
+                      placeholder="e.g. AI, Technology, Saudi Arabia"
+                      className="w-full pl-9 pr-4 py-3 rounded-xl bg-white/5 border border-[#FE7004]/15 text-white text-sm placeholder:text-white/30 focus:outline-none focus:border-[#FE7004]/50 focus:ring-1 focus:ring-[#FE7004]/30 transition-all"
+                    />
+                  </div>
                 </div>
 
                 <div>
@@ -554,6 +708,70 @@ export default function DashboardPage() {
                     rows={14}
                     className="w-full px-4 py-3 rounded-xl bg-white/5 border border-[#FE7004]/15 text-white text-sm placeholder:text-white/30 focus:outline-none focus:border-[#FE7004]/50 focus:ring-1 focus:ring-[#FE7004]/30 transition-all resize-y"
                   />
+                  <div className="flex items-center gap-1.5 text-xs text-white/40 mt-1.5">
+                    <Clock size={12} />
+                    <span>{readingTime} min read &middot; {blogContent.trim() ? blogContent.trim().split(/\s+/).length : 0} words</span>
+                  </div>
+                </div>
+
+                {/* SEO Checklist */}
+                <div className="rounded-xl bg-white/[0.03] border border-white/10 p-5 space-y-4">
+                  <div className="flex items-center justify-between">
+                    <h3 className="text-sm font-semibold text-white">SEO Checklist</h3>
+                    <span className={`text-xs font-bold px-2 py-0.5 rounded-full ${
+                      seoScore.score >= 80 ? 'bg-green-500/20 text-green-400' :
+                      seoScore.score >= 50 ? 'bg-yellow-500/20 text-yellow-400' :
+                      'bg-red-500/20 text-red-400'
+                    }`}>
+                      {seoScore.score}/100
+                    </span>
+                  </div>
+
+                  {/* Progress bar */}
+                  <div className="h-2 rounded-full bg-white/10 overflow-hidden">
+                    <div
+                      className={`h-full rounded-full transition-all duration-500 ${
+                        seoScore.score >= 80 ? 'bg-green-500' :
+                        seoScore.score >= 50 ? 'bg-yellow-500' :
+                        'bg-red-500'
+                      }`}
+                      style={{ width: `${seoScore.score}%` }}
+                    />
+                  </div>
+
+                  {/* Focus Keyword */}
+                  <div>
+                    <label className="micro-label text-white/60 block mb-1.5">
+                      Focus Keyword
+                    </label>
+                    <input
+                      type="text"
+                      value={focusKeyword}
+                      onChange={(e) => setFocusKeyword(e.target.value)}
+                      placeholder="e.g. AI"
+                      className="w-full px-3 py-2 rounded-lg bg-white/5 border border-white/10 text-white text-sm placeholder:text-white/30 focus:outline-none focus:border-[#FE7004]/50 transition-all"
+                    />
+                  </div>
+
+                  {/* Checklist */}
+                  <div className="space-y-2 text-xs">
+                    <div className={`flex items-center gap-2 ${seoScore.checks.titleLength ? 'text-green-400' : 'text-white/40'}`}>
+                      {seoScore.checks.titleLength ? <CheckCircle size={12} /> : <XCircle size={12} />}
+                      <span>Title length 40-60 chars ({blogTitle.length})</span>
+                    </div>
+                    <div className={`flex items-center gap-2 ${seoScore.checks.keywordInTitle ? 'text-green-400' : 'text-white/40'}`}>
+                      {seoScore.checks.keywordInTitle ? <CheckCircle size={12} /> : <XCircle size={12} />}
+                      <span>Keyword in Title</span>
+                    </div>
+                    <div className={`flex items-center gap-2 ${seoScore.checks.keywordInSlug ? 'text-green-400' : 'text-white/40'}`}>
+                      {seoScore.checks.keywordInSlug ? <CheckCircle size={12} /> : <XCircle size={12} />}
+                      <span>Keyword in URL Slug</span>
+                    </div>
+                    <div className={`flex items-center gap-2 ${seoScore.checks.excerptLength ? 'text-green-400' : 'text-white/40'}`}>
+                      {seoScore.checks.excerptLength ? <CheckCircle size={12} /> : <XCircle size={12} />}
+                      <span>Excerpt 120-160 chars ({blogExcerpt.length})</span>
+                    </div>
+                  </div>
                 </div>
 
                 <button
@@ -591,6 +809,8 @@ export default function DashboardPage() {
                             </h3>
                             <p className="text-xs text-white/40 mt-1">
                               /{blog.slug} &middot; {new Date(blog.date).toLocaleDateString()}
+                              {blog.readingTime && <span> &middot; {blog.readingTime} min read</span>}
+                              {blog.tags && <span> &middot; {blog.tags}</span>}
                             </p>
                           </div>
                           <div className="flex items-center gap-2 shrink-0">

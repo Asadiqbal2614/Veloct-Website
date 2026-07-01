@@ -3,12 +3,13 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "dev": "next dev -H 192.168.100.6",
+    "dev": "next dev",
     "build": "next build",
     "start": "next start",
     "lint": "next lint"
   },
   "dependencies": {
+    "@supabase/supabase-js": "^2.110.0",
     "lucide-react": "^0.400.0",
     "next": "^15.0.0",
     "next-themes": "^0.3.0",

@@ -5,7 +5,6 @@ import Industries from '@/components/industries'
 import WhyUs from '@/components/why-us'
 import Solutions from '@/components/solutions'
 import Approach from '@/components/approach'
-import FounderMessage from '@/components/founder-message'
 import ContactForm from '@/components/contact-form'
 import Footer from '@/components/footer'
 
@@ -14,7 +13,6 @@ export default function Home() {
     <main>
       <Header />
       <Hero />
-      <FounderMessage />
       <Services />
       <Industries />
       <WhyUs />

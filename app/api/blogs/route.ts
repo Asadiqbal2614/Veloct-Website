@@ -1,8 +1,5 @@
 import { NextResponse } from "next/server";
-import { promises as fs } from "fs";
-import path from "path";
-
-const DATA_FILE = path.join(process.cwd(), "data", "blogs.json");
+import { supabase } from "@/lib/supabase";
 
 export interface BlogPost {
   title: string;
@@ -11,30 +8,32 @@ export interface BlogPost {
   content: string;
   date: string;
   imageUrl?: string;
-}
-
-async function readBlogs(): Promise<BlogPost[]> {
-  try {
-    const raw = await fs.readFile(DATA_FILE, "utf-8");
-    return JSON.parse(raw);
-  } catch {
-    return [];
-  }
-}
-
-async function writeBlogs(data: BlogPost[]): Promise<void> {
-  await fs.writeFile(DATA_FILE, JSON.stringify(data, null, 2), "utf-8");
+  tags?: string;
+  readingTime?: number;
 }
 
 export async function GET() {
-  const blogs = await readBlogs();
-  return NextResponse.json(blogs);
+  const { data, error } = await supabase
+    .from("blogs")
+    .select("*")
+    .order("date", { ascending: false });
+
+  if (error) {
+    console.error("[Blogs] GET error:", error)
+    return NextResponse.json(
+      { error: error.message || "Internal server error" },
+      { status: 500 }
+    );
+  }
+
+  return NextResponse.json(data);
 }
 
 export async function POST(request: Request) {
   try {
     const body = await request.json();
-    const { title, slug, excerpt, content, date, imageUrl } = body;
+    console.log("[Blogs] POST body:", body)
+    const { title, slug, excerpt, content, date, imageUrl, tags, readingTime } = body;
 
     if (!title || !slug || !excerpt || !content || !date) {
       return NextResponse.json(
@@ -43,25 +42,41 @@ export async function POST(request: Request) {
       );
     }
 
-    const existing = await readBlogs();
-    if (existing.some((b) => b.slug === slug)) {
+    const { data: existing } = await supabase
+      .from("blogs")
+      .select("slug")
+      .eq("slug", slug)
+      .single();
+
+    if (existing) {
       return NextResponse.json(
         { error: "A blog with this slug already exists" },
         { status: 409 }
       );
     }
 
-    const blog: BlogPost = { title, slug, excerpt, content, date, imageUrl };
-    existing.push(blog);
-    await writeBlogs(existing);
+    const { data, error } = await supabase
+      .from("blogs")
+      .insert({ title, slug, excerpt, content, date, imageUrl, tags, readingTime })
+      .select()
+      .single();
+
+    if (error) {
+      console.log("DETAILED DB ERROR:", JSON.stringify(error, null, 2));
+      return NextResponse.json(
+        { success: false, error },
+        { status: 500 }
+      );
+    }
 
     return NextResponse.json(
-      { success: true, blog },
+      { success: true, blog: data },
       { status: 201 }
     );
-  } catch {
+  } catch (error) {
+    console.log("DETAILED DB ERROR:", JSON.stringify(error, null, 2));
     return NextResponse.json(
-      { error: "Internal server error" },
+      { success: false, error },
       { status: 500 }
     );
   }

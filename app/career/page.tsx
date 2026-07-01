@@ -2,7 +2,8 @@
 
 import { useState, FormEvent } from "react";
 import Link from "next/link";
-import { ArrowLeft, ArrowRight, Check, Loader2 } from "lucide-react";
+import { ArrowLeft, ArrowRight, Check, Loader2, Upload, FileText, AlertCircle } from "lucide-react";
+import { supabase } from "@/lib/supabase";
 
 const EDUCATION_OPTIONS = [
   "Matriculation",
@@ -33,12 +34,44 @@ export default function CareerPage() {
   const [experience, setExperience] = useState("");
   const [city, setCity] = useState("");
   const [country, setCountry] = useState("");
+  const [resumeFile, setResumeFile] = useState<File | null>(null);
+  const [uploadError, setUploadError] = useState("");
   const [loading, setLoading] = useState(false);
   const [submitted, setSubmitted] = useState(false);
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
+    setUploadError("");
     setLoading(true);
+
+    let resume_url = "";
+
+    if (resumeFile) {
+      if (resumeFile.size > 5 * 1024 * 1024) {
+        setUploadError("File size exceeds 5MB limit.");
+        setLoading(false);
+        return;
+      }
+
+      const fileExt = resumeFile.name.split(".").pop();
+      const filePath = `resumes/${Date.now()}-${Math.random().toString(36).substring(2)}.${fileExt}`;
+
+      const { error: uploadErr } = await supabase.storage
+        .from("resumes")
+        .upload(filePath, resumeFile, { cacheControl: "3600", upsert: false });
+
+      if (uploadErr) {
+        setUploadError(uploadErr.message || "Failed to upload resume.");
+        setLoading(false);
+        return;
+      }
+
+      const { data: publicUrlData } = supabase.storage
+        .from("resumes")
+        .getPublicUrl(filePath);
+
+      resume_url = publicUrlData.publicUrl;
+    }
 
     const payload = {
       fullName,
@@ -52,6 +85,7 @@ export default function CareerPage() {
       experience,
       city,
       country,
+      resume_url,
     };
 
     try {
@@ -74,6 +108,7 @@ export default function CareerPage() {
         setExperience("");
         setCity("");
         setCountry("");
+        setResumeFile(null);
       }
     } catch {
       // best-effort
@@ -296,6 +331,40 @@ export default function CareerPage() {
                 className="w-full px-4 py-3 rounded-xl bg-white/5 border border-[#FE7004]/15 text-white text-sm placeholder:text-white/30 focus:outline-none focus:border-[#FE7004]/50 focus:ring-1 focus:ring-[#FE7004]/30 transition-all"
               />
             </div>
+          </div>
+
+          <div>
+            <label htmlFor="resume" className="micro-label text-white/60 block mb-1.5">
+              Upload Resume / CV
+            </label>
+            <div className="relative">
+              <input
+                id="resume"
+                type="file"
+                accept=".pdf,.doc,.docx"
+                onChange={(e) => {
+                  setUploadError("")
+                  setResumeFile(e.target.files?.[0] || null)
+                }}
+                className="w-full px-4 py-3 rounded-xl bg-white/5 border border-[#FE7004]/15 text-white text-sm file:mr-3 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-medium file:bg-[#FE7004]/10 file:text-[#FE7004] hover:file:bg-[#FE7004]/20 transition-all cursor-pointer file:cursor-pointer"
+              />
+              <div className="flex items-center gap-1.5 mt-1.5">
+                <AlertCircle size={11} className="text-white/30" />
+                <span className="text-xs text-white/30">Max file size: 5MB &middot; .pdf, .doc, .docx</span>
+              </div>
+            </div>
+            {uploadError && (
+              <p className="text-xs text-red-400 mt-1.5 flex items-center gap-1">
+                <AlertCircle size={11} />
+                {uploadError}
+              </p>
+            )}
+            {resumeFile && !uploadError && (
+              <p className="text-xs text-green-400 mt-1.5 flex items-center gap-1">
+                <FileText size={11} />
+                {resumeFile.name}
+              </p>
+            )}
           </div>
 
           <button

@@ -1,46 +1,28 @@
 import { NextResponse } from "next/server";
-import { promises as fs } from "fs";
-import path from "path";
-
-const DATA_FILE = path.join(process.cwd(), "data", "careers.json");
-
-interface CareerSubmission {
-  fullName: string;
-  email: string;
-  contact: string;
-  day: string;
-  month: string;
-  year: string;
-  education: string;
-  specialization?: string;
-  experience: string;
-  city: string;
-  country: string;
-  timestamp: string;
-}
-
-async function readSubmissions(): Promise<CareerSubmission[]> {
-  try {
-    const raw = await fs.readFile(DATA_FILE, "utf-8");
-    return JSON.parse(raw);
-  } catch {
-    return [];
-  }
-}
-
-async function writeSubmissions(data: CareerSubmission[]): Promise<void> {
-  await fs.writeFile(DATA_FILE, JSON.stringify(data, null, 2), "utf-8");
-}
+import { supabase } from "@/lib/supabase";
 
 export async function GET() {
-  const submissions = await readSubmissions();
-  return NextResponse.json(submissions);
+  const { data, error } = await supabase
+    .from("careers")
+    .select("*")
+    .order("timestamp", { ascending: true });
+
+  if (error) {
+    console.error("[Careers] GET error:", error)
+    return NextResponse.json(
+      { error: error.message || "Internal server error" },
+      { status: 500 }
+    );
+  }
+
+  return NextResponse.json(data);
 }
 
 export async function POST(request: Request) {
   try {
     const body = await request.json();
-    const { fullName, email, contact, day, month, year, education, specialization, experience, city, country } = body;
+    console.log("[Careers] POST body:", body)
+    const { fullName, email, contact, day, month, year, education, specialization, experience, city, country, resume_url } = body;
 
     if (!fullName || !email || !contact || !education || !experience || !city || !country) {
       return NextResponse.json(
@@ -49,33 +31,87 @@ export async function POST(request: Request) {
       );
     }
 
-    const submission: CareerSubmission = {
-      fullName,
-      email,
-      contact,
-      day,
-      month,
-      year,
-      education,
-      specialization,
-      experience,
-      city,
-      country,
-      timestamp: new Date().toISOString(),
-    };
+    const { data, error } = await supabase
+      .from("careers")
+      .insert({
+        fullName,
+        email,
+        contact,
+        day,
+        month,
+        year,
+        education,
+        specialization,
+        experience,
+        city,
+        country,
+        resume_url: resume_url || null,
+        timestamp: new Date().toISOString(),
+      })
+      .select()
+      .single();
 
-    const submissions = await readSubmissions();
-    submissions.push(submission);
-    await writeSubmissions(submissions);
+    if (error) {
+      console.log("DETAILED DB ERROR:", JSON.stringify(error, null, 2));
+      return NextResponse.json(
+        { success: false, error },
+        { status: 500 }
+      );
+    }
 
     return NextResponse.json(
-      { success: true, submission },
+      { success: true, submission: data },
       { status: 201 }
     );
-  } catch {
+  } catch (error) {
+    console.log("DETAILED DB ERROR:", JSON.stringify(error, null, 2));
     return NextResponse.json(
-      { error: "Internal server error" },
+      { success: false, error },
       { status: 500 }
     );
+  }
+}
+
+export async function DELETE(request: Request) {
+  try {
+    const { searchParams } = new URL(request.url)
+    const id = searchParams.get('id')
+
+    if (id) {
+      const { data: existing, error: fetchErr } = await supabase
+        .from("careers")
+        .select("resume_url")
+        .eq("id", id)
+        .single()
+
+      if (fetchErr) {
+        console.log("DETAILED DB ERROR:", JSON.stringify(fetchErr, null, 2));
+        return NextResponse.json({ success: false, error: fetchErr }, { status: 500 })
+      }
+
+      if (existing?.resume_url) {
+        const filePath = existing.resume_url.split("/resumes/")[1]
+        if (filePath) {
+          await supabase.storage.from("resumes").remove([filePath])
+        }
+      }
+
+      const { error } = await supabase.from("careers").delete().eq("id", id)
+      if (error) {
+        console.log("DETAILED DB ERROR:", JSON.stringify(error, null, 2));
+        return NextResponse.json({ success: false, error }, { status: 500 })
+      }
+      return NextResponse.json({ success: true })
+    }
+
+    const { error } = await supabase.from("careers").delete().neq("email", "");
+    if (error) {
+      console.log("DETAILED DB ERROR:", JSON.stringify(error, null, 2));
+      return NextResponse.json({ success: false, error }, { status: 500 })
+    }
+    return NextResponse.json({ success: true });
+  } catch (error) {
+    console.log("DETAILED DB ERROR:", JSON.stringify(error, null, 2));
+    return NextResponse.json({ success: false, error }, { status: 500 })
   }
 }

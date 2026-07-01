@@ -8,9 +8,9 @@ const CONTACT_DETAILS = [
   { label: "Email", value: "info@veloct.tech", icon: Mail, href: "mailto:info@veloct.tech" },
   {
     label: "LinkedIn",
-    value: "linkedin.com/company/veloct",
+    value: "linkedin.com/company/veloct-tech",
     icon: Linkedin,
-    href: "https://linkedin.com/company/veloct",
+    href: "https://www.linkedin.com/company/veloct-tech",
   },
   { label: "Region", value: "Serving Saudi Arabia & Gulf Region", icon: MapPin },
 ];
