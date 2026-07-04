@@ -3,7 +3,7 @@
 import { useState, FormEvent } from "react";
 import Link from "next/link";
 import { ArrowLeft, ArrowRight, Check, Loader2, Upload, FileText, AlertCircle } from "lucide-react";
-import { supabase } from "@/lib/supabase";
+import { createClient } from "@/lib/supabase/client";
 
 const EDUCATION_OPTIONS = [
   "Matriculation",
@@ -55,6 +55,8 @@ export default function CareerPage() {
 
       const fileExt = resumeFile.name.split(".").pop();
       const filePath = `resumes/${Date.now()}-${Math.random().toString(36).substring(2)}.${fileExt}`;
+
+      const supabase = createClient();
 
       const { error: uploadErr } = await supabase.storage
         .from("resumes")
@@ -327,7 +329,7 @@ export default function CareerPage() {
                 required
                 value={country}
                 onChange={(e) => setCountry(e.target.value)}
-                placeholder="e.g. Saudi Arabia"
+                placeholder="e.g. United Arab Emirates"
                 className="w-full px-4 py-3 rounded-xl bg-white/5 border border-[#FE7004]/15 text-white text-sm placeholder:text-white/30 focus:outline-none focus:border-[#FE7004]/50 focus:ring-1 focus:ring-[#FE7004]/30 transition-all"
               />
             </div>

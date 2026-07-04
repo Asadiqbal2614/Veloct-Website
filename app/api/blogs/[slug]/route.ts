@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { supabase } from "@/lib/supabase";
+import { createClient } from "@/lib/supabase/server";
 
 export async function PUT(
   _request: Request,
@@ -16,6 +16,8 @@ export async function PUT(
         { status: 400 }
       );
     }
+
+    const supabase = await createClient();
 
     const { data: existing } = await supabase
       .from("blogs")
@@ -76,6 +78,8 @@ export async function DELETE(
 ) {
   try {
     const { slug } = await params;
+
+    const supabase = await createClient();
 
     const { data: existing } = await supabase
       .from("blogs")

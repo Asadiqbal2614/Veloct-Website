@@ -5,23 +5,34 @@ import { useRouter } from 'next/navigation'
 import Image from 'next/image'
 import Link from 'next/link'
 import { ArrowLeft, LogIn, Eye, EyeOff } from 'lucide-react'
+import { createClient } from '@/lib/supabase/client'
 
-export default function AdminPage() {
+export default function SecurePortalPage() {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
   const [showPassword, setShowPassword] = useState(false)
+  const [loading, setLoading] = useState(false)
   const router = useRouter()
 
-  const handleLogin = (e: React.FormEvent) => {
+  const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault()
     setError('')
+    setLoading(true)
 
-    if (username === process.env.NEXT_PUBLIC_ADMIN_USER && password === process.env.NEXT_PUBLIC_ADMIN_PASSWORD) {
-      sessionStorage.setItem('admin_authenticated', 'true')
-      router.push('/dashboard')
+    const supabase = createClient()
+
+    const { error: authError } = await supabase.auth.signInWithPassword({
+      email: username,
+      password,
+    })
+
+    setLoading(false)
+
+    if (authError) {
+      setError(authError.message)
     } else {
-      setError('Invalid username or password')
+      router.push('/dashboard')
     }
   }
 
@@ -91,10 +102,11 @@ export default function AdminPage() {
 
           <button
             type="submit"
-            className="command-strip w-full py-3 rounded-lg font-semibold text-white flex items-center justify-center gap-2 hover:opacity-90 transition-opacity cursor-pointer"
+            disabled={loading}
+            className="command-strip w-full py-3 rounded-lg font-semibold text-white flex items-center justify-center gap-2 hover:opacity-90 transition-opacity cursor-pointer disabled:opacity-50"
           >
             <LogIn size={18} />
-            Sign In
+            {loading ? 'Signing In...' : 'Sign In'}
           </button>
         </form>
       </div>

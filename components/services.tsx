@@ -51,7 +51,7 @@ export default function Services() {
             Our Core Services
           </h2>
           <p className="text-base sm:text-lg text-white/80 leading-relaxed">
-            We deliver enterprise-grade technology solutions tailored to the needs of businesses across the Gulf region.
+            We deliver enterprise-grade technology solutions tailored to the needs of forward-thinking businesses worldwide.
           </p>
         </div>
 

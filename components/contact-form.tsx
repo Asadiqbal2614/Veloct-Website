@@ -12,7 +12,7 @@ const CONTACT_DETAILS = [
     icon: Linkedin,
     href: "https://www.linkedin.com/company/veloct-tech",
   },
-  { label: "Region", value: "Serving Saudi Arabia & Gulf Region", icon: MapPin },
+  { label: "Region", value: "Serving Clients Worldwide", icon: MapPin },
 ];
 
 const ACTIONS = ["Book Consultation", "Request a Proposal"];

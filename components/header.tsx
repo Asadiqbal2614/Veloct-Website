@@ -95,7 +95,7 @@ export default function Header() {
             <img
               src="/assets/logo.png"
               alt="VELOCT"
-              width={105}
+              width={160}
               className="h-auto"
             />
           </a>
@@ -190,7 +190,7 @@ export default function Header() {
       <button
         onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
         className={cn(
-          "fixed bottom-6 right-6 z-50 w-11 h-11 rounded-full flex items-center justify-center shadow-lg transition-all duration-300",
+          "fixed bottom-24 right-6 z-50 w-12 h-12 rounded-full flex items-center justify-center shadow-lg transition-all duration-300",
           showScrollTop
             ? "opacity-100 pointer-events-auto translate-y-0"
             : "opacity-0 pointer-events-none translate-y-2",
@@ -198,7 +198,7 @@ export default function Header() {
         )}
         aria-label="Scroll to top"
       >
-        <ChevronUp className="w-5 h-5" />
+        <ChevronUp className="w-6 h-6" />
       </button>
     </>
   );

@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import { IBM_Plex_Sans, IBM_Plex_Mono } from 'next/font/google'
 import { ThemeProvider } from 'next-themes'
+import WhatsAppButton from '@/components/whatsapp-button'
 import './globals.css'
 
 const ibmPlexSans = IBM_Plex_Sans({
@@ -20,9 +21,9 @@ export const metadata: Metadata = {
   description:
     'VELOCT accelerates innovation through AI, cloud, and digital transformation solutions for modern enterprises.',
   icons: {
-    icon: '/assets/logo.png',
-    shortcut: '/assets/logo.png',
-    apple: '/assets/logo.png',
+    icon: '/assets/favicon.png',
+    shortcut: '/assets/favicon.png',
+    apple: '/assets/favicon.png',
   },
 }
 
@@ -42,6 +43,7 @@ export default function RootLayout({
             className="fixed top-0 left-0 w-0 h-0.5 bg-primary z-50 transition-all duration-150"
           />
           <div className="planner-bg min-h-screen">{children}</div>
+          <WhatsAppButton />
         </ThemeProvider>
       </body>
     </html>

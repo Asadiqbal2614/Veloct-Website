@@ -1,7 +1,9 @@
 import { NextResponse } from "next/server";
-import { supabase } from "@/lib/supabase";
+import { createClient } from "@/lib/supabase/server";
 
 export async function GET() {
+  const supabase = await createClient();
+
   const { data, error } = await supabase
     .from("submissions")
     .select("*")
@@ -31,7 +33,9 @@ export async function POST(request: Request) {
       );
     }
 
-    const { data, error } = await supabase
+    const supabase = await createClient();
+
+    const { error } = await supabase
       .from("submissions")
       .insert({
         email,
@@ -42,9 +46,7 @@ export async function POST(request: Request) {
         budget,
         timeline,
         timestamp: new Date().toISOString(),
-      })
-      .select()
-      .single();
+      });
 
     if (error) {
       console.log("DETAILED DB ERROR:", JSON.stringify(error, null, 2));
@@ -55,7 +57,7 @@ export async function POST(request: Request) {
     }
 
     return NextResponse.json(
-      { success: true, submission: data },
+      { success: true },
       { status: 201 }
     );
   } catch (error) {
@@ -69,6 +71,7 @@ export async function POST(request: Request) {
 
 export async function DELETE(request: Request) {
   try {
+    const supabase = await createClient();
     const { searchParams } = new URL(request.url)
     const id = searchParams.get('id')
 

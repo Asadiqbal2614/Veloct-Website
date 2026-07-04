@@ -5,9 +5,9 @@ import { Globe, Shield, Server, Lightbulb, HeadphonesIcon, Briefcase } from "luc
 const REASONS = [
   {
     icon: Globe,
-    title: "Gulf-Focused Solutions",
+    title: "Globally-Ready Solutions",
     description:
-      "Deep understanding of the Saudi and Gulf market — from regulatory compliance to cultural context, we build what works locally.",
+      "Deep cross-border expertise spanning regulatory compliance, cultural context, and international best practices — we build what works everywhere.",
   },
   {
     icon: Shield,
@@ -31,7 +31,7 @@ const REASONS = [
     icon: HeadphonesIcon,
     title: "Remote Service Delivery",
     description:
-      "Full project delivery and support remotely across the Gulf — fast response, minimal downtime, maximum uptime.",
+      "Full project delivery and support remotely across the globe — fast response, minimal downtime, maximum uptime.",
   },
   {
     icon: Briefcase,
@@ -54,7 +54,7 @@ export default function WhyUs() {
             Why Choose VELOCT
           </h2>
           <p className="text-base sm:text-lg text-white/80 leading-relaxed">
-            We combine deep technical expertise with regional knowledge to deliver IT solutions that make a difference.
+            We combine deep technical expertise with global perspective to deliver IT solutions that make a difference.
           </p>
         </div>
 

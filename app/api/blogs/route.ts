@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { supabase } from "@/lib/supabase";
+import { createClient } from "@/lib/supabase/server";
 
 export interface BlogPost {
   title: string;
@@ -13,6 +13,8 @@ export interface BlogPost {
 }
 
 export async function GET() {
+  const supabase = await createClient();
+
   const { data, error } = await supabase
     .from("blogs")
     .select("*")
@@ -41,6 +43,8 @@ export async function POST(request: Request) {
         { status: 400 }
       );
     }
+
+    const supabase = await createClient();
 
     const { data: existing } = await supabase
       .from("blogs")

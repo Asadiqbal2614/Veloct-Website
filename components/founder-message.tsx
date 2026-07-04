@@ -18,8 +18,8 @@ export default function FounderMessage() {
         <div className="space-y-6">
           <blockquote className="pl-5 border-l-4 border-[#FE7004] text-white/80 text-base sm:text-lg leading-relaxed">
             &ldquo;At VELOCT, we believe technology should be a catalyst — not a complication. 
-            Our mission is to bring enterprise-grade innovation to businesses across Saudi Arabia 
-            and the Gulf, without the friction and overhead of traditional IT engagements.&rdquo;
+            Our mission is to bring enterprise-grade innovation to businesses worldwide,
+            ensuring seamless digital evolution without traditional IT overhead.&rdquo;
           </blockquote>
 
           <blockquote className="pl-5 border-l-4 border-[#FE7004] text-white/80 text-base sm:text-lg leading-relaxed">

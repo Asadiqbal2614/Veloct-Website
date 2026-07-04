@@ -45,7 +45,7 @@ export default function BlogsPage() {
           </h1>
           <p className="text-white/60 text-base max-w-2xl">
             Explore the latest in technology, innovation, and digital transformation
-            across the Gulf region.
+            driving change for businesses worldwide.
           </p>
         </div>
 

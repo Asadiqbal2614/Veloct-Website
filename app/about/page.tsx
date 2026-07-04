@@ -5,7 +5,7 @@ import { ArrowLeft, Target, Eye, Heart, Shield, Zap, Users, TrendingUp } from 'l
 const values = [
   { icon: Shield, title: 'Security First', description: 'Every solution is built with enterprise-grade security at its core, protecting your data and operations.' },
   { icon: Zap, title: 'Innovation Driven', description: 'We leverage cutting-edge AI, cloud, and cybersecurity technologies to deliver future-ready solutions.' },
-  { icon: Users, title: 'Gulf-Focused', description: 'Deep understanding of the regional market, regulatory landscape, and business culture across Saudi Arabia and the Gulf.' },
+  { icon: Users, title: 'Global Perspective', description: 'Deep understanding of diverse markets, regulatory landscapes, and business cultures — delivering solutions that work across borders.' },
   { icon: Heart, title: 'Client Partnership', description: 'We don\'t just deliver projects — we build lasting partnerships with transparent communication and shared goals.' },
   { icon: TrendingUp, title: 'Scalable Solutions', description: 'From startups to enterprises, our solutions grow with your business, ensuring long-term value.' },
   { icon: Target, title: 'Quality Excellence', description: 'Unwavering commitment to quality through rigorous testing, best practices, and continuous improvement.' },
@@ -29,11 +29,11 @@ export default function AboutPage() {
             About Us
           </span>
           <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-white">
-            Accelerating Innovation Across the Gulf
+            Accelerating Innovation Across the Globe
           </h1>
           <p className="text-white/60 text-base max-w-3xl leading-relaxed">
-            VELOCT is a Saudi-based technology consulting firm specializing in AI, cloud
-            infrastructure, and cybersecurity. We help businesses across the Gulf region
+            VELOCT is a global technology consulting firm specializing in AI, cloud
+            infrastructure, and cybersecurity. We help businesses worldwide
             modernize, scale, and secure their digital operations.
           </p>
         </div>
@@ -68,7 +68,7 @@ export default function AboutPage() {
                 <h2 className="text-lg font-semibold text-white mb-2">Our Mission</h2>
                 <p className="text-white/70 leading-relaxed text-sm">
                   To democratize access to enterprise-grade AI, cloud, and cybersecurity
-                  solutions for businesses across Saudi Arabia and the Gulf region — making
+                  solutions for businesses everywhere — making
                   advanced technology practical, accessible, and impactful.
                 </p>
               </div>
@@ -80,7 +80,7 @@ export default function AboutPage() {
               <div>
                 <h2 className="text-lg font-semibold text-white mb-2">Our Vision</h2>
                 <p className="text-white/70 leading-relaxed text-sm">
-                  To be the most trusted technology partner in the Gulf — recognized for
+                  To be the most trusted technology partner worldwide — recognized for
                   delivering innovative, secure, and scalable solutions that empower businesses
                   to lead in the digital economy.
                 </p>
@@ -103,19 +103,19 @@ export default function AboutPage() {
           <div className="space-y-6">
             <blockquote className="pl-5 border-l-4 border-[#FE7004] text-white/80 text-base sm:text-lg leading-relaxed">
               &ldquo;At VELOCT, we believe technology should be a catalyst — not a complication.
-              Our mission is to bring enterprise-grade innovation to businesses across Saudi Arabia
-              and the Gulf, without the friction and overhead of traditional IT engagements.&rdquo;
+              Our mission is to bring enterprise-grade innovation to businesses worldwide,
+              ensuring seamless digital evolution without traditional IT overhead.&rdquo;
             </blockquote>
 
             <blockquote className="pl-5 border-l-4 border-[#FE7004] text-white/80 text-base sm:text-lg leading-relaxed">
-              &ldquo;We founded VELOCT to bridge the gap between global tech standards and
-              regional needs. Every solution we deliver is designed with local context,
-              global best practices, and an unwavering commitment to quality.&rdquo;
+              &ldquo;We founded VELOCT to bridge the gap between cutting-edge technology and
+              real-world business needs. Every solution we deliver is designed with
+              global best practices and an unwavering commitment to quality.&rdquo;
             </blockquote>
 
             <blockquote className="pl-5 border-l-4 border-[#FE7004] text-white/80 text-base sm:text-lg leading-relaxed">
               &ldquo;Whether you are a growing startup or an established enterprise, our team is
-              ready to partner with you — from strategy through deployment and beyond.
+              ready to partner with you — from strategy through deployment and beyond, no matter where you are.
               Let&rsquo;s build something impactful together.&rdquo;
             </blockquote>
 

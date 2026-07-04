@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation'
 import Image from 'next/image'
 import Link from 'next/link'
 import { cn } from '@/lib/utils'
+import { createClient } from '@/lib/supabase/client'
 import { LogOut, RefreshCw, Trash2, Mail, Calendar, Users, Briefcase, GraduationCap, FileText, Pencil, Award, CalendarDays, Tag, Lock, Unlock, Clock, CheckCircle, XCircle } from 'lucide-react'
 
 interface Consultation {
@@ -91,13 +92,16 @@ export default function DashboardPage() {
   }, [])
 
   useEffect(() => {
-    const auth = sessionStorage.getItem('admin_authenticated')
-    if (auth !== 'true') {
-      router.push('/admin')
-    } else {
-      setAuthenticated(true)
-      loadData()
-    }
+    ;(async () => {
+      const supabase = createClient()
+      const { data: { session } } = await supabase.auth.getSession()
+      if (!session) {
+        router.replace('/')
+      } else {
+        setAuthenticated(true)
+        loadData()
+      }
+    })()
   }, [router, loadData])
 
   const clearAll = async () => {
@@ -126,9 +130,10 @@ export default function DashboardPage() {
     }
   }
 
-  const handleLogout = () => {
-    sessionStorage.removeItem('admin_authenticated')
-    router.push('/admin')
+  const handleLogout = async () => {
+    const supabase = createClient()
+    await supabase.auth.signOut()
+    router.replace('/')
   }
 
   const handlePublishBlog = async (e: FormEvent) => {
@@ -623,7 +628,7 @@ export default function DashboardPage() {
                     required
                     value={blogTitle}
                     onChange={(e) => setBlogTitle(e.target.value)}
-                    placeholder="e.g. The Future of AI in the Gulf"
+                    placeholder="e.g. The Future of AI in Business"
                     className="w-full px-4 py-3 rounded-xl bg-white/5 border border-[#FE7004]/15 text-white text-sm placeholder:text-white/30 focus:outline-none focus:border-[#FE7004]/50 focus:ring-1 focus:ring-[#FE7004]/30 transition-all"
                   />
                 </div>
@@ -639,7 +644,7 @@ export default function DashboardPage() {
                       readOnly={slugLocked}
                       value={blogSlug}
                       onChange={(e) => setBlogSlug(e.target.value)}
-                      placeholder="e.g. future-of-ai-in-gulf"
+                      placeholder="e.g. future-of-ai-in-business"
                       className="w-full px-4 py-3 rounded-xl bg-white/5 border border-[#FE7004]/15 text-white text-sm placeholder:text-white/30 focus:outline-none focus:border-[#FE7004]/50 focus:ring-1 focus:ring-[#FE7004]/30 transition-all font-mono"
                     />
                     <button
@@ -676,7 +681,7 @@ export default function DashboardPage() {
                       type="text"
                       value={blogTags}
                       onChange={(e) => setBlogTags(e.target.value)}
-                      placeholder="e.g. AI, Technology, Saudi Arabia"
+                      placeholder="e.g. AI, Technology, Innovation"
                       className="w-full pl-9 pr-4 py-3 rounded-xl bg-white/5 border border-[#FE7004]/15 text-white text-sm placeholder:text-white/30 focus:outline-none focus:border-[#FE7004]/50 focus:ring-1 focus:ring-[#FE7004]/30 transition-all"
                     />
                   </div>

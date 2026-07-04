@@ -47,7 +47,7 @@ export default function Hero() {
           <div className="space-y-6 lg:space-y-8">
             <div className="animate-fade-in-up">
               <span className="micro-label inline-block px-3 py-1.5 rounded-full border border-[#FE7004]/30 text-[#FE7004] bg-[#FE7004]/5">
-                Saudi Arabia &amp; Gulf Region
+                AI &amp; Cloud Transformation
               </span>
             </div>
 
@@ -63,7 +63,7 @@ export default function Hero() {
               className="animate-fade-in-up text-base sm:text-lg text-white/80 max-w-xl leading-relaxed"
               style={{ animationDelay: "0.2s" }}
             >
-              VELOCT delivers enterprise IT solutions across Saudi Arabia and the Gulf — from AI-driven
+              VELOCT delivers enterprise IT solutions to businesses worldwide — from AI-driven
               automation and cloud infrastructure to cybersecurity and custom software that scales.
             </p>
 
