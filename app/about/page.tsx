@@ -3,12 +3,12 @@ import Link from 'next/link'
 import { ArrowLeft, Target, Eye, Heart, Shield, Zap, Users, TrendingUp } from 'lucide-react'
 
 const values = [
-  { icon: Shield, title: 'Security First', description: 'Every solution is built with enterprise-grade security at its core, protecting your data and operations.' },
-  { icon: Zap, title: 'Innovation Driven', description: 'We leverage cutting-edge AI, cloud, and cybersecurity technologies to deliver future-ready solutions.' },
-  { icon: Users, title: 'Global Perspective', description: 'Deep understanding of diverse markets, regulatory landscapes, and business cultures — delivering solutions that work across borders.' },
-  { icon: Heart, title: 'Client Partnership', description: 'We don\'t just deliver projects — we build lasting partnerships with transparent communication and shared goals.' },
-  { icon: TrendingUp, title: 'Scalable Solutions', description: 'From startups to enterprises, our solutions grow with your business, ensuring long-term value.' },
-  { icon: Target, title: 'Quality Excellence', description: 'Unwavering commitment to quality through rigorous testing, best practices, and continuous improvement.' },
+  { icon: Shield, title: 'Zero-Trust Security', description: 'Every solution is engineered with zero-trust architectures and defense-in-depth — protecting your data, operations, and compliance posture.' },
+  { icon: Zap, title: 'Innovation Driven', description: 'We leverage cutting-edge AI, cloud, and cybersecurity technologies to deliver future-ready solutions that drive business growth.' },
+  { icon: Users, title: 'Global Perspective', description: 'Deep cross-border expertise spanning regulatory compliance and international best practices — we build what works everywhere.' },
+  { icon: Heart, title: 'Client Partnership', description: 'We don\'t just deliver projects — we build lasting partnerships with transparent communication, shared goals, and measurable outcomes.' },
+  { icon: TrendingUp, title: 'Scalable Solutions', description: 'From startups to enterprises, our cloud-native architectures and modular systems grow seamlessly with your business.' },
+  { icon: Target, title: 'Quality Excellence', description: 'Unwavering commitment to quality through rigorous testing, industry best practices, and continuous improvement across every delivery.' },
 ]
 
 export default function AboutPage() {
@@ -29,12 +29,12 @@ export default function AboutPage() {
             About Us
           </span>
           <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-white">
-            Accelerating Innovation Across the Globe
+            Digital Transformation, AI &amp; Cloud Services — Worldwide
           </h1>
           <p className="text-white/60 text-base max-w-3xl leading-relaxed">
-            VELOCT is a global technology consulting firm specializing in AI, cloud
-            infrastructure, and cybersecurity. We help businesses worldwide
-            modernize, scale, and secure their digital operations.
+            VELOCT.TECH is an international IT service provider specializing in digital
+            transformation, AI, and cloud services for forward-thinking businesses worldwide.
+            We bridge the gap between complex technology and real business goals.
           </p>
         </div>
 
@@ -45,15 +45,15 @@ export default function AboutPage() {
             <div>
               <h2 className="text-xl font-semibold text-white mb-3">Company Overview</h2>
               <p className="text-white/70 leading-relaxed mb-4">
-                Founded with a vision to bridge the gap between global technology standards and
-                regional business needs, VELOCT delivers enterprise-grade solutions without the
-                traditional overhead. Our team combines deep technical expertise with practical
-                business acumen to drive measurable outcomes for our clients.
+                VELOCT.TECH is led by a seasoned IT Specialist with deep roots in both hardware
+                infrastructure and modern full-stack software development. We deliver secure,
+                scalable, and intelligent solutions that act as catalysts for business growth —
+                combining enterprise-grade technology with seamless deployment.
               </p>
               <p className="text-white/70 leading-relaxed">
-                From strategy consulting to full-scale deployment, we partner with organizations
-                at every stage of their digital journey — ensuring technology serves as a
-                catalyst for growth, not a complication.
+                From AI-driven automation and zero-trust cybersecurity to custom software and
+                cloud architecture, we partner with organizations worldwide to turn complex
+                technical challenges into measurable business outcomes.
               </p>
             </div>
           </div>
@@ -67,9 +67,9 @@ export default function AboutPage() {
               <div>
                 <h2 className="text-lg font-semibold text-white mb-2">Our Mission</h2>
                 <p className="text-white/70 leading-relaxed text-sm">
-                  To democratize access to enterprise-grade AI, cloud, and cybersecurity
-                  solutions for businesses everywhere — making
-                  advanced technology practical, accessible, and impactful.
+                  To deliver secure, scalable, and intelligent solutions that act as catalysts
+                  for business growth — combining high-value technology with seamless deployment
+                  and zero-trust security architectures.
                 </p>
               </div>
             </div>
@@ -80,9 +80,9 @@ export default function AboutPage() {
               <div>
                 <h2 className="text-lg font-semibold text-white mb-2">Our Vision</h2>
                 <p className="text-white/70 leading-relaxed text-sm">
-                  To be the most trusted technology partner worldwide — recognized for
-                  delivering innovative, secure, and scalable solutions that empower businesses
-                  to lead in the digital economy.
+                  To be the preferred technology partner for forward-thinking businesses
+                  worldwide — bridging the gap between complex technology and business goals
+                  through AI, cybersecurity, and custom software excellence.
                 </p>
               </div>
             </div>
@@ -102,20 +102,21 @@ export default function AboutPage() {
 
           <div className="space-y-6">
             <blockquote className="pl-5 border-l-4 border-[#FE7004] text-white/80 text-base sm:text-lg leading-relaxed">
-              &ldquo;At VELOCT, we believe technology should be a catalyst — not a complication.
-              Our mission is to bring enterprise-grade innovation to businesses worldwide,
-              ensuring seamless digital evolution without traditional IT overhead.&rdquo;
+              &ldquo;At VELOCT.TECH, we bridge the gap between complex technology and business
+              goals. Our focus is high-value tech — AI, Cybersecurity, and Custom Software —
+              combined with seamless deployment and zero-trust security architectures.&rdquo;
             </blockquote>
 
             <blockquote className="pl-5 border-l-4 border-[#FE7004] text-white/80 text-base sm:text-lg leading-relaxed">
-              &ldquo;We founded VELOCT to bridge the gap between cutting-edge technology and
-              real-world business needs. Every solution we deliver is designed with
-              global best practices and an unwavering commitment to quality.&rdquo;
+              &ldquo;I founded VELOCT.TECH with a singular vision: to make enterprise-grade
+              digital transformation accessible to forward-thinking businesses everywhere.
+              Every solution we deliver is built on global best practices, rigorous quality
+              standards, and a deep understanding of both hardware and software ecosystems.&rdquo;
             </blockquote>
 
             <blockquote className="pl-5 border-l-4 border-[#FE7004] text-white/80 text-base sm:text-lg leading-relaxed">
-              &ldquo;Whether you are a growing startup or an established enterprise, our team is
-              ready to partner with you — from strategy through deployment and beyond, no matter where you are.
+              &ldquo;Whether you are scaling your startup or modernizing an enterprise, our team
+              is ready to partner with you — from strategy through deployment and beyond.
               Let&rsquo;s build something impactful together.&rdquo;
             </blockquote>
 

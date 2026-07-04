@@ -1,13 +1,14 @@
-"use client";
+"use client"
 
-import { Globe, Shield, Server, Lightbulb, HeadphonesIcon, Briefcase } from "lucide-react";
+import { Globe, Shield, Server, Lightbulb, HeadphonesIcon, Briefcase } from "lucide-react"
+import AnimateOnScroll from "@/components/animate-on-scroll"
 
 const REASONS = [
   {
     icon: Globe,
     title: "Globally-Ready Solutions",
     description:
-      "Deep cross-border expertise spanning regulatory compliance, cultural context, and international best practices — we build what works everywhere.",
+      "Deep cross-border expertise spanning regulatory compliance and international best practices — we build what works everywhere.",
   },
   {
     icon: Shield,
@@ -39,49 +40,47 @@ const REASONS = [
     description:
       "Technology serves your business goals, not the other way around. We align every solution with your strategic objectives.",
   },
-];
+]
 
 export default function WhyUs() {
   return (
     <section id="why-us" className="relative py-16 lg:py-20">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Section Header */}
-        <div className="text-center max-w-3xl mx-auto mb-14 lg:mb-18 space-y-4">
-          <span className="micro-label inline-block px-3 py-1.5 rounded-full border border-[#FE7004]/30 text-[#FE7004] bg-[#FE7004]/5">
-            The Advantage
-          </span>
-          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-white">
-            Why Choose VELOCT
-          </h2>
-          <p className="text-base sm:text-lg text-white/80 leading-relaxed">
-            We combine deep technical expertise with global perspective to deliver IT solutions that make a difference.
-          </p>
-        </div>
+        <AnimateOnScroll>
+          <div className="text-center max-w-3xl mx-auto mb-14 lg:mb-18 space-y-4">
+            <span className="micro-label inline-block px-3 py-1.5 rounded-full border border-[#FE7004]/30 text-[#FE7004] bg-[#FE7004]/5">
+              The Advantage
+            </span>
+            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-white">
+              Why Choose VELOCT
+            </h2>
+            <p className="text-base sm:text-lg text-white/80 leading-relaxed">
+              We combine deep technical expertise with global perspective to deliver IT solutions that make a difference.
+            </p>
+          </div>
+        </AnimateOnScroll>
 
-        {/* Cards Grid */}
-        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 items-stretch">
           {REASONS.map((reason, idx) => {
-            const Icon = reason.icon;
+            const Icon = reason.icon
             return (
-              <div
-                key={reason.title}
-                className="paper-card p-6 lg:p-8 animate-fade-in-up"
-                style={{ animationDelay: `${idx * 0.1}s` }}
-              >
-                <div className="w-11 h-11 rounded-xl bg-[#FE7004]/10 flex items-center justify-center mb-4">
-                  <Icon className="w-5.5 h-5.5 text-[#FE7004]" />
+              <AnimateOnScroll key={reason.title} delay={idx * 80}>
+                <div className="paper-card p-6 lg:p-8 card-hover-lift h-full">
+                  <div className="w-11 h-11 rounded-xl bg-[#FE7004]/10 flex items-center justify-center mb-4 card-icon">
+                    <Icon className="w-5.5 h-5.5 text-[#FE7004]" />
+                  </div>
+                  <h3 className="text-lg font-bold text-white mb-2">
+                    {reason.title}
+                  </h3>
+                  <p className="text-base text-white/80 leading-relaxed">
+                    {reason.description}
+                  </p>
                 </div>
-                <h3 className="text-lg font-bold text-white mb-2">
-                  {reason.title}
-                </h3>
-                <p className="text-base text-white/80 leading-relaxed">
-                  {reason.description}
-                </p>
-              </div>
-            );
+              </AnimateOnScroll>
+            )
           })}
         </div>
       </div>
     </section>
-  );
+  )
 }

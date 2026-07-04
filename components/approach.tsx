@@ -1,6 +1,7 @@
-"use client";
+"use client"
 
-import { Search, Layers, Rocket, RefreshCw } from "lucide-react";
+import { Search, Layers, Rocket, RefreshCw } from "lucide-react"
+import { useInView } from "@/hooks/use-in-view"
 
 const STEPS = [
   {
@@ -31,14 +32,17 @@ const STEPS = [
     description:
       "Post-launch, we monitor, maintain, and optimize your systems — ensuring peak performance, security, and scalability as your business evolves.",
   },
-];
+]
 
 export default function Approach() {
+  const { ref: sectionRef, inView } = useInView({ threshold: 0.05 })
+
   return (
-    <section id="approach" className="relative py-16 lg:py-20">
+    <section id="approach" ref={sectionRef} className="relative py-16 lg:py-20">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
-        <div className="text-center max-w-3xl mx-auto mb-14 lg:mb-20 space-y-4">
+        <div className={`text-center max-w-3xl mx-auto mb-14 lg:mb-20 space-y-4 transition-all duration-700 ease-out ${inView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"}`}
+        >
           <span className="micro-label inline-block px-3 py-1.5 rounded-full border border-[#FE7004]/30 text-[#FE7004] bg-[#FE7004]/5">
             Framework
           </span>
@@ -52,13 +56,23 @@ export default function Approach() {
 
         {/* Timeline */}
         <div className="relative max-w-5xl mx-auto">
-          {/* Vertical spine line */}
-          <div className="absolute left-5 lg:left-1/2 lg:-translate-x-px top-0 bottom-0 w-0.5 bg-gradient-to-b from-[#FE7004]/40 via-[#FE7004]/20 to-transparent" />
+          {/* Animated vertical spine line */}
+          <div className="absolute left-5 lg:left-1/2 lg:-translate-x-px top-0 bottom-0 w-0.5 overflow-hidden">
+            <div
+              className="w-full bg-gradient-to-b from-[#FE7004]/40 via-[#FE7004]/20 to-transparent"
+              style={{
+                height: "100%",
+                transformOrigin: "top center",
+                transition: "transform 1.5s cubic-bezier(0.4, 0, 0.2, 1)",
+                transform: inView ? "scaleY(1)" : "scaleY(0)",
+              }}
+            />
+          </div>
 
           <div className="space-y-10 lg:space-y-0">
             {STEPS.map((step, idx) => {
-              const Icon = step.icon;
-              const isLeft = idx % 2 === 0;
+              const Icon = step.icon
+              const isLeft = idx % 2 === 0
 
               const cardContent = (
                 <>
@@ -74,16 +88,26 @@ export default function Approach() {
                     {step.description}
                   </p>
                 </>
-              );
+              )
 
               return (
                 <div key={step.number} className="relative lg:pb-24 last:pb-0">
                   {/* Mobile layout */}
                   <div className="flex lg:hidden items-start gap-4">
-                    <div className="relative z-10 flex-shrink-0 w-10 h-10 rounded-full bg-gradient-to-br from-[#FE7004] to-orange-500 flex items-center justify-center shadow-lg shadow-[#FE7004]/30">
+                    <div
+                      className={`relative z-10 flex-shrink-0 w-10 h-10 rounded-full bg-gradient-to-br from-[#FE7004] to-orange-500 flex items-center justify-center shadow-lg shadow-[#FE7004]/30 ${
+                        inView ? "animate-bounce-in" : "opacity-0"
+                      }`}
+                      style={{ animationDelay: `${idx * 0.15}s` }}
+                    >
                       <span className="text-sm font-bold text-white">{step.number}</span>
                     </div>
-                    <div className="flex-1 paper-card p-5 animate-fade-in-up" style={{ animationDelay: `${idx * 0.1}s` }}>
+                    <div
+                      className={`flex-1 paper-card p-5 transition-all duration-700 ease-out ${
+                        inView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
+                      }`}
+                      style={{ transitionDelay: `${idx * 0.12}s` }}
+                    >
                       {cardContent}
                     </div>
                   </div>
@@ -92,11 +116,21 @@ export default function Approach() {
                   <div className="hidden lg:flex items-start">
                     {isLeft ? (
                       <>
-                        <div className="w-[calc(50%-2rem)] paper-card p-7 animate-fade-in-up" style={{ animationDelay: `${idx * 0.1}s` }}>
+                        <div
+                          className={`w-[calc(50%-2rem)] paper-card p-7 transition-all duration-700 ease-out ${
+                            inView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
+                          }`}
+                          style={{ transitionDelay: `${idx * 0.12}s` }}
+                        >
                           {cardContent}
                         </div>
                         <div className="w-16 flex-shrink-0 flex justify-center relative">
-                          <div className="relative z-10 w-12 h-12 rounded-full bg-gradient-to-br from-[#FE7004] to-orange-500 flex items-center justify-center shadow-lg shadow-[#FE7004]/30">
+                          <div
+                            className={`relative z-10 w-12 h-12 rounded-full bg-gradient-to-br from-[#FE7004] to-orange-500 flex items-center justify-center shadow-lg shadow-[#FE7004]/30 ${
+                              inView ? "animate-bounce-in" : "opacity-0"
+                            }`}
+                            style={{ animationDelay: `${idx * 0.15}s` }}
+                          >
                             <span className="text-base font-bold text-white">{step.number}</span>
                           </div>
                         </div>
@@ -106,22 +140,32 @@ export default function Approach() {
                       <>
                         <div className="w-[calc(50%-2rem)]" />
                         <div className="w-16 flex-shrink-0 flex justify-center relative">
-                          <div className="relative z-10 w-12 h-12 rounded-full bg-gradient-to-br from-[#FE7004] to-orange-500 flex items-center justify-center shadow-lg shadow-[#FE7004]/30">
+                          <div
+                            className={`relative z-10 w-12 h-12 rounded-full bg-gradient-to-br from-[#FE7004] to-orange-500 flex items-center justify-center shadow-lg shadow-[#FE7004]/30 ${
+                              inView ? "animate-bounce-in" : "opacity-0"
+                            }`}
+                            style={{ animationDelay: `${idx * 0.15}s` }}
+                          >
                             <span className="text-base font-bold text-white">{step.number}</span>
                           </div>
                         </div>
-                        <div className="w-[calc(50%-2rem)] paper-card p-7 animate-fade-in-up" style={{ animationDelay: `${idx * 0.1}s` }}>
+                        <div
+                          className={`w-[calc(50%-2rem)] paper-card p-7 transition-all duration-700 ease-out ${
+                            inView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
+                          }`}
+                          style={{ transitionDelay: `${idx * 0.12}s` }}
+                        >
                           {cardContent}
                         </div>
                       </>
                     )}
                   </div>
                 </div>
-              );
+              )
             })}
           </div>
         </div>
       </div>
     </section>
-  );
+  )
 }

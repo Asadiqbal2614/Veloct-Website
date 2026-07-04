@@ -173,6 +173,132 @@ body {
   animation: float 4s ease-in-out infinite;
 }
 
+@keyframes lineGrow {
+  from { height: 0; }
+  to { height: 100%; }
+}
+
+@keyframes bounceIn {
+  0% { opacity: 0; transform: scale(0.5) translateY(20px); }
+  60% { opacity: 1; transform: scale(1.05) translateY(-4px); }
+  100% { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+@keyframes pulseOrange {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(254, 112, 4, 0.4); }
+  50% { box-shadow: 0 0 0 12px rgba(254, 112, 4, 0); }
+}
+
+@utility animate-line-grow {
+  animation: lineGrow 1.2s ease-out forwards;
+}
+
+@utility animate-bounce-in {
+  animation: bounceIn 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+@utility animate-pulse-orange {
+  animation: pulseOrange 2s ease-in-out infinite;
+}
+
+.tech-grid-bg {
+  background-image:
+    linear-gradient(rgba(254, 112, 4, 0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(254, 112, 4, 0.04) 1px, transparent 1px);
+  background-size: 80px 80px;
+}
+
+.hero-glow {
+  position: absolute;
+  width: 600px;
+  height: 600px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(254, 112, 4, 0.08), transparent 60%);
+  pointer-events: none;
+}
+
+.card-hover-lift {
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.card-hover-lift:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 8px 30px rgba(254, 112, 4, 0.15);
+  border-color: rgba(254, 112, 4, 0.3);
+}
+
+.card-hover-lift:hover .card-icon {
+  transform: scale(1.12);
+  background-color: rgba(254, 112, 4, 0.2);
+}
+
+.card-hover-lift:hover .card-icon svg {
+  transform: scale(1.1);
+}
+
+.card-icon {
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.card-icon svg {
+  transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.industry-card-hover {
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.industry-card-hover:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 8px 30px rgba(254, 112, 4, 0.15);
+  border-color: rgba(254, 112, 4, 0.3);
+}
+
+.industry-card-hover:hover .industry-icon-bg {
+  transform: scale(1.1) rotate(6deg);
+  background-color: rgba(254, 112, 4, 0.2);
+}
+
+.industry-icon-bg {
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.timeline-draw {
+  position: absolute;
+  left: 50%;
+  top: 0;
+  width: 2px;
+  background: linear-gradient(to bottom, rgba(254, 112, 4, 0.6), rgba(254, 112, 4, 0.1));
+  transform: translateX(-50%);
+}
+
+.timeline-draw-inner {
+  height: 100%;
+  width: 100%;
+  background: linear-gradient(to bottom, #FE7004, rgba(254, 112, 4, 0.3));
+  transform-origin: top center;
+  transition: transform 1.2s ease-out;
+}
+
+.timeline-draw-inner.drawn {
+  transform: scaleY(1);
+}
+
+.timeline-draw-inner:not(.drawn) {
+  transform: scaleY(0);
+}
+
+.step-bounce {
+  opacity: 0;
+  transform: scale(0.6) translateY(30px);
+  transition: all 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.step-bounce.visible {
+  opacity: 1;
+  transform: scale(1) translateY(0);
+}
+
 /* Grid layout for cards */
 .grid-3 {
   display: grid;
