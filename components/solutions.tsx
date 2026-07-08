@@ -2,7 +2,7 @@
 
 import {
   MessageSquare,
-  Globe,
+  Cloud,
   ShieldCheck,
   BarChart3,
   Smartphone,
@@ -15,7 +15,7 @@ import AnimateOnScroll from "@/components/animate-on-scroll"
 
 const SOLUTIONS = [
   { icon: MessageSquare, title: "AI Chatbots & Agents" },
-  { icon: Globe, title: "Web & SaaS Platforms" },
+  { icon: Cloud, title: "Cloud Infrastructure" },
   { icon: ShieldCheck, title: "Cyber Security" },
   { icon: BarChart3, title: "Data Analytics & BI" },
   { icon: Smartphone, title: "Mobile Apps" },

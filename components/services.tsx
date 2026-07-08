@@ -1,7 +1,7 @@
 "use client"
 
 import Link from "next/link"
-import { Bot, Globe, Shield, ChevronRight, ArrowRight } from "lucide-react"
+import { Bot, Globe, Shield, Cloud, ChevronRight, ArrowRight } from "lucide-react"
 import AnimateOnScroll from "@/components/animate-on-scroll"
 
 const SERVICES = [
@@ -38,6 +38,17 @@ const SERVICES = [
       "Zero-trust architecture implementation",
     ],
   },
+  {
+    icon: Cloud,
+    title: "Cloud Infrastructure & Services",
+    description: "Robust, enterprise-grade cloud solutions designed for high availability, seamless scalability, and maximum data security.",
+    items: [
+      "Cloud hosting & server migration",
+      "High-performance virtual machines (ECS)",
+      "Secure object storage & backup",
+      "Disaster recovery & global CDN",
+    ],
+  },
 ]
 
 export default function Services() {
@@ -58,12 +69,12 @@ export default function Services() {
           </div>
         </AnimateOnScroll>
 
-        <div className="grid md:grid-cols-3 gap-6 lg:gap-8 items-stretch">
+        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8 items-stretch">
           {SERVICES.map((service, idx) => {
             const Icon = service.icon
             return (
               <AnimateOnScroll key={service.title} delay={idx * 120}>
-                <div className="paper-card p-6 lg:p-8 relative flex flex-col card-hover-lift">
+                <div className="paper-card p-6 lg:p-8 relative flex flex-col card-hover-lift h-full">
                   <div className="w-12 h-12 rounded-xl bg-[#FE7004]/10 flex items-center justify-center mb-5 card-icon">
                     <Icon className="w-6 h-6 text-[#FE7004]" />
                   </div>

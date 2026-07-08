@@ -24,7 +24,7 @@ export async function POST(request: Request) {
   try {
     const body = await request.json();
     console.log("[Careers] POST body:", body)
-    const { fullName, email, contact, day, month, year, education, specialization, experience, city, country, resume_url } = body;
+    const { fullName, email, contact, day, month, year, education, specialization, experience, city, country, resume_url, job_id } = body;
 
     if (!fullName || !email || !contact || !education || !experience || !city || !country) {
       return NextResponse.json(
@@ -50,6 +50,7 @@ export async function POST(request: Request) {
         city,
         country,
         resume_url: resume_url || null,
+        job_id: job_id || null,
         timestamp: new Date().toISOString(),
       });
 

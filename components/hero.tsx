@@ -1,7 +1,7 @@
 "use client"
 
 import { useEffect, useState, useCallback } from "react"
-import { BrainCircuit, Globe, Shield, ArrowRight, FileText } from "lucide-react"
+import { BrainCircuit, Cloud, Shield, ArrowRight, FileText } from "lucide-react"
 
 const PILLARS = [
   {
@@ -17,15 +17,16 @@ const PILLARS = [
     accent: "#FE7004",
   },
   {
-    icon: Globe,
-    title: "Web App & SaaS Development",
-    description: "Custom web apps, scalable SaaS platforms, and enterprise portals",
+    icon: Cloud,
+    title: "Cloud Infrastructure & Services",
+    description: "High-availability cloud hosting, VMs, storage, and disaster recovery",
     features: [
-      "Custom web apps (React, Node, Python)",
-      "Scalable SaaS platforms & company portals",
-      "Secure enterprise admin dashboards",
+      "Cloud hosting & server migration",
+      "High-performance virtual machines",
+      "Secure object storage & backup",
+      "Disaster recovery & global CDN",
     ],
-    tag: "⚡ Full-Stack Delivery",
+    tag: "☁️ Enterprise-Grade Cloud",
     accent: "#60A5FA",
   },
   {

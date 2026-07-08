@@ -6,7 +6,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { cn } from '@/lib/utils'
 import { createClient } from '@/lib/supabase/client'
-import { LogOut, RefreshCw, Trash2, Mail, Calendar, Users, Briefcase, GraduationCap, FileText, Pencil, Award, CalendarDays, Tag, Lock, Unlock, Clock, CheckCircle, XCircle } from 'lucide-react'
+import { LogOut, RefreshCw, Trash2, Mail, Calendar, Users, Briefcase, GraduationCap, FileText, Pencil, Award, CalendarDays, Tag, Lock, Unlock, Clock, CheckCircle, XCircle, Plus, ToggleLeft, ToggleRight } from 'lucide-react'
 
 interface Consultation {
   id: string
@@ -48,13 +48,25 @@ interface BlogPost {
   readingTime?: number
 }
 
-type Tab = 'queries' | 'careers' | 'blogs'
+interface JobPosting {
+  id: string
+  title: string
+  description: string
+  experience: string
+  location: string
+  last_date: string
+  is_active: boolean
+  created_at: string
+}
+
+type Tab = 'queries' | 'careers' | 'blogs' | 'jobs'
 
 export default function DashboardPage() {
   const router = useRouter()
   const [consultations, setConsultations] = useState<Consultation[]>([])
   const [careers, setCareers] = useState<CareerSubmission[]>([])
   const [blogs, setBlogs] = useState<BlogPost[]>([])
+  const [jobs, setJobs] = useState<JobPosting[]>([])
   const [authenticated, setAuthenticated] = useState(false)
   const [refreshing, setRefreshing] = useState(false)
   const [activeTab, setActiveTab] = useState<Tab>('queries')
@@ -73,17 +85,30 @@ export default function DashboardPage() {
   const [blogSuccess, setBlogSuccess] = useState('')
   const [blogError, setBlogError] = useState('')
 
+  // Job form state
+  const [jobTitle, setJobTitle] = useState('')
+  const [jobDescription, setJobDescription] = useState('')
+  const [jobExperience, setJobExperience] = useState('')
+  const [jobLocation, setJobLocation] = useState('')
+  const [jobLastDate, setJobLastDate] = useState('')
+  const [editingJobId, setEditingJobId] = useState<string | null>(null)
+  const [jobPublishing, setJobPublishing] = useState(false)
+  const [jobSuccess, setJobSuccess] = useState('')
+  const [jobError, setJobError] = useState('')
+
   const loadData = useCallback(async () => {
     setRefreshing(true)
     try {
-      const [subRes, careerRes, blogRes] = await Promise.all([
+      const [subRes, careerRes, blogRes, jobsRes] = await Promise.all([
         fetch('/api/submissions'),
         fetch('/api/careers'),
         fetch('/api/blogs'),
+        fetch('/api/jobs'),
       ])
       if (subRes.ok) setConsultations(await subRes.json())
       if (careerRes.ok) setCareers(await careerRes.json())
       if (blogRes.ok) setBlogs(await blogRes.json())
+      if (jobsRes.ok) setJobs(await jobsRes.json())
     } catch {
       // best-effort
     } finally {
@@ -111,6 +136,9 @@ export default function DashboardPage() {
     } else if (activeTab === 'careers') {
       setCareers([])
       await fetch('/api/careers', { method: 'DELETE' })
+    } else if (activeTab === 'jobs') {
+      setJobs([])
+      await fetch('/api/jobs', { method: 'DELETE' })
     }
   }
 
@@ -228,6 +256,97 @@ export default function DashboardPage() {
     }
   }
 
+  // --- Job CRUD ---
+
+  const resetJobForm = () => {
+    setJobTitle('')
+    setJobDescription('')
+    setJobExperience('')
+    setJobLocation('')
+    setJobLastDate('')
+    setEditingJobId(null)
+    setJobSuccess('')
+    setJobError('')
+  }
+
+  const handleEditJob = (job: JobPosting) => {
+    setJobTitle(job.title)
+    setJobDescription(job.description)
+    setJobExperience(job.experience)
+    setJobLocation(job.location)
+    setJobLastDate(job.last_date)
+    setEditingJobId(job.id)
+    setJobSuccess('')
+    setJobError('')
+  }
+
+  const handleToggleJobStatus = async (job: JobPosting) => {
+    try {
+      const res = await fetch(`/api/jobs/${job.id}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ is_active: !job.is_active }),
+      })
+      if (res.ok) {
+        setJobs((prev) =>
+          prev.map((j) => (j.id === job.id ? { ...j, is_active: !j.is_active } : j))
+        )
+      }
+    } catch {
+      // best-effort
+    }
+  }
+
+  const handleDeleteJob = async (id: string) => {
+    try {
+      const res = await fetch(`/api/jobs?id=${id}`, { method: 'DELETE' })
+      if (res.ok) {
+        setJobs((prev) => prev.filter((j) => j.id !== id))
+      }
+    } catch {
+      // best-effort
+    }
+  }
+
+  const handlePublishJob = async (e: FormEvent) => {
+    e.preventDefault()
+    setJobPublishing(true)
+    setJobSuccess('')
+    setJobError('')
+
+    const isEditing = !!editingJobId
+
+    try {
+      const url = isEditing ? `/api/jobs/${editingJobId}` : '/api/jobs'
+      const method = isEditing ? 'PUT' : 'POST'
+
+      const res = await fetch(url, {
+        method,
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          title: jobTitle,
+          description: jobDescription,
+          experience: jobExperience,
+          location: jobLocation,
+          last_date: jobLastDate,
+        }),
+      })
+
+      if (res.ok) {
+        setJobSuccess(isEditing ? 'Job updated successfully!' : 'Job created successfully!')
+        resetJobForm()
+        loadData()
+      } else {
+        const err = await res.json()
+        setJobError(err.error || 'Failed to save job')
+      }
+    } catch {
+      setJobError('Network error. Please try again.')
+    } finally {
+      setJobPublishing(false)
+    }
+  }
+
   // Auto-generate slug from title
   useEffect(() => {
     if (slugLocked && !editingSlug) {
@@ -311,7 +430,15 @@ export default function DashboardPage() {
     { label: 'Total Words', value: blogs.length > 0 ? blogs.reduce((s, b) => s + b.content.split(/\s+/).length, 0).toLocaleString() : '0', icon: FileText, delay: '200ms' },
   ]
 
-  const stats = activeTab === 'queries' ? queriesStats : activeTab === 'careers' ? careersStats : blogsStats
+  const activeJobsCount = jobs.filter((j) => j.is_active).length
+  const jobsStats = [
+    { label: 'Total Positions', value: jobs.length, icon: Briefcase, delay: '0ms' },
+    { label: 'Active Listings', value: activeJobsCount, icon: ToggleRight, delay: '100ms' },
+    { label: 'Latest Job', value: jobs.length > 0 ? jobs[0].title : 'N/A', icon: FileText, delay: '200ms' },
+    { label: 'Inactive', value: jobs.length - activeJobsCount, icon: ToggleLeft, delay: '300ms' },
+  ]
+
+  const stats = activeTab === 'queries' ? queriesStats : activeTab === 'careers' ? careersStats : activeTab === 'jobs' ? jobsStats : blogsStats
 
   return (
     <div className="min-h-screen planner-bg">
@@ -349,7 +476,11 @@ export default function DashboardPage() {
               <RefreshCw size={16} className={refreshing ? 'animate-spin' : ''} />
               {refreshing ? 'Refreshing...' : 'Refresh'}
             </button>
-            {activeTab !== 'blogs' && (activeTab === 'queries' ? consultations.length > 0 : careers.length > 0) && (
+            {activeTab !== 'blogs' && (
+              activeTab === 'queries' ? consultations.length > 0 :
+              activeTab === 'careers' ? careers.length > 0 :
+              activeTab === 'jobs' ? jobs.length > 0 : false
+            ) && (
               <button
                 onClick={clearAll}
                 className="flex items-center gap-2 text-sm text-destructive hover:text-red-300 transition-colors px-4 py-2 rounded-lg border border-destructive/30 hover:border-destructive/60 cursor-pointer"
@@ -388,6 +519,18 @@ export default function DashboardPage() {
             Career Applications
           </button>
           <button
+            onClick={() => setActiveTab('jobs')}
+            className={cn(
+              "flex items-center gap-2 px-5 py-2.5 rounded-lg text-sm font-medium transition-all duration-200 cursor-pointer",
+              activeTab === 'jobs'
+                ? "bg-[#FE7004] text-white shadow-lg shadow-[#FE7004]/20"
+                : "text-white/60 hover:text-white hover:bg-white/5"
+            )}
+          >
+            <Briefcase size={16} />
+            Manage Jobs
+          </button>
+          <button
             onClick={() => setActiveTab('blogs')}
             className={cn(
               "flex items-center gap-2 px-5 py-2.5 rounded-lg text-sm font-medium transition-all duration-200 cursor-pointer",
@@ -405,6 +548,7 @@ export default function DashboardPage() {
           "grid grid-cols-1 sm:grid-cols-2 gap-6 mb-8",
           activeTab === 'blogs' ? 'md:grid-cols-3' : 'lg:grid-cols-4'
         )}>
+          {/* Stats cards rendered below */}
           {stats.map((stat) => (
             <div
               key={stat.label}
@@ -585,6 +729,195 @@ export default function DashboardPage() {
                 </table>
               </div>
             )}
+          </div>
+        )}
+
+        {activeTab === 'jobs' && (
+          <div className="grid gap-6 lg:grid-cols-2">
+            {/* Create/Edit Job Form */}
+            <div className="paper-card overflow-hidden animate-fade-in-up" style={{ animationDelay: '400ms' }}>
+              <div className="p-6 border-b border-border">
+                <div className="flex items-center justify-between">
+                  <h2 className="text-xl font-semibold">
+                    {editingJobId ? 'Edit Position' : 'Create New Position'}
+                  </h2>
+                  {editingJobId && (
+                    <button
+                      onClick={resetJobForm}
+                      className="text-xs text-white/40 hover:text-white transition-colors cursor-pointer"
+                    >
+                      Cancel Edit
+                    </button>
+                  )}
+                </div>
+              </div>
+              <form onSubmit={handlePublishJob} className="p-6 space-y-5">
+                {jobSuccess && (
+                  <div className="bg-green-500/10 border border-green-500/30 rounded-lg px-4 py-3 text-sm text-green-400">
+                    {jobSuccess}
+                  </div>
+                )}
+                {jobError && (
+                  <div className="bg-red-500/10 border border-red-500/30 rounded-lg px-4 py-3 text-sm text-red-400">
+                    {typeof jobError === 'string' ? jobError : 'An unexpected error occurred'}
+                  </div>
+                )}
+
+                <div>
+                  <label className="micro-label text-white/60 block mb-1.5">
+                    Job Title <span className="text-[#FE7004]">*</span>
+                  </label>
+                  <input
+                    type="text"
+                    required
+                    value={jobTitle}
+                    onChange={(e) => setJobTitle(e.target.value)}
+                    placeholder="e.g. Senior Full-Stack Developer"
+                    className="w-full px-4 py-3 rounded-xl bg-white/5 border border-[#FE7004]/15 text-white text-sm placeholder:text-white/30 focus:outline-none focus:border-[#FE7004]/50 focus:ring-1 focus:ring-[#FE7004]/30 transition-all"
+                  />
+                </div>
+
+                <div>
+                  <label className="micro-label text-white/60 block mb-1.5">
+                    Description <span className="text-[#FE7004]">*</span>
+                  </label>
+                  <textarea
+                    required
+                    value={jobDescription}
+                    onChange={(e) => setJobDescription(e.target.value)}
+                    placeholder="Describe the role, responsibilities, and requirements..."
+                    rows={5}
+                    className="w-full px-4 py-3 rounded-xl bg-white/5 border border-[#FE7004]/15 text-white text-sm placeholder:text-white/30 focus:outline-none focus:border-[#FE7004]/50 focus:ring-1 focus:ring-[#FE7004]/30 transition-all resize-y"
+                  />
+                </div>
+
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <label className="micro-label text-white/60 block mb-1.5">
+                      Experience <span className="text-[#FE7004]">*</span>
+                    </label>
+                    <input
+                      type="text"
+                      required
+                      value={jobExperience}
+                      onChange={(e) => setJobExperience(e.target.value)}
+                      placeholder="e.g. 3-5 years"
+                      className="w-full px-4 py-3 rounded-xl bg-white/5 border border-[#FE7004]/15 text-white text-sm placeholder:text-white/30 focus:outline-none focus:border-[#FE7004]/50 focus:ring-1 focus:ring-[#FE7004]/30 transition-all"
+                    />
+                  </div>
+                  <div>
+                    <label className="micro-label text-white/60 block mb-1.5">
+                      Location <span className="text-[#FE7004]">*</span>
+                    </label>
+                    <input
+                      type="text"
+                      required
+                      value={jobLocation}
+                      onChange={(e) => setJobLocation(e.target.value)}
+                      placeholder="e.g. Remote / Dubai"
+                      className="w-full px-4 py-3 rounded-xl bg-white/5 border border-[#FE7004]/15 text-white text-sm placeholder:text-white/30 focus:outline-none focus:border-[#FE7004]/50 focus:ring-1 focus:ring-[#FE7004]/30 transition-all"
+                    />
+                  </div>
+                </div>
+
+                <div>
+                  <label className="micro-label text-white/60 block mb-1.5">
+                    Last Date to Apply <span className="text-[#FE7004]">*</span>
+                  </label>
+                  <input
+                    type="date"
+                    required
+                    value={jobLastDate}
+                    onChange={(e) => setJobLastDate(e.target.value)}
+                    className="w-full px-4 py-3 rounded-xl bg-white/5 border border-[#FE7004]/15 text-white text-sm focus:outline-none focus:border-[#FE7004]/50 focus:ring-1 focus:ring-[#FE7004]/30 transition-all [color-scheme:dark]"
+                  />
+                </div>
+
+                <button
+                  type="submit"
+                  disabled={jobPublishing}
+                  className="command-strip w-full py-3.5 rounded-xl text-sm font-semibold text-white flex items-center justify-center gap-2 shadow-lg shadow-[#FE7004]/20 hover:shadow-[#FE7004]/40 transition-all duration-300 hover:scale-[1.02] disabled:opacity-60 disabled:cursor-not-allowed"
+                >
+                  <Plus size={16} />
+                  {jobPublishing ? (editingJobId ? 'Updating...' : 'Publishing...') : (editingJobId ? 'Update Position' : 'Create Position')}
+                </button>
+              </form>
+            </div>
+
+            {/* Job Listings Table */}
+            <div className="paper-card overflow-hidden animate-fade-in-up" style={{ animationDelay: '500ms' }}>
+              <div className="p-6 border-b border-border">
+                <h2 className="text-xl font-semibold">All Positions ({jobs.length})</h2>
+              </div>
+
+              {jobs.length === 0 ? (
+                <div className="p-12 text-center text-muted-foreground">
+                  <Briefcase size={40} className="mx-auto mb-4 opacity-30" />
+                  <p className="text-lg">No job positions yet.</p>
+                  <p className="text-sm mt-1">Use the form to create your first job listing.</p>
+                </div>
+              ) : (
+                <div className="w-full overflow-x-auto">
+                  <table className="w-full text-sm whitespace-nowrap">
+                    <thead>
+                      <tr className="border-b border-border">
+                        <th className="text-left px-6 py-4 micro-label">Title</th>
+                        <th className="text-left px-6 py-4 micro-label">Status</th>
+                        <th className="text-left px-6 py-4 micro-label">Experience</th>
+                        <th className="text-left px-6 py-4 micro-label">Location</th>
+                        <th className="text-left px-6 py-4 micro-label">Last Date</th>
+                        <th className="text-left px-6 py-4 micro-label">Actions</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {jobs.map((job, i) => (
+                        <tr
+                          key={job.id}
+                          className="border-b border-border/50 hover:bg-white/[0.02] transition-colors animate-slide-up"
+                          style={{ animationDelay: `${500 + i * 50}ms` }}
+                        >
+                          <td className="px-6 py-4 text-white font-medium">{job.title}</td>
+                          <td className="px-6 py-4">
+                            <button
+                              onClick={() => handleToggleJobStatus(job)}
+                              className={`flex items-center gap-1.5 text-xs font-medium px-2.5 py-1 rounded-full border transition-all cursor-pointer ${
+                                job.is_active
+                                  ? 'bg-green-500/10 border-green-500/30 text-green-400 hover:bg-green-500/20'
+                                  : 'bg-white/5 border-white/10 text-white/40 hover:text-white/60'
+                              }`}
+                            >
+                              {job.is_active ? <ToggleRight size={12} /> : <ToggleLeft size={12} />}
+                              {job.is_active ? 'Active' : 'Inactive'}
+                            </button>
+                          </td>
+                          <td className="px-6 py-4 text-muted-foreground">{job.experience}</td>
+                          <td className="px-6 py-4 text-muted-foreground">{job.location}</td>
+                          <td className="px-6 py-4 text-muted-foreground">
+                            {new Date(job.last_date).toLocaleDateString()}
+                          </td>
+                          <td className="px-6 py-4">
+                            <div className="flex items-center gap-3">
+                              <button
+                                onClick={() => handleEditJob(job)}
+                                className="text-blue-400 hover:text-blue-300 transition-colors cursor-pointer"
+                              >
+                                <Pencil size={14} />
+                              </button>
+                              <button
+                                onClick={() => handleDeleteJob(job.id)}
+                                className="text-muted-foreground hover:text-red-500 transition-colors cursor-pointer"
+                              >
+                                <Trash2 size={14} />
+                              </button>
+                            </div>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              )}
+            </div>
           </div>
         )}
 

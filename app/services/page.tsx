@@ -1,7 +1,7 @@
 "use client"
 
 import Link from "next/link"
-import { ArrowLeft, Bot, Globe, Shield, BarChart3, Smartphone, Monitor, ShoppingCart, Palette, TrendingUp, ArrowRight, CheckCircle2 } from "lucide-react"
+import { ArrowLeft, Bot, Globe, Shield, Cloud, BarChart3, Smartphone, Monitor, ShoppingCart, Palette, TrendingUp, ArrowRight, CheckCircle2 } from "lucide-react"
 import AnimateOnScroll from "@/components/animate-on-scroll"
 
 const HIGH_VALUE_SERVICES = [
@@ -36,6 +36,17 @@ const HIGH_VALUE_SERVICES = [
       "Penetration testing & firewall setup",
       "ISO 27001 & regional compliance audits",
       "Zero-trust architecture implementation",
+    ],
+  },
+  {
+    icon: Cloud,
+    title: "Cloud Infrastructure & Services",
+    description: "Robust, enterprise-grade cloud solutions designed for high availability, seamless scalability, and maximum data security.",
+    features: [
+      "Cloud hosting & server migration",
+      "High-performance virtual machines (ECS)",
+      "Secure object storage & backup",
+      "Disaster recovery & global CDN",
     ],
   },
   {
@@ -156,7 +167,7 @@ export default function ServicesPage() {
             {HIGH_VALUE_SERVICES.map((svc, idx) => {
               const Icon = svc.icon
               return (
-                <AnimateOnScroll key={svc.title} delay={idx * 80}>
+                <AnimateOnScroll key={svc.title} delay={idx * 80} className={idx === 6 ? "lg:col-start-2" : ""}>
                   <div className="paper-card p-6 lg:p-8 flex flex-col h-full card-hover-lift">
                     <div className="w-12 h-12 rounded-xl bg-[#FE7004]/10 flex items-center justify-center mb-5 card-icon">
                       <Icon className="w-6 h-6 text-[#FE7004]" />
