@@ -19,7 +19,7 @@ const ibmPlexMono = IBM_Plex_Mono({
 export const metadata: Metadata = {
   title: 'VELOCT | Accelerating Innovation Through AI, Cloud & Digital Transformation',
   description:
-    'VELOCT accelerates innovation through AI, cloud, and digital transformation solutions for modern enterprises.',
+    'VELOCT delivers AI automation, AI agents, cloud infrastructure, cybersecurity, and custom software development for enterprises worldwide.',
   icons: {
     icon: '/assets/favicon.png',
     shortcut: '/assets/favicon.png',
@@ -37,12 +37,12 @@ export default function RootLayout({
       <body
         className={`${ibmPlexSans.variable} ${ibmPlexMono.variable} font-body antialiased`}
       >
-        <ThemeProvider attribute="class" defaultTheme="dark">
+        <ThemeProvider attribute="class" defaultTheme="dark" enableSystem={false}>
           <div
             id="scroll-progress"
             className="fixed top-0 left-0 w-0 h-0.5 bg-primary z-50 transition-all duration-150"
           />
-          <div className="planner-bg min-h-screen">{children}</div>
+          <div className="planner-bg bg-white dark:bg-[#00164A] min-h-screen">{children}</div>
           <WhatsAppButton />
         </ThemeProvider>
       </body>

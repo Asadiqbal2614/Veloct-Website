@@ -1,6 +1,14 @@
 "use client";
 
+import { usePathname } from "next/navigation";
+
 export default function WhatsAppButton() {
+  const pathname = usePathname();
+  const isAdminRoute = pathname.startsWith("/dashboard") || pathname.startsWith("/veloct-secure-portal");
+  const isBlogRoute = pathname === "/blogs" || pathname.startsWith("/blogs/") || pathname === "/blog" || pathname.startsWith("/blog/");
+
+  if (isAdminRoute || isBlogRoute) return null;
+
   return (
     <a
       href="https://wa.me/923332527314?text=Hi%20VELOCT,%20I%27m%20interested%20in%20your%20services!"

@@ -3,6 +3,7 @@
 import { useState, useEffect, useCallback } from "react";
 import { Menu, X, ArrowRight, ChevronRight, ChevronUp } from "lucide-react";
 import { cn } from "@/lib/utils";
+import ThemeToggle from "@/components/theme-toggle";
 
 const NAV_LINKS = [
   { label: "Home", href: "#hero" },
@@ -80,7 +81,7 @@ export default function Header() {
         "fixed top-0 left-0 right-0 z-50 transition-transform duration-300 ease-in-out",
         hidden ? "-translate-y-full" : "translate-y-0",
         scrolled
-          ? "bg-[#00164A]/90 backdrop-blur-xl shadow-lg shadow-black/20"
+          ? "bg-white/80 dark:bg-[#00164A]/90 backdrop-blur-xl shadow-lg shadow-black/10 dark:shadow-black/20"
           : "bg-transparent"
       )}
     >
@@ -93,10 +94,16 @@ export default function Header() {
             className="flex-shrink-0"
           >
             <img
+              src="/assets/logo1.png"
+              alt="VELOCT"
+              width={160}
+              className="block dark:hidden h-auto"
+            />
+            <img
               src="/assets/logo.png"
               alt="VELOCT"
               width={160}
-              className="h-auto"
+              className="hidden dark:block h-auto"
             />
           </a>
 
@@ -109,9 +116,9 @@ export default function Header() {
                 onClick={(e) => handleNavClick(e, link.href)}
                 className={cn(
                   "relative px-4 py-2 text-sm font-medium transition-colors duration-300 rounded-full",
-                  activeSection === link.href.replace("#", "")
-                    ? "text-[#FE7004]"
-                    : "text-white/80 hover:text-white"
+                    activeSection === link.href.replace("#", "")
+                      ? "text-[#FE7004]"
+                      : "text-slate-700/80 hover:text-slate-900 dark:text-white/80 dark:hover:text-white"
                 )}
               >
                 {link.label}
@@ -129,6 +136,7 @@ export default function Header() {
 
           {/* Desktop Actions */}
           <div className="hidden lg:flex items-center gap-3">
+            <ThemeToggle />
             <a
               href="#contact"
               onClick={(e) => handleNavClick(e, "#contact")}
@@ -142,7 +150,7 @@ export default function Header() {
           {/* Mobile Hamburger */}
           <button
             onClick={() => setMenuOpen(!menuOpen)}
-            className="lg:hidden p-2 text-white/80 hover:text-white transition-colors"
+            className="lg:hidden p-2 text-slate-600 dark:text-white/80 hover:text-slate-900 dark:hover:text-white transition-colors"
             aria-label="Toggle menu"
           >
             {menuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
@@ -157,7 +165,7 @@ export default function Header() {
           menuOpen ? "max-h-96 opacity-100" : "max-h-0 opacity-0"
         )}
       >
-        <nav className="glass-panel mx-4 mb-4 rounded-2xl p-4 flex flex-col gap-1">
+        <nav className="bg-slate-100/70 backdrop-blur-sm border border-slate-200/80 dark:bg-white/5 dark:border-white/10 mx-4 mb-4 rounded-2xl p-4 flex flex-col gap-1">
           {NAV_LINKS.map((link) => (
             <a
               key={link.href}
@@ -165,23 +173,26 @@ export default function Header() {
               onClick={(e) => handleNavClick(e, link.href)}
               className={cn(
                 "flex items-center justify-between px-4 py-3 rounded-xl text-sm font-medium transition-colors duration-300",
-                activeSection === link.href.replace("#", "")
-                  ? "text-[#FE7004] bg-[#FE7004]/10"
-                  : "text-white/80 hover:text-white hover:bg-white/5"
+                  activeSection === link.href.replace("#", "")
+                    ? "text-[#FE7004] bg-[#FE7004]/10"
+                    : "text-slate-600 dark:text-white/80 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-white/5"
               )}
             >
               {link.label}
-              <ChevronRight className="w-4 h-4 text-white/40" />
+              <ChevronRight className="w-4 h-4 text-slate-400 dark:text-white/40" />
             </a>
           ))}
-          <a
-            href="#contact"
-            onClick={(e) => handleNavClick(e, "#contact")}
-            className="command-strip mt-2 px-5 py-3 rounded-xl text-sm font-semibold text-white flex items-center justify-center gap-2 shadow-lg shadow-[#FE7004]/20"
-          >
-            Consultation
-            <ArrowRight className="w-4 h-4" />
-          </a>
+          <div className="flex items-center justify-between mt-2 px-4 py-2">
+            <ThemeToggle />
+            <a
+              href="#contact"
+              onClick={(e) => handleNavClick(e, "#contact")}
+              className="command-strip px-5 py-3 rounded-xl text-sm font-semibold text-white flex items-center gap-2 shadow-lg shadow-[#FE7004]/20"
+            >
+              Consultation
+              <ArrowRight className="w-4 h-4" />
+            </a>
+          </div>
         </nav>
       </div>
     </header>

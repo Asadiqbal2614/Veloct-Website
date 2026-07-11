@@ -8,7 +8,7 @@ const HIGH_VALUE_SERVICES = [
   {
     icon: Bot,
     title: "AI Automation & AI Agents",
-    description: "Intelligent automation tailored for your workflows — from custom ChatGPT agents to AI voice assistants that transform how your business operates.",
+    description: "Production-ready AI automation for your business — custom ChatGPT bots, AI voice agents, and intelligent workflows designed to reduce manual effort and accelerate operations.",
     features: [
       "Custom ChatGPT bots & AI voice agents",
       "CRM, Sales & HR screening automation",
@@ -19,7 +19,7 @@ const HIGH_VALUE_SERVICES = [
   {
     icon: Globe,
     title: "Web App & SaaS Development",
-    description: "Scalable, high-performance web architecture built with modern stacks — from SaaS platforms to secure enterprise portals.",
+    description: "Custom web applications and SaaS platforms built for scale — from enterprise portals to full-featured admin dashboards with modern front-end and back-end stacks.",
     features: [
       "Custom web apps (React, Node, Python)",
       "Scalable SaaS platforms & company portals",
@@ -29,7 +29,7 @@ const HIGH_VALUE_SERVICES = [
   },
   {
     icon: Shield,
-    title: "Cyber Security",
+    title: "Cybersecurity",
     description: "Defense-in-depth security for your enterprise — protecting your infrastructure, data, and compliance posture against evolving threats.",
     features: [
       "Vulnerability assessments & security audits",
@@ -41,7 +41,7 @@ const HIGH_VALUE_SERVICES = [
   {
     icon: Cloud,
     title: "Cloud Infrastructure & Services",
-    description: "Robust, enterprise-grade cloud solutions designed for high availability, seamless scalability, and maximum data security.",
+    description: "Enterprise cloud infrastructure built for high availability, disaster recovery, and cost efficiency — including migration, monitoring, and managed hosting.",
     features: [
       "Cloud hosting & server migration",
       "High-performance virtual machines (ECS)",
@@ -119,12 +119,12 @@ const GROWTH_SERVICES = [
 
 export default function ServicesPage() {
   return (
-    <div className="min-h-screen planner-bg">
+    <div className="min-h-screen bg-white dark:bg-[#00164A] transition-colors duration-300">
       <div className="max-w-6xl mx-auto px-4 py-12 sm:py-20">
         <AnimateOnScroll>
           <Link
             href="/"
-            className="inline-flex items-center gap-2 text-sm text-white/60 hover:text-[#FE7004] transition-colors mb-8"
+            className="inline-flex items-center gap-2 text-sm text-slate-500 dark:text-white/60 hover:text-[#FE7004] transition-colors mb-8"
           >
             <ArrowLeft className="w-4 h-4" />
             Back to Home
@@ -137,10 +137,10 @@ export default function ServicesPage() {
             <span className="micro-label inline-block px-3 py-1.5 rounded-full border border-[#FE7004]/30 text-[#FE7004] bg-[#FE7004]/5">
               What We Deliver
             </span>
-            <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-white">
+            <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-slate-900 dark:text-white">
               Enterprise IT &amp; Digital Solutions
             </h1>
-            <p className="text-white/60 text-base sm:text-lg max-w-3xl leading-relaxed">
+            <p className="text-slate-600 dark:text-gray-300 text-base sm:text-lg max-w-3xl leading-relaxed">
               End-to-end technology services designed to scale your business, optimize
               operations, and secure your digital assets.
             </p>
@@ -155,10 +155,10 @@ export default function ServicesPage() {
               <span className="micro-label text-[#FE7004] tracking-wider">Core Offerings</span>
               <div className="h-px flex-1 bg-gradient-to-l from-[#FE7004]/30 to-transparent" />
             </div>
-            <h2 className="text-2xl sm:text-3xl font-bold text-white text-center mb-3">
+            <h2 className="text-2xl sm:text-3xl font-bold text-slate-900 dark:text-white text-center mb-3">
               High-Value Tech Services
             </h2>
-            <p className="text-white/60 text-sm sm:text-base text-center max-w-2xl mx-auto mb-10">
+            <p className="text-slate-600 dark:text-gray-300 text-sm sm:text-base text-center max-w-2xl mx-auto mb-10">
               Our primary focus — delivering enterprise-grade technology that drives measurable business outcomes.
             </p>
           </AnimateOnScroll>
@@ -168,15 +168,15 @@ export default function ServicesPage() {
               const Icon = svc.icon
               return (
                 <AnimateOnScroll key={svc.title} delay={idx * 80} className={idx === 6 ? "lg:col-start-2" : ""}>
-                  <div className="paper-card p-6 lg:p-8 flex flex-col h-full card-hover-lift">
+                  <div className="bg-slate-50 border border-slate-200/80 shadow-sm dark:bg-white/5 dark:border-white/10 dark:shadow-none rounded-xl p-6 lg:p-8 flex flex-col h-full card-hover-lift">
                     <div className="w-12 h-12 rounded-xl bg-[#FE7004]/10 flex items-center justify-center mb-5 card-icon">
                       <Icon className="w-6 h-6 text-[#FE7004]" />
                     </div>
-                    <h3 className="text-lg font-bold text-white mb-3">{svc.title}</h3>
-                    <p className="text-sm text-white/70 leading-relaxed mb-5">{svc.description}</p>
+                    <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-3">{svc.title}</h3>
+                    <p className="text-sm text-slate-600 dark:text-white/70 leading-relaxed mb-5">{svc.description}</p>
                     <ul className="space-y-2.5 mt-auto">
                       {svc.features.map((f) => (
-                        <li key={f} className="flex items-start gap-2 text-sm text-white/75">
+                        <li key={f} className="flex items-start gap-2 text-sm text-slate-700 dark:text-white/85">
                           <CheckCircle2 className="w-4 h-4 text-[#FE7004] flex-shrink-0 mt-0.5" />
                           {f}
                         </li>
@@ -197,10 +197,10 @@ export default function ServicesPage() {
               <span className="micro-label text-[#FE7004] tracking-wider">Growth Layer</span>
               <div className="h-px flex-1 bg-gradient-to-l from-[#FE7004]/30 to-transparent" />
             </div>
-            <h2 className="text-2xl sm:text-3xl font-bold text-white text-center mb-3">
+            <h2 className="text-2xl sm:text-3xl font-bold text-slate-900 dark:text-white text-center mb-3">
               Digital Growth Services
             </h2>
-            <p className="text-white/60 text-sm sm:text-base text-center max-w-2xl mx-auto mb-10">
+            <p className="text-slate-600 dark:text-gray-300 text-sm sm:text-base text-center max-w-2xl mx-auto mb-10">
               Supporting services that amplify your brand, engage your audience, and accelerate revenue.
             </p>
           </AnimateOnScroll>
@@ -210,14 +210,14 @@ export default function ServicesPage() {
               const Icon = svc.icon
               return (
                 <AnimateOnScroll key={svc.title} delay={idx * 80}>
-                  <div className="paper-card p-6 lg:p-8 flex flex-col h-full card-hover-lift">
+                  <div className="bg-slate-50 border border-slate-200/80 shadow-sm dark:bg-white/5 dark:border-white/10 dark:shadow-none rounded-xl p-6 lg:p-8 flex flex-col h-full card-hover-lift">
                     <div className="w-11 h-11 rounded-xl bg-[#FE7004]/10 flex items-center justify-center mb-4 card-icon">
                       <Icon className="w-5.5 h-5.5 text-[#FE7004]" />
                     </div>
-                    <h3 className="text-base font-bold text-white mb-3">{svc.title}</h3>
+                    <h3 className="text-base font-bold text-slate-900 dark:text-white mb-3">{svc.title}</h3>
                     <ul className="space-y-2 mt-auto">
                       {svc.features.map((f) => (
-                        <li key={f} className="flex items-start gap-2 text-sm text-white/75">
+                        <li key={f} className="flex items-start gap-2 text-sm text-slate-700 dark:text-white/85">
                           <CheckCircle2 className="w-4 h-4 text-[#FE7004] flex-shrink-0 mt-0.5" />
                           {f}
                         </li>
@@ -232,15 +232,15 @@ export default function ServicesPage() {
 
         {/* CTA Section */}
         <AnimateOnScroll delay={120}>
-          <div className="glass-panel rounded-2xl p-8 sm:p-12 lg:p-14 text-center relative overflow-hidden">
+          <div className="bg-slate-100/70 backdrop-blur-sm border border-slate-200/80 dark:bg-white/5 dark:border-white/10 rounded-2xl p-8 sm:p-12 lg:p-14 text-center relative overflow-hidden">
             <div className="absolute inset-0 bg-gradient-to-br from-[#FE7004]/5 to-transparent pointer-events-none" />
             <div className="relative z-10">
-              <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-white mb-4">
+              <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-slate-900 dark:text-white mb-4">
                 Ready to Transform Your Business?
               </h2>
-              <p className="text-white/70 text-base sm:text-lg max-w-2xl mx-auto mb-8 leading-relaxed">
+              <p className="text-slate-600 dark:text-white/70 text-base sm:text-lg max-w-2xl mx-auto mb-8 leading-relaxed">
                 Let&rsquo;s build something exceptional together. Get in touch for a free
-                consultation and discover how VELOCT.TECH can power your next chapter.
+                consultation and discover how VELOCT can power your next chapter.
               </p>
               <Link
                 href="/#contact"

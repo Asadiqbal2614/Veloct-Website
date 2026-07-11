@@ -80,7 +80,7 @@ export default function ContactForm() {
   };
 
   return (
-    <section id="contact" className="relative py-16 lg:py-20">
+    <section id="contact" className="relative py-16 lg:py-20 bg-white dark:bg-[#00164A] transition-colors duration-300">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid lg:grid-cols-2 gap-10 lg:gap-16">
           {/* Left - Info */}
@@ -89,12 +89,12 @@ export default function ContactForm() {
               <span className="micro-label inline-block px-3 py-1.5 rounded-full border border-[#FE7004]/30 text-[#FE7004] bg-[#FE7004]/5">
                 Get In Touch
               </span>
-              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-white">
+              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-slate-900 dark:text-white">
                 Ready to Accelerate Your Business?
               </h2>
-              <p className="text-base sm:text-lg text-white/60 leading-relaxed">
+              <p className="text-base sm:text-lg text-slate-600 dark:text-gray-300 leading-relaxed">
                 Let&apos;s discuss how VELOCT can help you achieve your technology goals.
-                Reach out and we&apos;ll get back to you within 24 hours.
+                Reach out and we&apos;ll get back to you typically within one business day.
               </p>
             </div>
 
@@ -115,12 +115,12 @@ export default function ContactForm() {
                           href={detail.href}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="text-sm text-white/70 hover:text-white transition-colors"
+                          className="text-sm text-slate-600 dark:text-white/70 hover:text-slate-900 dark:hover:text-white transition-colors"
                         >
                           {detail.value}
                         </a>
                       ) : (
-                        <p className="text-sm text-white/70">{detail.value}</p>
+                        <p className="text-sm text-slate-600 dark:text-white/70">{detail.value}</p>
                       )}
                     </div>
                   </div>
@@ -130,21 +130,21 @@ export default function ContactForm() {
           </div>
 
           {/* Right - Form */}
-          <div className="paper-card p-6 sm:p-8 lg:p-10 animate-fade-in-up" style={{ animationDelay: "0.15s" }}>
+          <div className="bg-slate-50 border border-slate-200/80 shadow-sm dark:bg-white/5 dark:border-white/10 dark:shadow-none rounded-xl p-6 sm:p-8 lg:p-10 animate-fade-in-up" style={{ animationDelay: "0.15s" }}>
             {submitted ? (
               <div className="flex flex-col items-center justify-center text-center py-12 space-y-4">
                 <div className="w-16 h-16 rounded-full bg-[#FE7004]/15 flex items-center justify-center">
                   <Check className="w-8 h-8 text-[#FE7004]" />
                 </div>
-                <h3 className="text-xl font-bold text-white">Thank You!</h3>
-                <p className="text-sm text-white/60">
-                  Your message has been received. We&apos;ll be in touch within 24 hours.
+                <h3 className="text-xl font-bold text-slate-900 dark:text-white">Thank You!</h3>
+                <p className="text-sm text-slate-600 dark:text-white/70">
+                  Your message has been received. We&apos;ll be in touch typically within one business day.
                 </p>
               </div>
             ) : (
               <form onSubmit={handleSubmit} className="space-y-5">
                 <div>
-                  <label htmlFor="email" className="micro-label text-white/60 block mb-1.5">
+                  <label htmlFor="email" className="micro-label text-slate-500 dark:text-white/60 block mb-1.5">
                     Corporate Email <span className="text-[#FE7004]">*</span>
                   </label>
                   <input
@@ -154,12 +154,12 @@ export default function ContactForm() {
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     placeholder="you@company.com"
-                    className="w-full px-4 py-3 rounded-xl bg-white/5 border border-[#FE7004]/15 text-white text-sm placeholder:text-white/30 focus:outline-none focus:border-[#FE7004]/50 focus:ring-1 focus:ring-[#FE7004]/30 transition-all duration-300"
+                    className="w-full px-4 py-3 rounded-xl bg-gray-50 dark:bg-white/5 border border-gray-300 dark:border-[#FE7004]/15 text-slate-900 dark:text-white text-sm placeholder:text-slate-400 dark:placeholder:text-white/30 focus:outline-none focus:border-[#FE7004]/50 focus:ring-1 focus:ring-[#FE7004]/30 transition-all duration-300"
                   />
                 </div>
 
                 <div>
-                  <label htmlFor="action" className="micro-label text-white/60 block mb-1.5">
+                  <label htmlFor="action" className="micro-label text-slate-500 dark:text-white/60 block mb-1.5">
                     Action <span className="text-[#FE7004]">*</span>
                   </label>
                   <select
@@ -167,7 +167,7 @@ export default function ContactForm() {
                     required
                     value={action}
                     onChange={(e) => setAction(e.target.value)}
-                    className="w-full px-4 py-3 rounded-xl bg-white/5 border border-[#FE7004]/15 text-white text-sm focus:outline-none focus:border-[#FE7004]/50 focus:ring-1 focus:ring-[#FE7004]/30 transition-all duration-300 appearance-none"
+                    className="w-full px-4 py-3 rounded-xl bg-gray-50 dark:bg-white/5 border border-gray-300 dark:border-[#FE7004]/15 text-slate-900 dark:text-white text-sm focus:outline-none focus:border-[#FE7004]/50 focus:ring-1 focus:ring-[#FE7004]/30 transition-all duration-300 appearance-none"
                     style={{
                       backgroundImage: `url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%23FE7004' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e")`,
                       backgroundPosition: "right 12px center",
@@ -176,7 +176,7 @@ export default function ContactForm() {
                     }}
                   >
                     {ACTIONS.map((a) => (
-                      <option key={a} value={a} className="bg-[#00164A] text-white">
+                      <option key={a} value={a} className="bg-slate-50 dark:bg-[#00164A] text-slate-900 dark:text-white">
                         {a}
                       </option>
                     ))}
@@ -185,7 +185,7 @@ export default function ContactForm() {
 
                 {/* Company Name - always visible */}
                 <div>
-                  <label htmlFor="company" className="micro-label text-white/60 block mb-1.5">
+                  <label htmlFor="company" className="micro-label text-slate-500 dark:text-white/60 block mb-1.5">
                     Company Name <span className="text-[#FE7004]">*</span>
                   </label>
                   <input
@@ -195,7 +195,7 @@ export default function ContactForm() {
                     value={company}
                     onChange={(e) => setCompany(e.target.value)}
                     placeholder="Your company name"
-                    className="w-full px-4 py-3 rounded-xl bg-white/5 border border-[#FE7004]/15 text-white text-sm placeholder:text-white/30 focus:outline-none focus:border-[#FE7004]/50 focus:ring-1 focus:ring-[#FE7004]/30 transition-all duration-300"
+                    className="w-full px-4 py-3 rounded-xl bg-gray-50 dark:bg-white/5 border border-gray-300 dark:border-[#FE7004]/15 text-slate-900 dark:text-white text-sm placeholder:text-slate-400 dark:placeholder:text-white/30 focus:outline-none focus:border-[#FE7004]/50 focus:ring-1 focus:ring-[#FE7004]/30 transition-all duration-300"
                   />
                 </div>
 
@@ -203,7 +203,7 @@ export default function ContactForm() {
                 {isProposal && (
                   <>
                     <div>
-                      <label htmlFor="companySize" className="micro-label text-white/60 block mb-1.5">
+                      <label htmlFor="companySize" className="micro-label text-slate-500 dark:text-white/60 block mb-1.5">
                         Company Size <span className="text-[#FE7004]">*</span>
                       </label>
                       <select
@@ -211,7 +211,7 @@ export default function ContactForm() {
                         required
                         value={companySize}
                         onChange={(e) => setCompanySize(e.target.value)}
-                        className="w-full px-4 py-3 rounded-xl bg-white/5 border border-[#FE7004]/15 text-white text-sm focus:outline-none focus:border-[#FE7004]/50 focus:ring-1 focus:ring-[#FE7004]/30 transition-all duration-300 appearance-none"
+                        className="w-full px-4 py-3 rounded-xl bg-gray-50 dark:bg-white/5 border border-gray-300 dark:border-[#FE7004]/15 text-slate-900 dark:text-white text-sm focus:outline-none focus:border-[#FE7004]/50 focus:ring-1 focus:ring-[#FE7004]/30 transition-all duration-300 appearance-none"
                         style={{
                           backgroundImage: `url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%23FE7004' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e")`,
                           backgroundPosition: "right 12px center",
@@ -219,15 +219,15 @@ export default function ContactForm() {
                           backgroundSize: "20px",
                         }}
                       >
-                        <option value="" disabled className="bg-[#00164A] text-white">Select size</option>
+                        <option value="" disabled className="bg-slate-50 dark:bg-[#00164A] text-slate-900 dark:text-white">Select size</option>
                         {COMPANY_SIZES.map((s) => (
-                          <option key={s} value={s} className="bg-[#00164A] text-white">{s} employees</option>
+                          <option key={s} value={s} className="bg-slate-50 dark:bg-[#00164A] text-slate-900 dark:text-white">{s} employees</option>
                         ))}
                       </select>
                     </div>
 
                     <div>
-                      <label htmlFor="budget" className="micro-label text-white/60 block mb-1.5">
+                      <label htmlFor="budget" className="micro-label text-slate-500 dark:text-white/60 block mb-1.5">
                         Estimated Budget <span className="text-[#FE7004]">*</span>
                       </label>
                       <select
@@ -235,7 +235,7 @@ export default function ContactForm() {
                         required
                         value={budget}
                         onChange={(e) => setBudget(e.target.value)}
-                        className="w-full px-4 py-3 rounded-xl bg-white/5 border border-[#FE7004]/15 text-white text-sm focus:outline-none focus:border-[#FE7004]/50 focus:ring-1 focus:ring-[#FE7004]/30 transition-all duration-300 appearance-none"
+                        className="w-full px-4 py-3 rounded-xl bg-gray-50 dark:bg-white/5 border border-gray-300 dark:border-[#FE7004]/15 text-slate-900 dark:text-white text-sm focus:outline-none focus:border-[#FE7004]/50 focus:ring-1 focus:ring-[#FE7004]/30 transition-all duration-300 appearance-none"
                         style={{
                           backgroundImage: `url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%23FE7004' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e")`,
                           backgroundPosition: "right 12px center",
@@ -243,9 +243,9 @@ export default function ContactForm() {
                           backgroundSize: "20px",
                         }}
                       >
-                        <option value="" disabled className="bg-[#00164A] text-white">Select budget</option>
+                        <option value="" disabled className="bg-slate-50 dark:bg-[#00164A] text-slate-900 dark:text-white">Select budget</option>
                         {BUDGETS.map((b) => (
-                          <option key={b} value={b} className="bg-[#00164A] text-white">{b}</option>
+                          <option key={b} value={b} className="bg-slate-50 dark:bg-[#00164A] text-slate-900 dark:text-white">{b}</option>
                         ))}
                       </select>
                     </div>
@@ -254,7 +254,7 @@ export default function ContactForm() {
 
                 {/* Timeline - always visible */}
                 <div>
-                  <label htmlFor="timeline" className="micro-label text-white/60 block mb-1.5">
+                  <label htmlFor="timeline" className="micro-label text-slate-500 dark:text-white/60 block mb-1.5">
                     Project Timeline <span className="text-[#FE7004]">*</span>
                   </label>
                   <select
@@ -262,7 +262,7 @@ export default function ContactForm() {
                     required
                     value={timeline}
                     onChange={(e) => setTimeline(e.target.value)}
-                    className="w-full px-4 py-3 rounded-xl bg-white/5 border border-[#FE7004]/15 text-white text-sm focus:outline-none focus:border-[#FE7004]/50 focus:ring-1 focus:ring-[#FE7004]/30 transition-all duration-300 appearance-none"
+                    className="w-full px-4 py-3 rounded-xl bg-gray-50 dark:bg-white/5 border border-gray-300 dark:border-[#FE7004]/15 text-slate-900 dark:text-white text-sm focus:outline-none focus:border-[#FE7004]/50 focus:ring-1 focus:ring-[#FE7004]/30 transition-all duration-300 appearance-none"
                     style={{
                       backgroundImage: `url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%23FE7004' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e")`,
                       backgroundPosition: "right 12px center",
@@ -270,15 +270,15 @@ export default function ContactForm() {
                       backgroundSize: "20px",
                     }}
                   >
-                    <option value="" disabled className="bg-[#00164A] text-white">Select timeline</option>
+                    <option value="" disabled className="bg-slate-50 dark:bg-[#00164A] text-slate-900 dark:text-white">Select timeline</option>
                     {TIMELINES.map((t) => (
-                      <option key={t} value={t} className="bg-[#00164A] text-white">{t}</option>
+                      <option key={t} value={t} className="bg-slate-50 dark:bg-[#00164A] text-slate-900 dark:text-white">{t}</option>
                     ))}
                   </select>
                 </div>
 
                 <div>
-                  <label htmlFor="context" className="micro-label text-white/60 block mb-1.5">
+                  <label htmlFor="context" className="micro-label text-slate-500 dark:text-white/60 block mb-1.5">
                     Context <span className="text-[#FE7004]">*</span>
                   </label>
                   <textarea
@@ -288,7 +288,7 @@ export default function ContactForm() {
                     onChange={(e) => setContext(e.target.value)}
                     placeholder="Tell us about your project or requirements..."
                     rows={4}
-                    className="w-full px-4 py-3 rounded-xl bg-white/5 border border-[#FE7004]/15 text-white text-sm placeholder:text-white/30 focus:outline-none focus:border-[#FE7004]/50 focus:ring-1 focus:ring-[#FE7004]/30 transition-all duration-300 resize-none"
+                    className="w-full px-4 py-3 rounded-xl bg-gray-50 dark:bg-white/5 border border-gray-300 dark:border-[#FE7004]/15 text-slate-900 dark:text-white text-sm placeholder:text-slate-400 dark:placeholder:text-white/30 focus:outline-none focus:border-[#FE7004]/50 focus:ring-1 focus:ring-[#FE7004]/30 transition-all duration-300 resize-none"
                   />
                 </div>
 
@@ -313,11 +313,11 @@ export default function ContactForm() {
       {/* Toast Notification */}
       {toast && (
         <div className="fixed bottom-6 right-6 z-50 animate-slide-up">
-          <div className="glass-panel rounded-xl px-5 py-3.5 flex items-center gap-3 shadow-xl shadow-black/30">
+          <div className="bg-slate-100/70 backdrop-blur-sm border border-slate-200/80 dark:bg-white/5 dark:border-white/10 dark:shadow-none rounded-xl px-5 py-3.5 flex items-center gap-3 shadow-xl shadow-black/30">
             <div className="w-7 h-7 rounded-full bg-[#FE7004]/15 flex items-center justify-center">
               <Check className="w-4 h-4 text-[#FE7004]" />
             </div>
-            <p className="text-sm text-white font-medium">
+            <p className="text-sm text-slate-900 dark:text-white font-medium">
               Message sent successfully!
             </p>
           </div>

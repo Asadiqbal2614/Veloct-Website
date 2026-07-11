@@ -1,19 +1,16 @@
 @import "tailwindcss";
 
+
 @custom-variant dark (&:where(.dark, .dark *));
 
 @theme inline {
-  --color-background: #00164A;
-  --color-foreground: #FFFFFF;
-  --color-card: rgba(0, 22, 74, 0.7);
-  --color-card-foreground: rgba(255, 255, 255, 0.9);
   --color-primary: #FE7004;
   --color-primary-foreground: #FFFFFF;
   --color-accent: #FE7004;
   --color-accent-subtle: rgba(254, 112, 4, 0.12);
-  --color-muted: rgba(255, 255, 255, 0.7);
-  --color-muted-foreground: rgba(255, 255, 255, 0.6);
-  --color-border: rgba(254, 112, 4, 0.15);
+  --color-muted: var(--text-muted);
+  --color-muted-foreground: var(--text-muted-foreground);
+  --color-border: var(--card-border);
   --color-ring: rgba(254, 112, 4, 0.5);
   --color-destructive: #ef4444;
 
@@ -23,9 +20,44 @@
   --radius: 16px;
 }
 
+/* ===== Theme Variables ===== */
+:root {
+  --bg-body: #f8fafc;
+  --bg-primary: #ffffff;
+  --text-primary: #0f172a;
+  --text-secondary: #334155;
+  --text-muted: #64748b;
+  --text-muted-foreground: #94a3b8;
+  --card-bg: rgba(255, 255, 255, 0.85);
+  --card-border: rgba(0, 0, 0, 0.08);
+  --card-shadow: 0 8px 32px rgba(0, 0, 0, 0.06);
+  --glass-bg: rgba(255, 255, 255, 0.7);
+  --planner-grid-color: rgba(254, 112, 4, 0.06);
+  --glow-color: rgba(254, 112, 4, 0.05);
+  --header-bg: rgba(255, 255, 255, 0.85);
+  --scrollbar-color: rgba(254, 112, 4, 0.3);
+}
+
+.dark {
+  --bg-body: #00164A;
+  --bg-primary: #00164A;
+  --text-primary: #ffffff;
+  --text-secondary: rgba(255, 255, 255, 0.8);
+  --text-muted: rgba(255, 255, 255, 0.6);
+  --text-muted-foreground: rgba(255, 255, 255, 0.5);
+  --card-bg: rgba(0, 22, 74, 0.7);
+  --card-border: rgba(254, 112, 4, 0.15);
+  --card-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  --glass-bg: rgba(0, 22, 74, 0.6);
+  --planner-grid-color: rgba(254, 112, 4, 0.03);
+  --glow-color: rgba(254, 112, 4, 0.08);
+  --header-bg: rgba(0, 22, 74, 0.9);
+  --scrollbar-color: rgba(254, 112, 4, 0.3);
+}
+
 * {
   scrollbar-width: thin;
-  scrollbar-color: rgba(254, 112, 4, 0.3) transparent;
+  scrollbar-color: var(--scrollbar-color) transparent;
 }
 
 html {
@@ -34,9 +66,10 @@ html {
 
 body {
   font-family: var(--font-body);
-  background: var(--color-background);
-  color: var(--color-foreground);
+  background: var(--bg-body);
+  color: var(--text-primary);
   min-height: 100vh;
+  transition: background 0.3s ease, color 0.3s ease;
 }
 
 .planner-bg {
@@ -48,8 +81,8 @@ body {
   position: fixed;
   inset: 0;
   background-image:
-    linear-gradient(rgba(254, 112, 4, 0.03) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(254, 112, 4, 0.03) 1px, transparent 1px);
+    linear-gradient(var(--planner-grid-color) 1px, transparent 1px),
+    linear-gradient(90deg, var(--planner-grid-color) 1px, transparent 1px);
   background-size: 60px 60px;
   pointer-events: none;
   z-index: 0;
@@ -62,25 +95,26 @@ body {
   right: -10%;
   width: 500px;
   height: 500px;
-  background: radial-gradient(circle, rgba(254, 112, 4, 0.08), transparent 60%);
+  background: radial-gradient(circle, var(--glow-color), transparent 60%);
   pointer-events: none;
   z-index: 0;
 }
 
 .glass-panel {
-  background: rgba(0, 22, 74, 0.6);
+  background: var(--glass-bg);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
-  border: 1px solid var(--color-border);
+  border: 1px solid var(--card-border);
+  transition: background 0.3s ease, border-color 0.3s ease;
 }
 
 .paper-card {
-  background: linear-gradient(145deg, rgba(255, 255, 255, 0.04), rgba(255, 255, 255, 0.01));
+  background: var(--card-bg);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
-  border: 1px solid var(--color-border);
+  border: 1px solid var(--card-border);
   border-radius: var(--radius);
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  box-shadow: var(--card-shadow);
   transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
@@ -123,7 +157,7 @@ body {
     linear-gradient(rgba(254, 112, 4, 0.04) 1px, transparent 1px),
     linear-gradient(90deg, rgba(254, 112, 4, 0.04) 1px, transparent 1px);
   background-size: 30px 30px;
-  border: 1px solid var(--color-border);
+  border: 1px solid var(--card-border);
   border-radius: var(--radius);
 }
 
@@ -203,8 +237,8 @@ body {
 
 .tech-grid-bg {
   background-image:
-    linear-gradient(rgba(254, 112, 4, 0.04) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(254, 112, 4, 0.04) 1px, transparent 1px);
+    linear-gradient(var(--planner-grid-color) 1px, transparent 1px),
+    linear-gradient(90deg, var(--planner-grid-color) 1px, transparent 1px);
   background-size: 80px 80px;
 }
 
@@ -213,7 +247,7 @@ body {
   width: 600px;
   height: 600px;
   border-radius: 50%;
-  background: radial-gradient(circle, rgba(254, 112, 4, 0.08), transparent 60%);
+  background: radial-gradient(circle, var(--glow-color), transparent 60%);
   pointer-events: none;
 }
 
@@ -323,3 +357,4 @@ body {
     grid-template-columns: 1fr;
   }
 }
+

@@ -1,6 +1,7 @@
 "use client"
 
 import { useEffect, useState, useCallback } from "react"
+import Link from "next/link"
 import { BrainCircuit, Cloud, Shield, ArrowRight, FileText } from "lucide-react"
 
 const PILLARS = [
@@ -12,8 +13,10 @@ const PILLARS = [
       "Custom ChatGPT & AI voice agents",
       "CRM, Sales & HR screening bots",
       "Advanced workflow automation",
+      "Custom API & LLM integrations",
+      "Automated email & smart notification workflows",
+      "Data extraction & quick report generation",
     ],
-    tag: "🤖 Agentic Workflows Optimized",
     accent: "#FE7004",
   },
   {
@@ -25,20 +28,23 @@ const PILLARS = [
       "High-performance virtual machines",
       "Secure object storage & backup",
       "Disaster recovery & global CDN",
+      "Real-time system monitoring & uptime alerts",
+      "Cloud cost optimization & resource management",
     ],
-    tag: "☁️ Enterprise-Grade Cloud",
     accent: "#60A5FA",
   },
   {
     icon: Shield,
-    title: "Cyber Security",
+    title: "Cybersecurity",
     description: "Vulnerability assessments, pen testing, and ISO 27001 compliance",
     features: [
       "Vulnerability assessments & security audits",
       "Penetration testing & firewall setup",
       "ISO 27001 & regional compliance",
+      "Zero-trust architecture & MFA setup",
+      "Regular system patching & updates",
+      "Continuous threat tracking & incident response",
     ],
-    tag: "🔒 End-to-End Protection",
     accent: "#34D399",
   },
 ]
@@ -58,13 +64,13 @@ export default function Hero() {
   return (
     <section
       id="hero"
-      className="relative min-h-screen flex items-center pt-24 pb-16 overflow-hidden"
+      className="relative min-h-screen flex items-center pt-24 pb-16 overflow-hidden bg-white dark:bg-[#00164A] transition-colors duration-300"
     >
       {/* Background */}
       <div className="absolute inset-0 tech-grid-bg" />
       <div className="hero-glow top-1/4 -right-20 opacity-60" />
       <div className="hero-glow bottom-1/4 -left-20 opacity-40" />
-      <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-[#00164A]" />
+      <div className="absolute inset-0 dark:bg-gradient-to-b dark:from-transparent dark:via-transparent dark:to-[#00164A]" />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full relative z-10">
         <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
@@ -77,7 +83,7 @@ export default function Hero() {
             </div>
 
             <h1
-              className="opacity-0 translate-y-8 animate-[fadeInUp_0.6s_ease_0.1s_forwards] text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-bold leading-tight"
+              className="opacity-0 translate-y-8 animate-[fadeInUp_0.6s_ease_0.1s_forwards] text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-bold leading-tight text-slate-900 dark:text-white"
             >
               We Build With{" "}
               <span className="bg-gradient-to-r from-[#FE7004] to-orange-300 bg-clip-text text-transparent">
@@ -87,7 +93,7 @@ export default function Hero() {
             </h1>
 
             <p
-              className="opacity-0 translate-y-8 animate-[fadeInUp_0.6s_ease_0.2s_forwards] text-base sm:text-lg text-white/80 max-w-xl leading-relaxed"
+              className="opacity-0 translate-y-8 animate-[fadeInUp_0.6s_ease_0.2s_forwards] text-base sm:text-lg text-slate-600 dark:text-white/80 max-w-xl leading-relaxed"
             >
               VELOCT delivers enterprise IT solutions to businesses worldwide — from AI-driven
               automation and cloud infrastructure to cybersecurity and custom software that scales.
@@ -113,7 +119,7 @@ export default function Hero() {
                   e.preventDefault()
                   document.getElementById("contact")?.scrollIntoView({ behavior: "smooth" })
                 }}
-                className="px-6 py-3 rounded-full text-sm font-semibold text-white/80 border border-white/20 hover:border-[#FE7004]/50 hover:text-white transition-all duration-300 flex items-center gap-2 glass-panel"
+                className="px-6 py-3 rounded-full text-sm font-semibold text-slate-600 dark:text-white/80 border border-slate-300 dark:border-white/20 hover:border-[#FE7004]/50 hover:text-slate-900 dark:hover:text-white transition-all duration-300 flex items-center gap-2 bg-slate-100/50 dark:bg-white/5 backdrop-blur-sm"
               >
                 <FileText className="w-4 h-4" />
                 Request Proposal
@@ -123,9 +129,9 @@ export default function Hero() {
 
           {/* Right Content - Auto-playing Pillar Carousel */}
           <div className="opacity-0 translate-y-8 animate-[fadeInUp_0.6s_ease_0.4s_forwards]">
-            <div className="glass-panel rounded-2xl p-6 sm:p-8 relative overflow-hidden">
+            <div className="bg-slate-50/80 backdrop-blur-md border border-slate-200/60 shadow-sm dark:bg-white/5 dark:border-white/10 dark:shadow-none rounded-2xl p-6 sm:p-8 relative overflow-hidden">
               <div className="flex items-center gap-2 mb-6 pb-4 border-b border-[#FE7004]/10">
-                <span className="text-xs font-semibold text-white/50 tracking-widest uppercase">
+                <span className="text-xs font-semibold text-slate-500 dark:text-white/50 tracking-widest uppercase">
                   Technology Pillars
                 </span>
                 <div className="flex items-center gap-1.5 ml-auto">
@@ -138,7 +144,7 @@ export default function Hero() {
                         i === activePillar ? "w-6" : ""
                       }`}
                       style={{
-                        backgroundColor: i === activePillar ? p.accent : "rgba(255,255,255,0.15)",
+                        backgroundColor: i === activePillar ? p.accent : "rgba(0,0,0,0.15)",
                       }}
                       aria-label={`View ${p.title}`}
                     />
@@ -146,14 +152,16 @@ export default function Hero() {
                 </div>
               </div>
 
-              <div className="relative min-h-[340px]">
+              <div className="relative h-auto md:min-h-[380px]">
                 {PILLARS.map((pillar, idx) => {
                   const Icon = pillar.icon
                   const isActive = idx === activePillar
                   return (
                     <div
                       key={pillar.title}
-                      className={`transition-all duration-700 ease-in-out absolute inset-0 ${
+                      className={`transition-all duration-700 ease-in-out ${
+                        isActive ? "" : "hidden"
+                      } md:block md:absolute md:inset-0 ${
                         isActive
                           ? "opacity-100 translate-x-0"
                           : idx < activePillar
@@ -163,10 +171,10 @@ export default function Hero() {
                       aria-hidden={!isActive}
                     >
                       <div
-                        className="paper-card p-5 sm:p-7"
+                        className="bg-white border border-slate-100 shadow-lg shadow-slate-200/50 dark:bg-white/5 dark:border-white/10 dark:shadow-none rounded-xl p-6 sm:p-8 h-full flex flex-col transition-all duration-300 ease-in-out"
                         style={{ borderLeftColor: pillar.accent, borderLeftWidth: "3px" }}
                       >
-                        <div className="flex items-start gap-3 mb-3">
+                        <div className="flex items-start gap-3 mb-4">
                           <div
                             className="w-9 h-9 rounded-lg flex items-center justify-center flex-shrink-0"
                             style={{ backgroundColor: `${pillar.accent}15` }}
@@ -174,17 +182,17 @@ export default function Hero() {
                             <Icon className="w-4.5 h-4.5" style={{ color: pillar.accent }} />
                           </div>
                           <div className="min-w-0">
-                            <h4 className="text-sm font-bold text-white">
+                            <h4 className="text-sm font-bold text-slate-900 dark:text-slate-200">
                               {pillar.title}
                             </h4>
-                            <p className="text-sm text-white/70 mt-0.5 line-clamp-1">
+                            <p className="text-sm text-slate-600 dark:text-slate-300 mt-0.5 line-clamp-2">
                               {pillar.description}
                             </p>
                           </div>
                         </div>
-                        <ul className="space-y-2 mb-4">
+                        <ul className="space-y-4 flex-1">
                           {pillar.features.map((f) => (
-                            <li key={f} className="flex items-center gap-2 text-sm text-white/60">
+                            <li key={f} className="flex items-center gap-2 text-sm text-slate-700 dark:text-slate-400">
                               <span
                                 className="w-1.5 h-1.5 rounded-full flex-shrink-0"
                                 style={{ backgroundColor: pillar.accent }}
@@ -193,22 +201,17 @@ export default function Hero() {
                             </li>
                           ))}
                         </ul>
-                        <div
-                          className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs font-medium"
-                          style={{
-                            backgroundColor: `${pillar.accent}12`,
-                            color: pillar.accent,
-                          }}
-                        >
-                          {pillar.tag}
-                        </div>
+                        <Link href="/services" className="mt-auto pt-4 text-sm font-semibold text-slate-900 dark:text-white flex items-center gap-2 w-fit transition-colors duration-200">
+                          Explore Capabilities
+                          <span className="transform transition-transform duration-200 hover:translate-x-1">➔</span>
+                        </Link>
                       </div>
                     </div>
                   )
                 })}
               </div>
 
-              <div className="mt-4 pt-4 border-t border-[#FE7004]/10 flex items-center gap-2 text-sm text-white/40">
+              <div className="mt-4 pt-4 border-t border-[#FE7004]/10 flex items-center gap-2 text-sm text-slate-500 dark:text-white/40">
                 <span className="w-1.5 h-1.5 rounded-full bg-[#FE7004] animate-pulse-orange" />
                 Integrated approach — AI, Cloud &amp; Security working as one
               </div>

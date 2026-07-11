@@ -362,7 +362,8 @@ export default function DashboardPage() {
   }, [blogTitle, slugLocked, editingSlug])
 
   const readingTime = useMemo(() => {
-    const words = blogContent.trim() ? blogContent.trim().split(/\s+/).length : 0
+    const text = blogContent.trim()
+    const words = text ? text.split(/\s+/).length : 0
     return Math.max(1, Math.ceil(words / 200))
   }, [blogContent])
 
@@ -441,22 +442,29 @@ export default function DashboardPage() {
   const stats = activeTab === 'queries' ? queriesStats : activeTab === 'careers' ? careersStats : activeTab === 'jobs' ? jobsStats : blogsStats
 
   return (
-    <div className="min-h-screen planner-bg">
-      <header className="glass-panel border-b border-border sticky top-0 z-40">
-        <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
+    <div className="min-h-screen bg-white dark:bg-[#00164A] transition-colors duration-300">
+      <header className="bg-slate-100/70 backdrop-blur-sm border-b border-gray-200 dark:bg-white/5 dark:border-white/10 sticky top-0 z-40">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
           <Link href="/" className="flex items-center gap-3">
+            <Image
+              src="/assets/logo1.png"
+              alt="VELOCT"
+              width={120}
+              height={32}
+              className="block dark:hidden h-8 w-auto"
+            />
             <Image
               src="/assets/logo.png"
               alt="VELOCT"
               width={120}
               height={32}
-              className="h-8 w-auto"
+              className="hidden dark:block h-8 w-auto"
             />
-            <span className="micro-label hidden sm:block">Admin Panel</span>
+            <span className="micro-label hidden sm:block text-slate-500 dark:text-white/60">Admin Panel</span>
           </Link>
           <button
             onClick={handleLogout}
-            className="flex items-center gap-2 text-sm text-muted-foreground hover:text-destructive transition-colors cursor-pointer"
+            className="flex items-center gap-2 text-sm text-slate-500 dark:text-white/60 hover:text-red-500 transition-colors cursor-pointer"
           >
             <LogOut size={16} />
             Logout
@@ -464,14 +472,14 @@ export default function DashboardPage() {
         </div>
       </header>
 
-      <main className="max-w-7xl mx-auto px-6 py-8">
-        <div className="flex items-center justify-between mb-8">
-          <h1 className=" text-3xl font-semibold">Dashboard</h1>
-          <div className="flex gap-3">
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 py-6 sm:py-8">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
+          <h1 className="text-2xl sm:text-3xl font-semibold text-slate-900 dark:text-white">Dashboard</h1>
+          <div className="flex gap-3 flex-wrap">
             <button
               onClick={loadData}
               disabled={refreshing}
-              className="flex items-center gap-2 text-sm text-muted-foreground hover:text-primary transition-colors px-4 py-2 rounded-lg border border-border hover:border-primary/30 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+              className="flex items-center gap-2 text-sm text-slate-500 dark:text-white/60 hover:text-[#FE7004] transition-colors px-4 py-2 rounded-lg border border-gray-200 dark:border-white/10 hover:border-[#FE7004]/30 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
             >
               <RefreshCw size={16} className={refreshing ? 'animate-spin' : ''} />
               {refreshing ? 'Refreshing...' : 'Refresh'}
@@ -483,7 +491,7 @@ export default function DashboardPage() {
             ) && (
               <button
                 onClick={clearAll}
-                className="flex items-center gap-2 text-sm text-destructive hover:text-red-300 transition-colors px-4 py-2 rounded-lg border border-destructive/30 hover:border-destructive/60 cursor-pointer"
+                className="flex items-center gap-2 text-sm text-red-500 hover:text-red-300 transition-colors px-4 py-2 rounded-lg border border-red-500/30 hover:border-red-500/60 cursor-pointer"
               >
                 <Trash2 size={16} />
                 Clear All
@@ -493,15 +501,15 @@ export default function DashboardPage() {
         </div>
 
         {/* Tabs */}
-        <div className="flex gap-1 mb-6 p-1 rounded-xl bg-white/5 border border-border w-fit">
-          <button
-            onClick={() => setActiveTab('queries')}
-            className={cn(
-              "flex items-center gap-2 px-5 py-2.5 rounded-lg text-sm font-medium transition-all duration-200 cursor-pointer",
-              activeTab === 'queries'
-                ? "bg-[#FE7004] text-white shadow-lg shadow-[#FE7004]/20"
-                : "text-white/60 hover:text-white hover:bg-white/5"
-            )}
+          <div className="flex gap-1 mb-6 p-1 rounded-xl bg-gray-100 dark:bg-white/5 border border-gray-200 dark:border-white/10 overflow-x-auto w-full sm:w-fit">
+            <button
+              onClick={() => setActiveTab('queries')}
+              className={cn(
+                "flex items-center gap-1.5 sm:gap-2 px-3 sm:px-5 py-2 sm:py-2.5 rounded-lg text-xs sm:text-sm font-medium transition-all duration-200 cursor-pointer whitespace-nowrap",
+                activeTab === 'queries'
+                  ? "bg-[#FE7004] text-white shadow-lg shadow-[#FE7004]/20"
+                  : "text-slate-500 dark:text-white/60 hover:text-slate-900 dark:hover:text-white hover:bg-gray-200 dark:hover:bg-white/5"
+              )}
           >
             <Mail size={16} />
             Client Queries
@@ -509,10 +517,10 @@ export default function DashboardPage() {
           <button
             onClick={() => setActiveTab('careers')}
             className={cn(
-              "flex items-center gap-2 px-5 py-2.5 rounded-lg text-sm font-medium transition-all duration-200 cursor-pointer",
-              activeTab === 'careers'
-                ? "bg-[#FE7004] text-white shadow-lg shadow-[#FE7004]/20"
-                : "text-white/60 hover:text-white hover:bg-white/5"
+                "flex items-center gap-1.5 sm:gap-2 px-3 sm:px-5 py-2 sm:py-2.5 rounded-lg text-xs sm:text-sm font-medium transition-all duration-200 cursor-pointer whitespace-nowrap",
+                activeTab === 'careers'
+                  ? "bg-[#FE7004] text-white shadow-lg shadow-[#FE7004]/20"
+                  : "text-slate-500 dark:text-white/60 hover:text-slate-900 dark:hover:text-white hover:bg-gray-200 dark:hover:bg-white/5"
             )}
           >
             <Briefcase size={16} />
@@ -521,10 +529,10 @@ export default function DashboardPage() {
           <button
             onClick={() => setActiveTab('jobs')}
             className={cn(
-              "flex items-center gap-2 px-5 py-2.5 rounded-lg text-sm font-medium transition-all duration-200 cursor-pointer",
-              activeTab === 'jobs'
-                ? "bg-[#FE7004] text-white shadow-lg shadow-[#FE7004]/20"
-                : "text-white/60 hover:text-white hover:bg-white/5"
+                "flex items-center gap-1.5 sm:gap-2 px-3 sm:px-5 py-2 sm:py-2.5 rounded-lg text-xs sm:text-sm font-medium transition-all duration-200 cursor-pointer whitespace-nowrap",
+                activeTab === 'jobs'
+                  ? "bg-[#FE7004] text-white shadow-lg shadow-[#FE7004]/20"
+                  : "text-slate-500 dark:text-white/60 hover:text-slate-900 dark:hover:text-white hover:bg-gray-200 dark:hover:bg-white/5"
             )}
           >
             <Briefcase size={16} />
@@ -533,10 +541,10 @@ export default function DashboardPage() {
           <button
             onClick={() => setActiveTab('blogs')}
             className={cn(
-              "flex items-center gap-2 px-5 py-2.5 rounded-lg text-sm font-medium transition-all duration-200 cursor-pointer",
+                "flex items-center gap-1.5 sm:gap-2 px-3 sm:px-5 py-2 sm:py-2.5 rounded-lg text-xs sm:text-sm font-medium transition-all duration-200 cursor-pointer whitespace-nowrap",
               activeTab === 'blogs'
-                ? "bg-[#FE7004] text-white shadow-lg shadow-[#FE7004]/20"
-                : "text-white/60 hover:text-white hover:bg-white/5"
+                  ? "bg-[#FE7004] text-white shadow-lg shadow-[#FE7004]/20"
+                  : "text-slate-500 dark:text-white/60 hover:text-slate-900 dark:hover:text-white hover:bg-gray-200 dark:hover:bg-white/5"
             )}
           >
             <FileText size={16} />
@@ -546,100 +554,100 @@ export default function DashboardPage() {
 
         <div className={cn(
           "grid grid-cols-1 sm:grid-cols-2 gap-6 mb-8",
-          activeTab === 'blogs' ? 'md:grid-cols-3' : 'lg:grid-cols-4'
+              activeTab === 'blogs' ? 'md:grid-cols-3' : 'sm:grid-cols-2 lg:grid-cols-4'
         )}>
           {/* Stats cards rendered below */}
           {stats.map((stat) => (
             <div
               key={stat.label}
-              className="paper-card p-6 animate-slide-up relative overflow-hidden"
+              className="bg-slate-50 border border-slate-200/80 shadow-sm dark:bg-white/5 dark:border-white/10 dark:shadow-none rounded-xl p-6 animate-slide-up relative overflow-hidden"
               style={{ animationDelay: stat.delay }}
             >
               <div className="flex items-start justify-between mb-3">
-                <stat.icon size={20} className="text-primary/70" />
+                <stat.icon size={20} className="text-[#FE7004]/70" />
               </div>
-              <p className={cn(
-                "mb-1",
-                stat.label === 'Latest Title'
-                  ? "text-xl font-semibold text-white"
-                  : stat.label === 'Latest Email'
-                    ? "text-lg sm:text-xl font-bold text-white break-words"
-                    : "text-3xl font-bold text-white"
-              )}>
-                {stat.value}
-              </p>
-              <p className="text-sm text-gray-400 font-medium">{stat.label}</p>
+                <p className={cn(
+                  "mb-1",
+                  stat.label === 'Latest Title'
+                    ? "text-xl font-semibold text-slate-900 dark:text-white"
+                    :                     stat.label === 'Latest Email'
+                      ? "text-lg sm:text-xl font-bold text-slate-900 dark:text-white break-all"
+                      : "text-3xl font-bold text-slate-900 dark:text-white"
+                )}>
+                  {stat.value}
+                </p>
+                <p className="text-sm text-slate-500 dark:text-white/60 font-medium">{stat.label}</p>
             </div>
           ))}
         </div>
 
         {activeTab === 'queries' && (
-          <div className="paper-card overflow-hidden animate-fade-in-up" style={{ animationDelay: '400ms' }}>
-            <div className="p-6 border-b border-border">
-              <h2 className=" text-xl font-semibold">Consultation Requests</h2>
+          <div className="bg-slate-50 border border-slate-200/80 shadow-sm dark:bg-white/5 dark:border-white/10 dark:shadow-none rounded-xl overflow-hidden animate-fade-in-up" style={{ animationDelay: '400ms' }}>
+              <div className="p-4 sm:p-6 border-b border-gray-200 dark:border-white/10">
+              <h2 className="text-lg sm:text-xl font-semibold text-slate-900 dark:text-white">Consultation Requests</h2>
             </div>
 
             {consultations.length === 0 ? (
-              <div className="p-12 text-center text-muted-foreground">
+              <div className="p-6 sm:p-12 text-center text-slate-500 dark:text-white/60">
                 <Mail size={40} className="mx-auto mb-4 opacity-30" />
-                <p className="text-lg">No consultation requests yet.</p>
-                <p className="text-sm mt-1">Requests from the contact form will appear here.</p>
+                <p className="text-lg text-slate-500 dark:text-white/60">No consultation requests yet.</p>
+                <p className="text-sm mt-1 text-slate-400 dark:text-white/40">Requests from the contact form will appear here.</p>
               </div>
             ) : (
               <div className="w-full overflow-x-auto">
                 <table className="w-full text-sm whitespace-nowrap">
                   <thead>
-                    <tr className="border-b border-border">
-                      <th className="text-left px-6 py-4 micro-label">#</th>
-                      <th className="text-left px-6 py-4 micro-label">Email</th>
-                      <th className="text-left px-6 py-4 micro-label">Type</th>
-                      <th className="text-left px-6 py-4 micro-label">Company</th>
-                      <th className="text-left px-6 py-4 micro-label">Size</th>
-                      <th className="text-left px-6 py-4 micro-label">Budget</th>
-                      <th className="text-left px-6 py-4 micro-label">Timeline</th>
-                      <th className="text-left px-6 py-4 micro-label">Context</th>
-                      <th className="text-left px-6 py-4 micro-label">Date</th>
-                      <th className="text-left px-6 py-4 micro-label">Actions</th>
+                    <tr className="border-b border-gray-200 dark:border-white/10">
+                      <th className="text-left px-3 sm:px-6 py-3 sm:py-4 micro-label text-slate-500 dark:text-white/60">#</th>
+                      <th className="text-left px-3 sm:px-6 py-3 sm:py-4 micro-label text-slate-500 dark:text-white/60">Email</th>
+                      <th className="text-left px-3 sm:px-6 py-3 sm:py-4 micro-label text-slate-500 dark:text-white/60">Type</th>
+                      <th className="text-left px-3 sm:px-6 py-3 sm:py-4 micro-label text-slate-500 dark:text-white/60">Company</th>
+                      <th className="text-left px-3 sm:px-6 py-3 sm:py-4 micro-label text-slate-500 dark:text-white/60">Size</th>
+                      <th className="text-left px-3 sm:px-6 py-3 sm:py-4 micro-label text-slate-500 dark:text-white/60">Budget</th>
+                      <th className="text-left px-3 sm:px-6 py-3 sm:py-4 micro-label text-slate-500 dark:text-white/60">Timeline</th>
+                      <th className="text-left px-3 sm:px-6 py-3 sm:py-4 micro-label text-slate-500 dark:text-white/60">Context</th>
+                      <th className="text-left px-3 sm:px-6 py-3 sm:py-4 micro-label text-slate-500 dark:text-white/60">Date</th>
+                      <th className="text-left px-3 sm:px-6 py-3 sm:py-4 micro-label text-slate-500 dark:text-white/60">Actions</th>
                     </tr>
                   </thead>
                   <tbody>
                     {[...consultations].reverse().map((c, i) => (
                       <tr
                         key={`${c.email}-${i}`}
-                        className="border-b border-border/50 hover:bg-white/[0.02] transition-colors animate-slide-up"
+                        className="border-b border-gray-200/50 dark:border-white/5 hover:bg-white/[0.02] transition-colors animate-slide-up"
                         style={{ animationDelay: `${500 + i * 50}ms` }}
                       >
-                        <td className="px-6 py-4 font-medium text-primary">{i + 1}</td>
-                        <td className="px-6 py-4">
-                          <a href={`mailto:${c.email}`} className="text-primary hover:underline">{c.email}</a>
+                        <td className="px-3 sm:px-6 py-3 sm:py-4 font-medium text-[#FE7004]">{i + 1}</td>
+                        <td className="px-3 sm:px-6 py-3 sm:py-4">
+                          <a href={`mailto:${c.email}`} className="text-[#FE7004] hover:underline">{c.email}</a>
                         </td>
-                        <td className="px-6 py-4">
-                          <span className="micro-label text-primary">
+                        <td className="px-3 sm:px-6 py-3 sm:py-4">
+                          <span className="micro-label text-[#FE7004]">
                             {c.action === 'Book Consultation' ? 'Consultation' : 'Proposal'}
                           </span>
                         </td>
-                        <td className="px-6 py-4 text-muted-foreground whitespace-nowrap">
+                        <td className="px-3 sm:px-6 py-3 sm:py-4 text-slate-500 dark:text-white/60 whitespace-nowrap">
                           {c.company || '-'}
                         </td>
-                        <td className="px-6 py-4 text-muted-foreground whitespace-nowrap">
+                        <td className="px-3 sm:px-6 py-3 sm:py-4 text-slate-500 dark:text-white/60 whitespace-nowrap">
                           {c.companySize || '-'}
                         </td>
-                        <td className="px-6 py-4 text-muted-foreground whitespace-nowrap">
+                        <td className="px-3 sm:px-6 py-3 sm:py-4 text-slate-500 dark:text-white/60 whitespace-nowrap">
                           {c.budget || '-'}
                         </td>
-                        <td className="px-6 py-4 text-muted-foreground whitespace-nowrap">
+                        <td className="px-3 sm:px-6 py-3 sm:py-4 text-slate-500 dark:text-white/60 whitespace-nowrap">
                           {c.timeline || '-'}
                         </td>
-                        <td className="px-6 py-4 text-muted-foreground max-w-[180px] truncate">
+                        <td className="px-3 sm:px-6 py-3 sm:py-4 text-slate-500 dark:text-white/60 max-w-[120px] sm:max-w-[180px] truncate">
                           {c.context}
                         </td>
-                        <td className="px-6 py-4 text-muted-foreground whitespace-nowrap">
+                        <td className="px-3 sm:px-6 py-3 sm:py-4 text-slate-500 dark:text-white/60 whitespace-nowrap">
                           {new Date(c.timestamp).toLocaleDateString()}
                         </td>
-                        <td className="px-6 py-4">
+                        <td className="px-3 sm:px-6 py-3 sm:py-4">
                           <button
                             onClick={() => handleDelete(c.id, 'queries')}
-                            className="text-muted-foreground hover:text-red-500 transition-colors cursor-pointer"
+                            className="text-slate-500 dark:text-white/60 hover:text-red-500 transition-colors cursor-pointer"
                           >
                             <Trash2 size={14} />
                           </button>
@@ -654,51 +662,51 @@ export default function DashboardPage() {
         )}
 
         {activeTab === 'careers' && (
-          <div className="paper-card overflow-hidden animate-fade-in-up" style={{ animationDelay: '400ms' }}>
-            <div className="p-6 border-b border-border">
-              <h2 className=" text-xl font-semibold">Career Applications</h2>
+          <div className="bg-slate-50 border border-slate-200/80 shadow-sm dark:bg-white/5 dark:border-white/10 dark:shadow-none rounded-xl overflow-hidden animate-fade-in-up" style={{ animationDelay: '400ms' }}>
+            <div className="p-4 sm:p-6 border-b border-gray-200 dark:border-white/10">
+              <h2 className="text-lg sm:text-xl font-semibold text-slate-900 dark:text-white">Career Applications</h2>
             </div>
 
             {careers.length === 0 ? (
-              <div className="p-12 text-center text-muted-foreground">
+              <div className="p-6 sm:p-12 text-center text-slate-500 dark:text-white/60">
                 <Briefcase size={40} className="mx-auto mb-4 opacity-30" />
-                <p className="text-lg">No career applications yet.</p>
-                <p className="text-sm mt-1">Applications from the career page will appear here.</p>
+                <p className="text-lg text-slate-500 dark:text-white/60">No career applications yet.</p>
+                <p className="text-sm mt-1 text-slate-400 dark:text-white/40">Applications from the career page will appear here.</p>
               </div>
             ) : (
               <div className="w-full overflow-x-auto">
                 <table className="w-full text-sm whitespace-nowrap">
                   <thead>
-                    <tr className="border-b border-border">
-                      <th className="text-left px-6 py-4 micro-label">#</th>
-                      <th className="text-left px-6 py-4 micro-label">Name</th>
-                      <th className="text-left px-6 py-4 micro-label">Email</th>
-                      <th className="text-left px-6 py-4 micro-label">Education</th>
-                      <th className="text-left px-6 py-4 micro-label">Specialization</th>
-                      <th className="text-left px-6 py-4 micro-label">Experience</th>
-                      <th className="text-left px-6 py-4 micro-label">City</th>
-                      <th className="text-left px-6 py-4 micro-label">Resume</th>
-                      <th className="text-left px-6 py-4 micro-label">Date</th>
-                      <th className="text-left px-6 py-4 micro-label">Actions</th>
+                    <tr className="border-b border-gray-200 dark:border-white/10">
+                      <th className="text-left px-3 sm:px-6 py-3 sm:py-4 micro-label text-slate-500 dark:text-white/60">#</th>
+                      <th className="text-left px-3 sm:px-6 py-3 sm:py-4 micro-label text-slate-500 dark:text-white/60">Name</th>
+                      <th className="text-left px-3 sm:px-6 py-3 sm:py-4 micro-label text-slate-500 dark:text-white/60">Email</th>
+                      <th className="text-left px-3 sm:px-6 py-3 sm:py-4 micro-label text-slate-500 dark:text-white/60">Education</th>
+                      <th className="text-left px-3 sm:px-6 py-3 sm:py-4 micro-label text-slate-500 dark:text-white/60">Specialization</th>
+                      <th className="text-left px-3 sm:px-6 py-3 sm:py-4 micro-label text-slate-500 dark:text-white/60">Experience</th>
+                      <th className="text-left px-3 sm:px-6 py-3 sm:py-4 micro-label text-slate-500 dark:text-white/60">City</th>
+                      <th className="text-left px-3 sm:px-6 py-3 sm:py-4 micro-label text-slate-500 dark:text-white/60">Resume</th>
+                      <th className="text-left px-3 sm:px-6 py-3 sm:py-4 micro-label text-slate-500 dark:text-white/60">Date</th>
+                      <th className="text-left px-3 sm:px-6 py-3 sm:py-4 micro-label text-slate-500 dark:text-white/60">Actions</th>
                     </tr>
                   </thead>
                   <tbody>
                     {[...careers].reverse().map((c, i) => (
                       <tr
                         key={`${c.email}-${i}`}
-                        className="border-b border-border/50 hover:bg-white/[0.02] transition-colors animate-slide-up"
+                        className="border-b border-gray-200/50 dark:border-white/5 hover:bg-white/[0.02] transition-colors animate-slide-up"
                         style={{ animationDelay: `${500 + i * 50}ms` }}
                       >
-                        <td className="px-6 py-4 font-medium text-primary">{i + 1}</td>
-                        <td className="px-6 py-4 text-white font-medium">{c.fullName}</td>
-                        <td className="px-6 py-4">
-                          <a href={`mailto:${c.email}`} className="text-primary hover:underline">{c.email}</a>
+                        <td className="px-3 sm:px-6 py-3 sm:py-4 font-medium text-[#FE7004]">{i + 1}</td>
+                        <td className="px-3 sm:px-6 py-3 sm:py-4 text-slate-900 dark:text-white font-medium">{c.fullName}</td>
+                        <td className="px-3 sm:px-6 py-3 sm:py-4">
+                          <a href={`mailto:${c.email}`} className="text-[#FE7004] hover:underline">{c.email}</a>
                         </td>
-                        <td className="px-6 py-4 text-muted-foreground">{c.education}</td>
-                        <td className="px-6 py-4 text-muted-foreground">{c.specialization || '-'}</td>
-                        <td className="px-6 py-4 text-muted-foreground">{c.experience}</td>
-                        <td className="px-6 py-4 text-muted-foreground">{c.city}, {c.country}</td>
-                        <td className="px-6 py-4">
+                        <td className="px-3 sm:px-6 py-3 sm:py-4 text-slate-500 dark:text-white/60">{c.education}</td>
+                        <td className="px-3 sm:px-6 py-3 sm:py-4 text-slate-500 dark:text-white/60">{c.specialization || '-'}</td>
+                        <td className="px-3 sm:px-6 py-3 sm:py-4 text-slate-500 dark:text-white/60">{c.experience}</td>
+                        <td className="px-3 sm:px-6 py-3 sm:py-4 text-slate-500 dark:text-white/60">{c.city}, {c.country}</td>
+                        <td className="px-3 sm:px-6 py-3 sm:py-4">
                           {c.resume_url ? (
                             <a
                               href={c.resume_url}
@@ -709,16 +717,16 @@ export default function DashboardPage() {
                               View CV
                             </a>
                           ) : (
-                            <span className="text-xs text-white/30">No CV</span>
+                            <span className="text-xs text-slate-400 dark:text-white/30">No CV</span>
                           )}
                         </td>
-                        <td className="px-6 py-4 text-muted-foreground whitespace-nowrap">
+                        <td className="px-3 sm:px-6 py-3 sm:py-4 text-slate-500 dark:text-white/60 whitespace-nowrap">
                           {new Date(c.timestamp).toLocaleDateString()}
                         </td>
-                        <td className="px-6 py-4">
+                        <td className="px-3 sm:px-6 py-3 sm:py-4">
                           <button
                             onClick={() => handleDelete(c.id, 'careers')}
-                            className="text-muted-foreground hover:text-red-500 transition-colors cursor-pointer"
+                            className="text-slate-500 dark:text-white/60 hover:text-red-500 transition-colors cursor-pointer"
                           >
                             <Trash2 size={14} />
                           </button>
@@ -733,25 +741,25 @@ export default function DashboardPage() {
         )}
 
         {activeTab === 'jobs' && (
-          <div className="grid gap-6 lg:grid-cols-2">
+          <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
             {/* Create/Edit Job Form */}
-            <div className="paper-card overflow-hidden animate-fade-in-up" style={{ animationDelay: '400ms' }}>
-              <div className="p-6 border-b border-border">
-                <div className="flex items-center justify-between">
-                  <h2 className="text-xl font-semibold">
+            <div className="bg-slate-50 border border-slate-200/80 shadow-sm dark:bg-white/5 dark:border-white/10 dark:shadow-none rounded-xl overflow-hidden animate-fade-in-up" style={{ animationDelay: '400ms' }}>
+              <div className="p-4 sm:p-6 border-b border-gray-200 dark:border-white/10">
+                <div className="flex items-center justify-between gap-2">
+                  <h2 className="text-base sm:text-xl font-semibold text-slate-900 dark:text-white">
                     {editingJobId ? 'Edit Position' : 'Create New Position'}
                   </h2>
                   {editingJobId && (
                     <button
                       onClick={resetJobForm}
-                      className="text-xs text-white/40 hover:text-white transition-colors cursor-pointer"
+                      className="text-xs text-slate-400 dark:text-white/40 hover:text-slate-900 dark:hover:text-white transition-colors cursor-pointer"
                     >
                       Cancel Edit
                     </button>
                   )}
                 </div>
               </div>
-              <form onSubmit={handlePublishJob} className="p-6 space-y-5">
+              <form onSubmit={handlePublishJob} className="p-4 sm:p-6 space-y-5">
                 {jobSuccess && (
                   <div className="bg-green-500/10 border border-green-500/30 rounded-lg px-4 py-3 text-sm text-green-400">
                     {jobSuccess}
@@ -764,7 +772,7 @@ export default function DashboardPage() {
                 )}
 
                 <div>
-                  <label className="micro-label text-white/60 block mb-1.5">
+                  <label className="micro-label text-slate-500 dark:text-white/60 block mb-1.5">
                     Job Title <span className="text-[#FE7004]">*</span>
                   </label>
                   <input
@@ -773,12 +781,12 @@ export default function DashboardPage() {
                     value={jobTitle}
                     onChange={(e) => setJobTitle(e.target.value)}
                     placeholder="e.g. Senior Full-Stack Developer"
-                    className="w-full px-4 py-3 rounded-xl bg-white/5 border border-[#FE7004]/15 text-white text-sm placeholder:text-white/30 focus:outline-none focus:border-[#FE7004]/50 focus:ring-1 focus:ring-[#FE7004]/30 transition-all"
+                    className="w-full px-4 py-3 rounded-xl bg-gray-50 dark:bg-white/5 border border-gray-300 dark:border-[#FE7004]/15 text-slate-900 dark:text-white text-sm placeholder:text-slate-400 dark:placeholder:text-white/30 focus:outline-none focus:border-[#FE7004]/50 focus:ring-1 focus:ring-[#FE7004]/30 transition-all"
                   />
                 </div>
 
                 <div>
-                  <label className="micro-label text-white/60 block mb-1.5">
+                  <label className="micro-label text-slate-500 dark:text-white/60 block mb-1.5">
                     Description <span className="text-[#FE7004]">*</span>
                   </label>
                   <textarea
@@ -787,13 +795,13 @@ export default function DashboardPage() {
                     onChange={(e) => setJobDescription(e.target.value)}
                     placeholder="Describe the role, responsibilities, and requirements..."
                     rows={5}
-                    className="w-full px-4 py-3 rounded-xl bg-white/5 border border-[#FE7004]/15 text-white text-sm placeholder:text-white/30 focus:outline-none focus:border-[#FE7004]/50 focus:ring-1 focus:ring-[#FE7004]/30 transition-all resize-y"
+                    className="w-full px-4 py-3 rounded-xl bg-gray-50 dark:bg-white/5 border border-gray-300 dark:border-[#FE7004]/15 text-slate-900 dark:text-white text-sm placeholder:text-slate-400 dark:placeholder:text-white/30 focus:outline-none focus:border-[#FE7004]/50 focus:ring-1 focus:ring-[#FE7004]/30 transition-all resize-y"
                   />
                 </div>
 
-                <div className="grid grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
-                    <label className="micro-label text-white/60 block mb-1.5">
+                    <label className="micro-label text-slate-500 dark:text-white/60 block mb-1.5">
                       Experience <span className="text-[#FE7004]">*</span>
                     </label>
                     <input
@@ -802,11 +810,11 @@ export default function DashboardPage() {
                       value={jobExperience}
                       onChange={(e) => setJobExperience(e.target.value)}
                       placeholder="e.g. 3-5 years"
-                      className="w-full px-4 py-3 rounded-xl bg-white/5 border border-[#FE7004]/15 text-white text-sm placeholder:text-white/30 focus:outline-none focus:border-[#FE7004]/50 focus:ring-1 focus:ring-[#FE7004]/30 transition-all"
+                      className="w-full px-4 py-3 rounded-xl bg-gray-50 dark:bg-white/5 border border-gray-300 dark:border-[#FE7004]/15 text-slate-900 dark:text-white text-sm placeholder:text-slate-400 dark:placeholder:text-white/30 focus:outline-none focus:border-[#FE7004]/50 focus:ring-1 focus:ring-[#FE7004]/30 transition-all"
                     />
                   </div>
                   <div>
-                    <label className="micro-label text-white/60 block mb-1.5">
+                    <label className="micro-label text-slate-500 dark:text-white/60 block mb-1.5">
                       Location <span className="text-[#FE7004]">*</span>
                     </label>
                     <input
@@ -815,13 +823,13 @@ export default function DashboardPage() {
                       value={jobLocation}
                       onChange={(e) => setJobLocation(e.target.value)}
                       placeholder="e.g. Remote / Dubai"
-                      className="w-full px-4 py-3 rounded-xl bg-white/5 border border-[#FE7004]/15 text-white text-sm placeholder:text-white/30 focus:outline-none focus:border-[#FE7004]/50 focus:ring-1 focus:ring-[#FE7004]/30 transition-all"
+                      className="w-full px-4 py-3 rounded-xl bg-gray-50 dark:bg-white/5 border border-gray-300 dark:border-[#FE7004]/15 text-slate-900 dark:text-white text-sm placeholder:text-slate-400 dark:placeholder:text-white/30 focus:outline-none focus:border-[#FE7004]/50 focus:ring-1 focus:ring-[#FE7004]/30 transition-all"
                     />
                   </div>
                 </div>
 
                 <div>
-                  <label className="micro-label text-white/60 block mb-1.5">
+                  <label className="micro-label text-slate-500 dark:text-white/60 block mb-1.5">
                     Last Date to Apply <span className="text-[#FE7004]">*</span>
                   </label>
                   <input
@@ -829,7 +837,7 @@ export default function DashboardPage() {
                     required
                     value={jobLastDate}
                     onChange={(e) => setJobLastDate(e.target.value)}
-                    className="w-full px-4 py-3 rounded-xl bg-white/5 border border-[#FE7004]/15 text-white text-sm focus:outline-none focus:border-[#FE7004]/50 focus:ring-1 focus:ring-[#FE7004]/30 transition-all [color-scheme:dark]"
+                    className="w-full px-4 py-3 rounded-xl bg-gray-50 dark:bg-white/5 border border-gray-300 dark:border-[#FE7004]/15 text-slate-900 dark:text-white text-sm focus:outline-none focus:border-[#FE7004]/50 focus:ring-1 focus:ring-[#FE7004]/30 transition-all [color-scheme:dark]"
                   />
                 </div>
 
@@ -845,57 +853,57 @@ export default function DashboardPage() {
             </div>
 
             {/* Job Listings Table */}
-            <div className="paper-card overflow-hidden animate-fade-in-up" style={{ animationDelay: '500ms' }}>
-              <div className="p-6 border-b border-border">
-                <h2 className="text-xl font-semibold">All Positions ({jobs.length})</h2>
-              </div>
-
-              {jobs.length === 0 ? (
-                <div className="p-12 text-center text-muted-foreground">
-                  <Briefcase size={40} className="mx-auto mb-4 opacity-30" />
-                  <p className="text-lg">No job positions yet.</p>
-                  <p className="text-sm mt-1">Use the form to create your first job listing.</p>
+            <div className="bg-slate-50 border border-slate-200/80 shadow-sm dark:bg-white/5 dark:border-white/10 dark:shadow-none rounded-xl overflow-hidden animate-fade-in-up" style={{ animationDelay: '500ms' }}>
+                <div className="p-4 sm:p-6 border-b border-gray-200 dark:border-white/10">
+                  <h2 className="text-base sm:text-xl font-semibold text-slate-900 dark:text-white">All Positions ({jobs.length})</h2>
                 </div>
-              ) : (
-                <div className="w-full overflow-x-auto">
-                  <table className="w-full text-sm whitespace-nowrap">
-                    <thead>
-                      <tr className="border-b border-border">
-                        <th className="text-left px-6 py-4 micro-label">Title</th>
-                        <th className="text-left px-6 py-4 micro-label">Status</th>
-                        <th className="text-left px-6 py-4 micro-label">Experience</th>
-                        <th className="text-left px-6 py-4 micro-label">Location</th>
-                        <th className="text-left px-6 py-4 micro-label">Last Date</th>
-                        <th className="text-left px-6 py-4 micro-label">Actions</th>
+
+                {jobs.length === 0 ? (
+                  <div className="p-6 sm:p-12 text-center text-slate-500 dark:text-white/60">
+                    <Briefcase size={32} className="sm:size-40 mx-auto mb-4 opacity-30" />
+                    <p className="text-base sm:text-lg text-slate-500 dark:text-white/60">No job positions yet.</p>
+                    <p className="text-sm mt-1 text-slate-400 dark:text-white/40">Use the form to create your first job listing.</p>
+                  </div>
+                ) : (
+                  <div className="w-full overflow-x-auto">
+                    <table className="w-full text-sm whitespace-nowrap">
+                      <thead>
+                        <tr className="border-b border-gray-200 dark:border-white/10">
+                          <th className="text-left px-3 sm:px-6 py-3 sm:py-4 micro-label text-slate-500 dark:text-white/60">Title</th>
+                          <th className="text-left px-3 sm:px-6 py-3 sm:py-4 micro-label text-slate-500 dark:text-white/60">Status</th>
+                          <th className="text-left px-3 sm:px-6 py-3 sm:py-4 micro-label text-slate-500 dark:text-white/60">Experience</th>
+                          <th className="text-left px-3 sm:px-6 py-3 sm:py-4 micro-label text-slate-500 dark:text-white/60">Location</th>
+                          <th className="text-left px-3 sm:px-6 py-3 sm:py-4 micro-label text-slate-500 dark:text-white/60">Last Date</th>
+                          <th className="text-left px-3 sm:px-6 py-3 sm:py-4 micro-label text-slate-500 dark:text-white/60">Actions</th>
                       </tr>
                     </thead>
                     <tbody>
                       {jobs.map((job, i) => (
                         <tr
                           key={job.id}
-                          className="border-b border-border/50 hover:bg-white/[0.02] transition-colors animate-slide-up"
+                          className="border-b border-gray-200/50 dark:border-white/5 hover:bg-white/[0.02] transition-colors animate-slide-up"
                           style={{ animationDelay: `${500 + i * 50}ms` }}
                         >
-                          <td className="px-6 py-4 text-white font-medium">{job.title}</td>
-                          <td className="px-6 py-4">
+                          <td className="px-3 sm:px-6 py-3 sm:py-4 text-slate-900 dark:text-white font-medium">{job.title}</td>
+                          <td className="px-3 sm:px-6 py-3 sm:py-4">
                             <button
                               onClick={() => handleToggleJobStatus(job)}
                               className={`flex items-center gap-1.5 text-xs font-medium px-2.5 py-1 rounded-full border transition-all cursor-pointer ${
                                 job.is_active
                                   ? 'bg-green-500/10 border-green-500/30 text-green-400 hover:bg-green-500/20'
-                                  : 'bg-white/5 border-white/10 text-white/40 hover:text-white/60'
+                                  : 'bg-gray-100 dark:bg-white/5 border-gray-200 dark:border-white/10 text-slate-400 dark:text-white/40 hover:text-slate-600 dark:hover:text-white/60'
                               }`}
                             >
                               {job.is_active ? <ToggleRight size={12} /> : <ToggleLeft size={12} />}
                               {job.is_active ? 'Active' : 'Inactive'}
                             </button>
                           </td>
-                          <td className="px-6 py-4 text-muted-foreground">{job.experience}</td>
-                          <td className="px-6 py-4 text-muted-foreground">{job.location}</td>
-                          <td className="px-6 py-4 text-muted-foreground">
+                          <td className="px-3 sm:px-6 py-3 sm:py-4 text-slate-500 dark:text-white/60">{job.experience}</td>
+                          <td className="px-3 sm:px-6 py-3 sm:py-4 text-slate-500 dark:text-white/60">{job.location}</td>
+                          <td className="px-3 sm:px-6 py-3 sm:py-4 text-slate-500 dark:text-white/60">
                             {new Date(job.last_date).toLocaleDateString()}
                           </td>
-                          <td className="px-6 py-4">
+                          <td className="px-3 sm:px-6 py-3 sm:py-4">
                             <div className="flex items-center gap-3">
                               <button
                                 onClick={() => handleEditJob(job)}
@@ -905,7 +913,7 @@ export default function DashboardPage() {
                               </button>
                               <button
                                 onClick={() => handleDeleteJob(job.id)}
-                                className="text-muted-foreground hover:text-red-500 transition-colors cursor-pointer"
+                                className="text-slate-500 dark:text-white/60 hover:text-red-500 transition-colors cursor-pointer"
                               >
                                 <Trash2 size={14} />
                               </button>
@@ -922,25 +930,25 @@ export default function DashboardPage() {
         )}
 
         {activeTab === 'blogs' && (
-          <div className="grid gap-6 lg:grid-cols-2">
+          <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
             {/* Create Blog Form */}
-            <div className="paper-card overflow-hidden animate-fade-in-up" style={{ animationDelay: '400ms' }}>
-              <div className="p-6 border-b border-border">
-                <div className="flex items-center justify-between">
-                  <h2 className=" text-xl font-semibold">
+            <div className="bg-slate-50 border border-slate-200/80 shadow-sm dark:bg-white/5 dark:border-white/10 dark:shadow-none rounded-xl overflow-hidden animate-fade-in-up" style={{ animationDelay: '400ms' }}>
+              <div className="p-4 sm:p-6 border-b border-gray-200 dark:border-white/10">
+                <div className="flex items-center justify-between gap-2">
+                  <h2 className="text-base sm:text-xl font-semibold text-slate-900 dark:text-white">
                     {editingSlug ? 'Edit Blog' : 'Create New Blog'}
                   </h2>
                   {editingSlug && (
                     <button
                       onClick={resetForm}
-                      className="text-xs text-white/40 hover:text-white transition-colors cursor-pointer"
+                      className="text-xs text-slate-400 dark:text-white/40 hover:text-slate-900 dark:hover:text-white transition-colors cursor-pointer"
                     >
                       Cancel Edit
                     </button>
                   )}
                 </div>
               </div>
-              <form onSubmit={handlePublishBlog} className="p-6 space-y-5">
+              <form onSubmit={handlePublishBlog} className="p-4 sm:p-6 space-y-5">
                 {blogSuccess && (
                   <div className="bg-green-500/10 border border-green-500/30 rounded-lg px-4 py-3 text-sm text-green-400">
                     {blogSuccess}
@@ -953,7 +961,7 @@ export default function DashboardPage() {
                 )}
 
                 <div>
-                  <label className="micro-label text-white/60 block mb-1.5">
+                  <label className="micro-label text-slate-500 dark:text-white/60 block mb-1.5">
                     Blog Title <span className="text-[#FE7004]">*</span>
                   </label>
                   <input
@@ -962,12 +970,12 @@ export default function DashboardPage() {
                     value={blogTitle}
                     onChange={(e) => setBlogTitle(e.target.value)}
                     placeholder="e.g. The Future of AI in Business"
-                    className="w-full px-4 py-3 rounded-xl bg-white/5 border border-[#FE7004]/15 text-white text-sm placeholder:text-white/30 focus:outline-none focus:border-[#FE7004]/50 focus:ring-1 focus:ring-[#FE7004]/30 transition-all"
+                    className="w-full px-4 py-3 rounded-xl bg-gray-50 dark:bg-white/5 border border-gray-300 dark:border-[#FE7004]/15 text-slate-900 dark:text-white text-sm placeholder:text-slate-400 dark:placeholder:text-white/30 focus:outline-none focus:border-[#FE7004]/50 focus:ring-1 focus:ring-[#FE7004]/30 transition-all"
                   />
                 </div>
 
                 <div>
-                  <label className="micro-label text-white/60 block mb-1.5">
+                  <label className="micro-label text-slate-500 dark:text-white/60 block mb-1.5">
                     URL Slug <span className="text-[#FE7004]">*</span>
                   </label>
                   <div className="flex gap-2">
@@ -978,12 +986,12 @@ export default function DashboardPage() {
                       value={blogSlug}
                       onChange={(e) => setBlogSlug(e.target.value)}
                       placeholder="e.g. future-of-ai-in-business"
-                      className="w-full px-4 py-3 rounded-xl bg-white/5 border border-[#FE7004]/15 text-white text-sm placeholder:text-white/30 focus:outline-none focus:border-[#FE7004]/50 focus:ring-1 focus:ring-[#FE7004]/30 transition-all font-mono"
+                      className="w-full px-4 py-3 rounded-xl bg-gray-50 dark:bg-white/5 border border-gray-300 dark:border-[#FE7004]/15 text-slate-900 dark:text-white text-sm placeholder:text-slate-400 dark:placeholder:text-white/30 focus:outline-none focus:border-[#FE7004]/50 focus:ring-1 focus:ring-[#FE7004]/30 transition-all font-mono"
                     />
                     <button
                       type="button"
                       onClick={() => setSlugLocked(!slugLocked)}
-                      className="px-3 py-3 rounded-xl border border-[#FE7004]/15 text-white/60 hover:text-[#FE7004] hover:border-[#FE7004]/50 transition-all cursor-pointer"
+                      className="px-3 py-3 rounded-xl border border-gray-300 dark:border-[#FE7004]/15 text-slate-500 dark:text-white/60 hover:text-[#FE7004] hover:border-[#FE7004]/50 transition-all cursor-pointer"
                       title={slugLocked ? 'Edit slug' : 'Lock slug'}
                     >
                       {slugLocked ? <Lock size={16} /> : <Unlock size={16} />}
@@ -992,7 +1000,7 @@ export default function DashboardPage() {
                 </div>
 
                 <div>
-                  <label className="micro-label text-white/60 block mb-1.5">
+                  <label className="micro-label text-slate-500 dark:text-white/60 block mb-1.5">
                     Blog Cover Image URL
                   </label>
                   <input
@@ -1000,28 +1008,28 @@ export default function DashboardPage() {
                     value={blogImageUrl}
                     onChange={(e) => setBlogImageUrl(e.target.value)}
                     placeholder="e.g. /images/blog-one.jpg or an external unsplash link"
-                    className="w-full px-4 py-3 rounded-xl bg-white/5 border border-[#FE7004]/15 text-white text-sm placeholder:text-white/30 focus:outline-none focus:border-[#FE7004]/50 focus:ring-1 focus:ring-[#FE7004]/30 transition-all"
+                    className="w-full px-4 py-3 rounded-xl bg-gray-50 dark:bg-white/5 border border-gray-300 dark:border-[#FE7004]/15 text-slate-900 dark:text-white text-sm placeholder:text-slate-400 dark:placeholder:text-white/30 focus:outline-none focus:border-[#FE7004]/50 focus:ring-1 focus:ring-[#FE7004]/30 transition-all"
                   />
                 </div>
 
                 <div>
-                  <label className="micro-label text-white/60 block mb-1.5">
+                  <label className="micro-label text-slate-500 dark:text-white/60 block mb-1.5">
                     Tags / Keywords
                   </label>
                   <div className="relative">
-                    <Tag size={14} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-white/30 pointer-events-none" />
+                    <Tag size={14} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 dark:text-white/30 pointer-events-none" />
                     <input
                       type="text"
                       value={blogTags}
                       onChange={(e) => setBlogTags(e.target.value)}
                       placeholder="e.g. AI, Technology, Innovation"
-                      className="w-full pl-9 pr-4 py-3 rounded-xl bg-white/5 border border-[#FE7004]/15 text-white text-sm placeholder:text-white/30 focus:outline-none focus:border-[#FE7004]/50 focus:ring-1 focus:ring-[#FE7004]/30 transition-all"
+                      className="w-full pl-9 pr-4 py-3 rounded-xl bg-gray-50 dark:bg-white/5 border border-gray-300 dark:border-[#FE7004]/15 text-slate-900 dark:text-white text-sm placeholder:text-slate-400 dark:placeholder:text-white/30 focus:outline-none focus:border-[#FE7004]/50 focus:ring-1 focus:ring-[#FE7004]/30 transition-all"
                     />
                   </div>
                 </div>
 
                 <div>
-                  <label className="micro-label text-white/60 block mb-1.5">
+                  <label className="micro-label text-slate-500 dark:text-white/60 block mb-1.5">
                     Excerpt / Short Description <span className="text-[#FE7004]">*</span>
                   </label>
                   <input
@@ -1030,32 +1038,31 @@ export default function DashboardPage() {
                     value={blogExcerpt}
                     onChange={(e) => setBlogExcerpt(e.target.value)}
                     placeholder="A brief summary of the blog post..."
-                    className="w-full px-4 py-3 rounded-xl bg-white/5 border border-[#FE7004]/15 text-white text-sm placeholder:text-white/30 focus:outline-none focus:border-[#FE7004]/50 focus:ring-1 focus:ring-[#FE7004]/30 transition-all"
+                    className="w-full px-4 py-3 rounded-xl bg-gray-50 dark:bg-white/5 border border-gray-300 dark:border-[#FE7004]/15 text-slate-900 dark:text-white text-sm placeholder:text-slate-400 dark:placeholder:text-white/30 focus:outline-none focus:border-[#FE7004]/50 focus:ring-1 focus:ring-[#FE7004]/30 transition-all"
                   />
                 </div>
 
                 <div>
-                  <label className="micro-label text-white/60 block mb-1.5">
+                  <label className="micro-label text-slate-500 dark:text-white/60 block mb-1.5">
                     Main Content <span className="text-[#FE7004]">*</span>
                   </label>
                   <textarea
-                    required
                     value={blogContent}
                     onChange={(e) => setBlogContent(e.target.value)}
                     placeholder="Write your article here..."
-                    rows={14}
-                    className="w-full px-4 py-3 rounded-xl bg-white/5 border border-[#FE7004]/15 text-white text-sm placeholder:text-white/30 focus:outline-none focus:border-[#FE7004]/50 focus:ring-1 focus:ring-[#FE7004]/30 transition-all resize-y"
+                    rows={12}
+                    className="w-full px-4 py-3 rounded-xl bg-gray-50 dark:bg-white/5 border border-gray-300 dark:border-[#FE7004]/15 text-slate-900 dark:text-white text-sm placeholder:text-slate-400 dark:placeholder:text-white/30 focus:outline-none focus:border-[#FE7004]/50 focus:ring-1 focus:ring-[#FE7004]/30 transition-all resize-y font-mono"
                   />
-                  <div className="flex items-center gap-1.5 text-xs text-white/40 mt-1.5">
+                  <div className="flex items-center gap-1.5 text-xs text-slate-400 dark:text-white/40 mt-1.5">
                     <Clock size={12} />
                     <span>{readingTime} min read &middot; {blogContent.trim() ? blogContent.trim().split(/\s+/).length : 0} words</span>
                   </div>
                 </div>
 
                 {/* SEO Checklist */}
-                <div className="rounded-xl bg-white/[0.03] border border-white/10 p-5 space-y-4">
+                <div className="rounded-xl bg-gray-50 dark:bg-white/[0.03] border border-gray-200 dark:border-white/10 p-5 space-y-4">
                   <div className="flex items-center justify-between">
-                    <h3 className="text-sm font-semibold text-white">SEO Checklist</h3>
+                    <h3 className="text-sm font-semibold text-slate-900 dark:text-white">SEO Checklist</h3>
                     <span className={`text-xs font-bold px-2 py-0.5 rounded-full ${
                       seoScore.score >= 80 ? 'bg-green-500/20 text-green-400' :
                       seoScore.score >= 50 ? 'bg-yellow-500/20 text-yellow-400' :
@@ -1066,7 +1073,7 @@ export default function DashboardPage() {
                   </div>
 
                   {/* Progress bar */}
-                  <div className="h-2 rounded-full bg-white/10 overflow-hidden">
+                  <div className="h-2 rounded-full bg-gray-200 dark:bg-white/10 overflow-hidden">
                     <div
                       className={`h-full rounded-full transition-all duration-500 ${
                         seoScore.score >= 80 ? 'bg-green-500' :
@@ -1079,7 +1086,7 @@ export default function DashboardPage() {
 
                   {/* Focus Keyword */}
                   <div>
-                    <label className="micro-label text-white/60 block mb-1.5">
+                    <label className="micro-label text-slate-500 dark:text-white/60 block mb-1.5">
                       Focus Keyword
                     </label>
                     <input
@@ -1087,25 +1094,25 @@ export default function DashboardPage() {
                       value={focusKeyword}
                       onChange={(e) => setFocusKeyword(e.target.value)}
                       placeholder="e.g. AI"
-                      className="w-full px-3 py-2 rounded-lg bg-white/5 border border-white/10 text-white text-sm placeholder:text-white/30 focus:outline-none focus:border-[#FE7004]/50 transition-all"
+                      className="w-full px-3 py-2 rounded-lg bg-gray-50 dark:bg-white/5 border border-gray-300 dark:border-white/10 text-slate-900 dark:text-white text-sm placeholder:text-slate-400 dark:placeholder:text-white/30 focus:outline-none focus:border-[#FE7004]/50 transition-all"
                     />
                   </div>
 
                   {/* Checklist */}
                   <div className="space-y-2 text-xs">
-                    <div className={`flex items-center gap-2 ${seoScore.checks.titleLength ? 'text-green-400' : 'text-white/40'}`}>
+                    <div className={`flex items-center gap-2 ${seoScore.checks.titleLength ? 'text-green-400' : 'text-slate-400 dark:text-white/40'}`}>
                       {seoScore.checks.titleLength ? <CheckCircle size={12} /> : <XCircle size={12} />}
                       <span>Title length 40-60 chars ({blogTitle.length})</span>
                     </div>
-                    <div className={`flex items-center gap-2 ${seoScore.checks.keywordInTitle ? 'text-green-400' : 'text-white/40'}`}>
+                    <div className={`flex items-center gap-2 ${seoScore.checks.keywordInTitle ? 'text-green-400' : 'text-slate-400 dark:text-white/40'}`}>
                       {seoScore.checks.keywordInTitle ? <CheckCircle size={12} /> : <XCircle size={12} />}
                       <span>Keyword in Title</span>
                     </div>
-                    <div className={`flex items-center gap-2 ${seoScore.checks.keywordInSlug ? 'text-green-400' : 'text-white/40'}`}>
+                    <div className={`flex items-center gap-2 ${seoScore.checks.keywordInSlug ? 'text-green-400' : 'text-slate-400 dark:text-white/40'}`}>
                       {seoScore.checks.keywordInSlug ? <CheckCircle size={12} /> : <XCircle size={12} />}
                       <span>Keyword in URL Slug</span>
                     </div>
-                    <div className={`flex items-center gap-2 ${seoScore.checks.excerptLength ? 'text-green-400' : 'text-white/40'}`}>
+                    <div className={`flex items-center gap-2 ${seoScore.checks.excerptLength ? 'text-green-400' : 'text-slate-400 dark:text-white/40'}`}>
                       {seoScore.checks.excerptLength ? <CheckCircle size={12} /> : <XCircle size={12} />}
                       <span>Excerpt 120-160 chars ({blogExcerpt.length})</span>
                     </div>
@@ -1123,35 +1130,35 @@ export default function DashboardPage() {
             </div>
 
             {/* Published Blogs List */}
-            <div className="paper-card overflow-hidden animate-fade-in-up" style={{ animationDelay: '500ms' }}>
-              <div className="p-6 border-b border-border">
-                <h2 className=" text-xl font-semibold">Published Blogs ({blogs.length})</h2>
+            <div className="bg-slate-50 border border-slate-200/80 shadow-sm dark:bg-white/5 dark:border-white/10 dark:shadow-none rounded-xl overflow-hidden animate-fade-in-up" style={{ animationDelay: '500ms' }}>
+              <div className="p-4 sm:p-6 border-b border-gray-200 dark:border-white/10">
+                <h2 className="text-base sm:text-xl font-semibold text-slate-900 dark:text-white">Published Blogs ({blogs.length})</h2>
               </div>
 
               {blogs.length === 0 ? (
-                <div className="p-12 text-center text-muted-foreground">
-                  <FileText size={40} className="mx-auto mb-4 opacity-30" />
-                  <p className="text-lg">No blogs published yet.</p>
-                  <p className="text-sm mt-1">Use the form to create your first blog post.</p>
+                <div className="p-6 sm:p-12 text-center text-slate-500 dark:text-white/60">
+                  <FileText size={32} className="sm:size-40 mx-auto mb-4 opacity-30" />
+                  <p className="text-base sm:text-lg text-slate-500 dark:text-white/60">No blogs published yet.</p>
+                  <p className="text-sm mt-1 text-slate-400 dark:text-white/40">Use the form to create your first blog post.</p>
                 </div>
               ) : (
-                <div className="divide-y divide-border/50">
+                <div className="divide-y divide-gray-200/50 dark:divide-white/10">
                   {[...blogs]
                     .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
                     .map((blog) => (
-                      <div key={blog.slug} className="p-6 hover:bg-white/[0.02] transition-colors">
+                      <div key={blog.slug} className="p-4 sm:p-6 hover:bg-white/[0.02] transition-colors">
                         <div className="flex items-center justify-between gap-4">
                           <div className="min-w-0 flex-1">
-                            <h3 className=" text-base font-semibold text-white truncate">
+                            <h3 className="text-base font-semibold text-slate-900 dark:text-white truncate">
                               {blog.title}
                             </h3>
-                            <p className="text-xs text-white/40 mt-1">
+                            <p className="text-xs text-slate-400 dark:text-white/40 mt-1">
                               /{blog.slug} &middot; {new Date(blog.date).toLocaleDateString()}
                               {blog.readingTime && <span> &middot; {blog.readingTime} min read</span>}
                               {blog.tags && <span> &middot; {blog.tags}</span>}
                             </p>
                           </div>
-                          <div className="flex items-center gap-2 shrink-0">
+                          <div className="flex items-center gap-1 sm:gap-2 shrink-0 flex-wrap sm:flex-nowrap">
                             <button
                               onClick={() => handleEditBlog(blog)}
                               className="flex items-center gap-1.5 text-xs text-blue-400 hover:text-blue-300 transition-colors cursor-pointer"

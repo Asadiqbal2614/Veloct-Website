@@ -38,7 +38,7 @@ export default function Approach() {
   const { ref: sectionRef, inView } = useInView({ threshold: 0.05 })
 
   return (
-    <section id="approach" ref={sectionRef} className="relative py-16 lg:py-20">
+    <section id="approach" ref={sectionRef} className="relative py-16 lg:py-20 bg-white dark:bg-[#00164A] transition-colors duration-300">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
         <div className={`text-center max-w-3xl mx-auto mb-14 lg:mb-20 space-y-4 transition-all duration-700 ease-out ${inView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"}`}
@@ -46,10 +46,10 @@ export default function Approach() {
           <span className="micro-label inline-block px-3 py-1.5 rounded-full border border-[#FE7004]/30 text-[#FE7004] bg-[#FE7004]/5">
             Framework
           </span>
-          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-white">
+          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-slate-900 dark:text-white">
             How We Work
           </h2>
-          <p className="text-base sm:text-lg text-white/80 leading-relaxed">
+          <p className="text-base sm:text-lg text-slate-600 dark:text-gray-300 leading-relaxed">
             A proven four-phase methodology that ensures clarity, quality, and continuous improvement from concept to scale.
           </p>
         </div>
@@ -80,11 +80,11 @@ export default function Approach() {
                     <div className="w-10 h-10 rounded-xl bg-[#FE7004]/10 flex items-center justify-center">
                       <Icon className="w-5 h-5 text-[#FE7004]" />
                     </div>
-                    <h3 className="text-lg font-bold text-white">
+                    <h3 className="text-lg font-bold text-slate-900 dark:text-white">
                       {step.title}
                     </h3>
                   </div>
-                  <p className="text-base text-white/80 leading-relaxed">
+                  <p className="text-base text-slate-600 dark:text-gray-300 leading-relaxed">
                     {step.description}
                   </p>
                 </>
@@ -103,7 +103,7 @@ export default function Approach() {
                       <span className="text-sm font-bold text-white">{step.number}</span>
                     </div>
                     <div
-                      className={`flex-1 paper-card p-5 transition-all duration-700 ease-out ${
+                      className={`flex-1 bg-slate-50 border border-slate-200/80 shadow-sm dark:bg-white/5 dark:border-white/10 dark:shadow-none rounded-xl p-5 transition-all duration-700 ease-out ${
                         inView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
                       }`}
                       style={{ transitionDelay: `${idx * 0.12}s` }}
@@ -117,7 +117,7 @@ export default function Approach() {
                     {isLeft ? (
                       <>
                         <div
-                          className={`w-[calc(50%-2rem)] paper-card p-7 transition-all duration-700 ease-out ${
+                          className={`w-[calc(50%-2rem)] bg-slate-50 border border-slate-200/80 shadow-sm dark:bg-white/5 dark:border-white/10 dark:shadow-none rounded-xl p-7 transition-all duration-700 ease-out ${
                             inView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
                           }`}
                           style={{ transitionDelay: `${idx * 0.12}s` }}
@@ -150,7 +150,7 @@ export default function Approach() {
                           </div>
                         </div>
                         <div
-                          className={`w-[calc(50%-2rem)] paper-card p-7 transition-all duration-700 ease-out ${
+                          className={`w-[calc(50%-2rem)] bg-slate-50 border border-slate-200/80 shadow-sm dark:bg-white/5 dark:border-white/10 dark:shadow-none rounded-xl p-7 transition-all duration-700 ease-out ${
                             inView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
                           }`}
                           style={{ transitionDelay: `${idx * 0.12}s` }}

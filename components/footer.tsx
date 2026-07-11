@@ -4,40 +4,40 @@ import Link from "next/link";
 
 export default function Footer() {
   return (
-    <footer className="border-t border-[#FE7004]/10 py-10 lg:py-12">
+    <footer className="bg-white dark:bg-[#00164A] border-t border-slate-200 dark:border-[#FE7004]/10 py-10 lg:py-12 transition-colors duration-300">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex flex-col items-center text-center space-y-4">
           <span className="text-xl font-bold text-[#FE7004]">
             VELOCT
           </span>
-          <p className="text-sm text-white/50 max-w-xl">
+          <p className="text-sm text-slate-500 dark:text-white/50 max-w-xl">
             AI &bull; Cloud &bull; Cybersecurity &bull; Managed IT &bull; Custom Software
           </p>
 
           <div className="flex items-center gap-5 pt-2 flex-wrap justify-center">
             <Link
               href="/privacy-policy"
-              className="text-xs text-white/40 hover:text-[#FE7004] transition-colors"
+              className="text-xs text-slate-400 dark:text-white/40 hover:text-[#FE7004] transition-colors"
             >
               Privacy Policy
             </Link>
-            <span className="text-white/20 text-xs">|</span>
+            <span className="text-slate-300 dark:text-white/20 text-xs">|</span>
             <Link
               href="/cookies"
-              className="text-xs text-white/40 hover:text-[#FE7004] transition-colors"
+              className="text-xs text-slate-400 dark:text-white/40 hover:text-[#FE7004] transition-colors"
             >
               Cookie Policy
             </Link>
-            <span className="text-white/20 text-xs">|</span>
+            <span className="text-slate-300 dark:text-white/20 text-xs">|</span>
             <Link
               href="/terms"
-              className="text-xs text-white/40 hover:text-[#FE7004] transition-colors"
+              className="text-xs text-slate-400 dark:text-white/40 hover:text-[#FE7004] transition-colors"
             >
               Terms &amp; Conditions
             </Link>
           </div>
 
-          <p className="text-xs text-white/30">
+          <p className="text-xs text-slate-400 dark:text-white/30">
             &copy; {new Date().getFullYear()} VELOCT. All rights reserved.
           </p>
         </div>
