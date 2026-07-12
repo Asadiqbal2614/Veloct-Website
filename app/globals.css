@@ -64,6 +64,12 @@ html {
   scroll-behavior: smooth;
 }
 
+@media (min-width: 1024px) {
+  html {
+    font-size: 85%;
+  }
+}
+
 body {
   font-family: var(--font-body);
   background: var(--bg-body);
