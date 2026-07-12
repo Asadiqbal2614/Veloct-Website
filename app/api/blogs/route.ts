@@ -1,17 +1,7 @@
 import { NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
 import { requireAuth } from "@/lib/supabase/require-auth";
-
-export interface BlogPost {
-  title: string;
-  slug: string;
-  excerpt: string;
-  content: string;
-  date: string;
-  imageUrl?: string;
-  tags?: string;
-  readingTime?: number;
-}
+import type { BlogPost } from "@/lib/types";
 
 export async function GET() {
   const supabase = await createClient();

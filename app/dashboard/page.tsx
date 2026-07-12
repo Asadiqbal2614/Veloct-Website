@@ -7,6 +7,7 @@ import Link from 'next/link'
 import { cn } from '@/lib/utils'
 import { createClient } from '@/lib/supabase/client'
 import { LogOut, RefreshCw, Trash2, Mail, Calendar, Users, Briefcase, GraduationCap, FileText, Pencil, Award, CalendarDays, Tag, Lock, Unlock, Clock, CheckCircle, XCircle, Plus, ToggleLeft, ToggleRight } from 'lucide-react'
+import type { BlogPost, JobPosting } from '@/lib/types'
 
 interface Consultation {
   id: string
@@ -35,28 +36,6 @@ interface CareerSubmission {
   country: string
   timestamp: string
   resume_url?: string
-}
-
-interface BlogPost {
-  title: string
-  slug: string
-  excerpt: string
-  content: string
-  date: string
-  imageUrl?: string
-  tags?: string
-  readingTime?: number
-}
-
-interface JobPosting {
-  id: string
-  title: string
-  description: string
-  experience: string
-  location: string
-  last_date: string
-  is_active: boolean
-  created_at: string
 }
 
 type Tab = 'queries' | 'careers' | 'blogs' | 'jobs'

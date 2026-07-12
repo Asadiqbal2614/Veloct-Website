@@ -1,59 +1,63 @@
-"use client";
-
-import { useState, useEffect } from "react";
 import Link from "next/link";
-import { useParams } from "next/navigation";
-import { ArrowLeft, Calendar, Clock, Loader2, Tag } from "lucide-react";
+import { notFound } from "next/navigation";
+import { ArrowLeft, Calendar, Clock, Tag } from "lucide-react";
+import { createClient } from "@/lib/supabase/server";
+import { createPublicClient } from "@/lib/supabase/public";
 import BlogContent from "@/components/BlogContent";
-import type { BlogPost } from "@/app/api/blogs/route";
+import type { BlogPost } from "@/lib/types";
+import type { Metadata } from "next";
 
-export default function BlogArticlePage() {
-  const { slug } = useParams<{ slug: string }>();
-  const [blog, setBlog] = useState<BlogPost | null>(null);
-  const [loading, setLoading] = useState(true);
+export const revalidate = 60;
+export const dynamicParams = true;
 
-  useEffect(() => {
-    (async () => {
-      try {
-        const res = await fetch("/api/blogs");
-        if (res.ok) {
-          const data: BlogPost[] = await res.json();
-          const found = data.find((b) => b.slug === slug);
-          setBlog(found ?? null);
-        }
-      } catch {
-        // ignore
-      } finally {
-        setLoading(false);
-      }
-    })();
-  }, [slug]);
+type Params = Promise<{ slug: string }>;
 
-  if (loading) {
-    return (
-      <div className="min-h-screen bg-white dark:bg-[#00164A] transition-colors duration-300 flex items-center justify-center">
-        <Loader2 className="w-8 h-8 text-[#FE7004] animate-spin" />
-      </div>
-    );
-  }
+export async function generateStaticParams() {
+  const supabase = createPublicClient();
+  const { data: blogs } = await supabase.from("blogs").select("slug");
+  return (blogs ?? []).map((b) => ({ slug: b.slug }));
+}
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Params;
+}): Promise<Metadata> {
+  const { slug } = await params;
+  const supabase = createPublicClient();
+  const { data } = await supabase
+    .from("blogs")
+    .select("title, excerpt")
+    .eq("slug", slug)
+    .single();
+
+  if (!data) return { title: "Blog Not Found" };
+
+  return {
+    title: `${data.title} | VELOCT`,
+    description: data.excerpt,
+  };
+}
+
+export default async function BlogArticlePage({
+  params,
+}: {
+  params: Params;
+}) {
+  const { slug } = await params;
+  const supabase = await createClient();
+
+  const { data: blog } = await supabase
+    .from("blogs")
+    .select("*")
+    .eq("slug", slug)
+    .single();
 
   if (!blog) {
-    return (
-      <div className="min-h-screen bg-white dark:bg-[#00164A] transition-colors duration-300 flex items-center justify-center p-4">
-        <div className="text-center space-y-4">
-          <p className="text-6xl font-bold text-slate-300 dark:text-white/20">404</p>
-          <h1 className="text-2xl font-bold text-slate-900 dark:text-white">Blog not found</h1>
-          <Link
-            href="/blogs"
-            className="inline-flex items-center gap-2 text-sm text-[#FE7004] hover:underline"
-          >
-            <ArrowLeft className="w-4 h-4" />
-            Back to Blogs
-          </Link>
-        </div>
-      </div>
-    );
+    notFound();
   }
+
+  const post = blog as BlogPost;
 
   return (
     <div className="min-h-screen bg-white dark:bg-[#00164A] transition-colors duration-300">
@@ -69,31 +73,33 @@ export default function BlogArticlePage() {
         <div className="space-y-6 mb-10">
           <div className="flex items-center gap-2 text-sm text-slate-400 dark:text-white/40">
             <Calendar className="w-4 h-4" />
-            {new Date(blog.date).toLocaleDateString("en-US", {
+            {new Date(post.date).toLocaleDateString("en-US", {
               year: "numeric",
               month: "long",
               day: "numeric",
             })}
-            {blog.readingTime && (
+            {post.readingTime && (
               <>
-                <span className="text-slate-300 dark:text-white/20">&bull;</span>
+                <span className="text-slate-300 dark:text-white/20">
+                  &bull;
+                </span>
                 <Clock className="w-4 h-4" />
-                <span>{blog.readingTime} min read</span>
+                <span>{post.readingTime} min read</span>
               </>
             )}
           </div>
 
           <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-slate-900 dark:text-white leading-tight">
-            {blog.title}
+            {post.title}
           </h1>
 
           <p className="text-lg text-slate-500 dark:text-white/60 leading-relaxed">
-            {blog.excerpt}
+            {post.excerpt}
           </p>
 
-          {blog.tags && (
+          {post.tags && (
             <div className="flex flex-wrap gap-2">
-              {blog.tags.split(",").map((tag, i) => (
+              {post.tags.split(",").map((tag, i) => (
                 <span
                   key={i}
                   className="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-medium bg-slate-100 dark:bg-white/5 border border-slate-200 dark:border-white/10 text-slate-500 dark:text-white/60"
@@ -106,18 +112,19 @@ export default function BlogArticlePage() {
           )}
         </div>
 
-        {blog.imageUrl && (
+        {post.imageUrl && (
           <div className="mb-10 rounded-2xl overflow-hidden border border-[#FE7004]/10">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
-              src={blog.imageUrl}
-              alt={blog.title}
+              src={post.imageUrl}
+              alt={post.title}
               className="w-full h-auto object-cover"
             />
           </div>
         )}
 
         <div className="border-t border-slate-200 dark:border-[#FE7004]/10 pt-10">
-          <BlogContent content={blog.content} />
+          <BlogContent content={post.content} />
         </div>
       </article>
     </div>

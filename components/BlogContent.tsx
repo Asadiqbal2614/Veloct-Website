@@ -1,5 +1,3 @@
-"use client";
-
 import { parseBlogContent, type Block } from "@/lib/formatBlogContent";
 
 function renderBlock(block: Block, index: number) {
